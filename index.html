@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Nighty Night Games</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f1c 100%);
+      color: #e6e6fa;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 0.3em;
+      color: #d1bfff;
+      text-shadow: 0 0 8px #a585ff, 0 0 16px #4b3f88;
+    }
+
+    p {
+      font-size: 1.1em;
+      opacity: 0.85;
+    }
+
+    .moon {
+      font-size: 2.5em;
+      margin-bottom: 0.5em;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="moon">🌙</div>
+  <h1>Nighty Night Games</h1>
+  <p>Dreaming up new worlds...</p>
+  <p>Website coming soon.</p>
+</body>
+</html>
