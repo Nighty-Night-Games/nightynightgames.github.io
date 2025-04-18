@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Nighty Night Games</title>
@@ -11,17 +12,39 @@
       box-sizing: border-box;
     }
 
+    html,
     body {
-      background: #0a0a0a url('https://www.transparenttextures.com/patterns/asfalt-dark.png') repeat;
+      height: 100%;
+    }
+
+    body {
+      background:
+      url('images/blackhole-bg.jpg') no-repeat center center fixed,
+        url('https://grainy-gradients.vercel.app/noise.svg'),
+        url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+        background-size: cover, cover, auto;
+      background-repeat: no-repeat, no-repeat, repeat;
+      background-blend-mode: normal, overlay, overlay;
+      background-color: #0a0a0a;
       color: #d4d4d4;
       font-family: 'Courier New', Courier, monospace;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       text-align: center;
-      height: 100vh;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       padding: 2rem;
+      width: 100%;
+      position: relative;
+      z-index: 1;
     }
 
     h1 {
@@ -35,7 +58,7 @@
 
     p {
       font-size: 1.1em;
-      color: #aaaaaa;
+      color: #ffffff;
       max-width: 600px;
       margin-bottom: 1rem;
     }
@@ -58,18 +81,99 @@
       mix-blend-mode: overlay;
       pointer-events: none;
       opacity: 0.3;
+      z-index: 0;
+    }
+
+    .loading-bar-container {
+      width: 300px;
+      height: 8px;
+      background-color: #222;
+      border: 1px solid #333;
+      margin-top: 2rem;
+      overflow: hidden;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .loading-bar {
+      height: 100%;
+      width: 5%;
+      background-color: #777;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    .loading-text {
+      margin-top: 0.5rem;
+      font-size: 0.9em;
+      color: #555;
+      letter-spacing: 1px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        background-color: #555;
+      }
+
+      50% {
+        background-color: #aaa;
+      }
+    }
+
+    .social-links {
+      margin: 2rem 0 1rem 0;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .social-links a {
+      color: #888;
+      text-decoration: none;
+      font-size: 0.95em;
+      letter-spacing: 0.5px;
+      transition: color 0.2s ease;
+    }
+
+    .social-links a:hover {
+      color: #fff;
+      text-shadow: 0 0 5px #ffffff;
+    }
+
+    footer {
+      padding: 1rem;
+      font-size: 0.8em;
+      color: #ffffff;
     }
   </style>
 </head>
+
 <body>
-  <div class="grain"></div>
-  <h1>Nighty Night Games</h1>
-  <div class="underline"></div>
-  <p>We make strange, gritty, story-driven experiences in the shadows of reality.</p>
-  <p>Our website is brewing. Stay sharp.</p>
+  <main>
+    <div class="grain"></div>
+    <h1>Nighty Night Games</h1>
+    <div class="underline"></div>
+    <p>For those who seek meaning between the shadows — we craft games with grit, depth, and devotion.</p>
+    <p>The world’s still loading. Stay sharp.</p>
+
+    <div class="loading-bar-container">
+      <div class="loading-bar"></div>
+    </div>
+    <div class="loading-text">5%</div>
+
+    <div class="social-links">
+      <a href="https://x.com/nightynightgg" target="_blank">Twitter</a>
+      <a href="https://www.youtube.com/@NightyNightGames" target="_blank">YouTube</a>
+      <a href="https://twitch.tv/yourchannel" target="_blank">Twitch</a>
+      <a href="mailto:info@nightynightgames.com">Email</a>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Nighty Night Games. All rights reserved.<br>
+    All content, titles, and concepts are the intellectual property of Nighty Night Games.
+  </footer>
 </body>
-  <footer style="margin-top: 2rem; font-size: 0.8em; color: #666;">
-  &copy; 2025 Nighty Night Games. All rights reserved.<br>
-  All content, titles, and concepts are the intellectual property of Nighty Night Games.
-</footer>
+
 </html>
