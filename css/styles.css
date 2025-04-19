@@ -81,12 +81,13 @@ h1::after {
   width: 120%;
   height: 120%;
   border-radius: 12px;
-  background: radial-gradient(circle, rgba(255, 224, 163, 0.03) 0%, transparent 95%);
-  backdrop-filter: blur(12px);
+  background: radial-gradient(circle, rgba(255, 224, 163, 0.08) 0%, transparent 70%);
+  filter: blur(8px); /* reduce from 10px */
+  opacity: 0.85;
   transform: translate(-50%, -50%);
+  animation: title-glow-pulse 6s ease-in-out infinite;
   pointer-events: none;
   z-index: -1;
-  filter: drop-shadow(0 0 8px rgba(255, 224, 163, 0.03));
 }
 
 
@@ -104,6 +105,7 @@ h1::after {
   filter: drop-shadow(0 0 8px #ffd170) brightness(1.6);
   pointer-events: none;
   will-change: transform, opacity;
+  contain: layout style paint;
   
 }
 
@@ -261,33 +263,6 @@ p {
   color: #fff;
   text-shadow: 0 0 5px #aaa;
   transform: scale(1.05);
-}
-
-.corner-project {
-  position: absolute;
-  top: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 0.25rem 0.75rem;
-  background: rgba(255, 248, 214, 0.08);
-  color: #fff8d6;
-  font-size: 1.1em;
-  letter-spacing: 1px;
-  border: 1px solid #d6b36d;
-  border-radius: 4px;
-  text-transform: uppercase;
-  backdrop-filter: blur(2px);
-  text-decoration: none;
-  transition: all 0.25s ease-in-out;
-  z-index: 2;
-  text-shadow: 0 0 6px #d6b36d, 0 0 12px #b78f48;
-}
-
-.corner-project:hover {
-  color: #ffffff;
-  border-color: #aaa;
-  background: rgba(255, 255, 255, 0.05);
-  text-shadow: 0 0 4px #fff;
 }
 
 footer {

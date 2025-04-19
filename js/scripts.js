@@ -22,7 +22,8 @@ window.addEventListener('load', () => {
     const emberContainer = document.getElementById('ember-container');
     const title = document.querySelector('.title-wrap h1');
 
-    const maxEmbers = 400;
+    const isMobile = window.innerWidth < 768;
+    const maxEmbers = isMobile ? 200 : 400;
     let emberCount = 0;
 
     const riseHeight = 100 + Math.random() * 200; // 100–200px
@@ -84,9 +85,14 @@ window.addEventListener('load', () => {
     };
 
     // Spawn embers at random intervals
-    setInterval(() => {
-        spawnEmber();
-    }, 150 + Math.random() * 200);
+    function spawnLoop() {
+        requestIdleCallback(() => {
+            spawnEmber();
+            setTimeout(spawnLoop, 150 + Math.random() * 200);
+        });
+    }
+    spawnLoop();
+
 });
 
 
