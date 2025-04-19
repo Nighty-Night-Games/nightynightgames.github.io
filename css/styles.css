@@ -139,7 +139,8 @@ p {
 .corner-project {
   position: absolute;
   top: 1rem;
-  left: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 0.25rem 0.75rem;
   background: rgba(255, 255, 255, 0.05);
   color: #ccc;
@@ -153,6 +154,7 @@ p {
   transition: all 0.25s ease-in-out;
   z-index: 2;
 }
+
 
 .corner-project:hover {
   color: #fff8d6;
