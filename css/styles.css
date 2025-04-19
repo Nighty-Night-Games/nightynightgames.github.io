@@ -27,6 +27,29 @@ body {
   text-align: center;
 }
 
+.main-nav {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  z-index: 10;
+  display: flex;
+  gap: 1.5rem;
+  font-size: 1.1em;
+}
+
+.main-nav a {
+  color: #bbb;
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+}
+
+.main-nav a:hover {
+  color: #ffe0a3;
+  text-shadow: 0 0 5px #ffe0a3;
+}
+
+
 main {
   flex: 1;
   display: flex;
@@ -41,32 +64,27 @@ main {
 
 h1 {
   position: relative;
-  font-size: 8em;
-  letter-spacing: 2px;
+  font-size: 7em;
+  letter-spacing: 10px;
   margin-bottom: 0.5rem;
-  color: #f1f0ef;
+  color: #d6d5d3;
   text-transform: uppercase;
-  text-shadow:
-          0 0 2px #d6b36d,
-          0 0 4px #b78f48,
-          0 0 8px #b78f48,
-          2px 2px 0 #000;
-  animation: fadeUp 8s ease-out;
 }
 
-@keyframes ember-pulse {
-  0% {
-    transform: translate(-50%, -50%) scale(0.95);
-    opacity: 0.2;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.1);
-    opacity: 0.4;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(0.95);
-    opacity: 0.2;
-  }
+h1::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  border-radius: 12px;
+  background: radial-gradient(circle, rgba(255, 224, 163, 0.03) 0%, transparent 95%);
+  backdrop-filter: blur(12px);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: -1;
+  filter: drop-shadow(0 0 8px rgba(255, 224, 163, 0.03));
 }
 
 
@@ -100,7 +118,7 @@ h1 {
   position: absolute;
   bottom: 0;
   left: 0;
-  height: 150px;
+  height: 120px;
   pointer-events: none;
   z-index: 0;
   overflow: visible;
@@ -115,8 +133,8 @@ p {
 
 .underline {
   display: inline-block;
-  width: 60px;
-  height: 2px;
+  width: 80px;
+  height: 3px;
   background-color: #555;
   margin: 1rem auto;
 }

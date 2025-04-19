@@ -22,7 +22,7 @@ window.addEventListener('load', () => {
     const emberContainer = document.getElementById('ember-container');
     const title = document.querySelector('.title-wrap h1');
 
-    const maxEmbers = 600;
+    const maxEmbers = 400;
     let emberCount = 0;
 
     const riseHeight = 100 + Math.random() * 200; // 100–200px
@@ -36,12 +36,12 @@ window.addEventListener('load', () => {
         const titleRect = title.getBoundingClientRect();
         
         const left = Math.random() * titleRect.width;
-        const size = (Math.random() * 20 + 4).toFixed(1); // 2.0–6.0 (as string)
+        const size = (Math.random() * 15 + 3).toFixed(1); // 2.0–6.0 (as string)
         ember.style.width = `${size}px`;
         ember.style.height = `${size}px`;
 
         const duration = 12000 + Math.random() * 6000;
-        const amplitude = 15 + Math.random() * 12;
+        const amplitude = 15 + Math.random() * 10;
         const direction = Math.random() < 0.5 ? -1 : 1;
 
         ember.style.position = 'absolute';
