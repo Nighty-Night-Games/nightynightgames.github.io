@@ -89,10 +89,11 @@ p {
 
 .loading-bar {
   height: 100%;
-  width: 5%;
+  width: 0%; /* Start from 0 */
   background-color: #777;
-  animation: pulse 2s infinite ease-in-out;
+  transition: width 1s ease-in-out;
 }
+
 
 .loading-text {
   margin-top: 0.5rem;
@@ -102,14 +103,14 @@ p {
   font-family: 'Courier New', Courier, monospace;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    background-color: #555;
-  }
+@keyframes pulse-once {
+  0%   { background-color: #555; }
+  50%  { background-color: #aaa; }
+  100% { background-color: #777; }
+}
 
-  50% {
-    background-color: #aaa;
-  }
+.loading-bar.loaded {
+  animation: pulse-once 0.6s ease-in-out;
 }
 
 .social-links {
@@ -121,17 +122,45 @@ p {
 }
 
 .social-links a {
-  color: #888;
+  color: #ccc;
   text-decoration: none;
-  font-size: 0.95em;
+  font-size: 1em;
   letter-spacing: 0.5px;
-  transition: color 0.2s ease;
+  font-weight: 500;
+  transition: color 0.2s ease, text-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .social-links a:hover {
   color: #fff;
-  text-shadow: 0 0 5px #ffffff;
+  text-shadow: 0 0 5px #aaa;
+  transform: scale(1.05);
 }
+
+.corner-project {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ccc;
+  font-size: 1.1em;
+  letter-spacing: 1px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  text-transform: uppercase;
+  backdrop-filter: blur(2px);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.corner-project:hover {
+  color: #fff;
+  border-color: #888;
+  background: rgba(255, 255, 255, 0.1);
+  text-shadow: 0 0 4px #888;
+}
+
 
 footer {
   padding: 1rem;
@@ -215,4 +244,4 @@ footer {
   .social-links {
     margin: 1rem 0 0.5rem 0;
   }
-}
+  }
