@@ -4,9 +4,9 @@
   box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   height: 100%;
+  overflow-x: hidden; /* ⬅️ KEY FIX */
 }
 
 body {
@@ -69,6 +69,8 @@ h1 {
   margin-bottom: 0.5rem;
   color: #d6d5d3;
   text-transform: uppercase;
+  max-width: 90vw;
+  word-wrap: break-word;
 }
 
 h1::after {
@@ -116,13 +118,12 @@ h1::after {
 
 .ember-container {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 120px;
-  pointer-events: none;
-  z-index: 0;
+  width: 100%;
+  max-width: 100%;
   overflow: visible;
+  pointer-events: none;
 }
+
 
 p {
   font-size: 1.5em;
@@ -328,7 +329,8 @@ footer {
   }
 
   .social-links {
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
   .social-links a {
@@ -336,19 +338,32 @@ footer {
   }
 
   footer {
-    font-size: 0.7em;
-    padding: 0.5rem;
+    padding: 0.75rem;
+    line-height: 1.4;
   }
 }
 
 /* For very small screens */
 @media screen and (max-width: 320px) {
   h1 {
-    font-size: 2em;
+    font-size: 1.8em;
+    letter-spacing: 4px;
   }
 
   p {
     font-size: 0.9em;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .main-nav {
+    position: static;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.9em;
+    gap: 1rem;
   }
 }
 
@@ -371,4 +386,4 @@ footer {
   .social-links {
     margin: 1rem 0 0.5rem 0;
   }
-  }
+}
