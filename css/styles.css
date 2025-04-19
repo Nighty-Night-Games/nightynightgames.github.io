@@ -11,7 +11,7 @@ body {
 
 body {
   background:
-          url('../images/blackhole-bg.jpg') no-repeat center center fixed,
+          url('../images/blackhole-bg.webp') no-repeat center center fixed,
           url('https://grainy-gradients.vercel.app/noise.svg'),
           url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
   background-size: cover, cover, auto;
@@ -150,15 +150,15 @@ p {
   text-transform: uppercase;
   backdrop-filter: blur(2px);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease-in-out;
   z-index: 2;
 }
 
 .corner-project:hover {
-  color: #fff;
-  border-color: #888;
-  background: rgba(255, 255, 255, 0.1);
-  text-shadow: 0 0 4px #888;
+  color: #fff8d6;
+  border-color: #d6b36d;
+  background: rgba(255, 248, 214, 0.08);
+  text-shadow: 0 0 6px #d6b36d, 0 0 12px #b78f48;
 }
 
 
