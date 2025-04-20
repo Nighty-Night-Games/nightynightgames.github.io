@@ -60,21 +60,63 @@ body {
 
 /* === HEADER === */
 .site-header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 5rem; /* Increased height */
+  height: 4rem;
   padding: 0 var(--spacing-lg);
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: var(--background-dark);
-  backdrop-filter: blur(calc(var(--blur-amount) * 1.25)); /* Stronger blur */
-  border-bottom: 1.5px solid var(--border-light); /* More pronounced */
+  backdrop-filter: blur(var(--blur-amount));
+  border-bottom: 1px solid var(--border-light);
   z-index: 20;
 }
 
+.header-left {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.header-center {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.header-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.logo img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.menu-toggle {
+  display: none;
+}
 
 .site-header .social-links,
 .site-header .main-nav {
@@ -107,6 +149,7 @@ main {
   justify-content: center;
   align-items: center;
   padding: var(--spacing-lg);
+  padding-top: 5rem; /* equal or slightly more than header height */
   width: 100%;
   position: relative;
   z-index: 1;
@@ -311,63 +354,113 @@ footer a.footer-contact:hover {
 
 /* === MEDIA QUERIES === */
 @media screen and (max-width: 768px) {
-  h1 { font-size: 4em; }
-  p { font-size: 1.2em; padding: 0 var(--spacing-sm); }
-  .loading-bar-container { width: 80%; max-width: 300px; }
+  .site-header {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .site-header a {
+    font-size: 0.9em;
+  }
+
+  main {
+    padding-top: 5rem;
+  }
 }
 
 @media screen and (max-width: 480px) {
-  h1 { font-size: 2.5em; }
-  p { font-size: var(--font-size-base); }
-  main { padding: var(--spacing-sm); }
-
-  .social-links {
-    flex-direction: column;
-    gap: var(--spacing-xs);
-  }
-
   .site-header {
-    height: auto;
-    padding: var(--spacing-sm) var(--spacing-sm);
-    gap: var(--spacing-sm);
-  }
-  .site-header a {
-    font-size: 1em;
-    letter-spacing: 0.8px;
-  }
-}
-
-@media screen and (max-width: 320px) {
-  h1 {
-    font-size: 1.8em;
-    letter-spacing: 4px;
-  }
-  p { font-size: 0.9em; }
-}
-
-@media screen and (max-height: 480px) and (orientation: landscape) {
-  h1 { font-size: 2em; margin-bottom: 0.25rem; }
-  p { font-size: 0.9em; margin-bottom: var(--spacing-xs); }
-  .loading-bar-container { margin-top: var(--spacing-sm); }
-  .social-links { margin: var(--spacing-sm) 0 var(--spacing-xs); }
-}
-
-@media screen and (max-height: 480px) and (orientation: landscape) and (max-width: 600px) {
-  .site-header {
-    flex-direction: column;
     height: auto;
     padding: var(--spacing-sm);
-    gap: var(--spacing-xs);
-  }
-
-  .social-links,
-  .main-nav {
-    justify-content: center;
     flex-wrap: wrap;
   }
 
+  .header-center {
+    order: -1;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .header-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    gap: var(--spacing-md);
+  }
+
+  .header-right {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) 0;
+  }
+
+  .header-right.active {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: block;
+    background: none;
+    border: none;
+    color: var(--text-white);
+    cursor: pointer;
+    font-size: 1.4em;
+    padding: var(--spacing-xs);
+  }
+
+  main {
+    padding-top: calc(4rem + var(--spacing-lg));
+  }
+
+  h1 {
+    font-size: 2.5em;
+    letter-spacing: 5px;
+  }
+}
+
+/* Additional mobile optimization */
+@media screen and (max-width: 360px) {
+  .header-left {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
   .site-header a {
-    margin-right: var(--spacing-sm);
-    font-size: 0.9em;
+    font-size: 0.85em;
+  }
+
+  h1 {
+    font-size: 2em;
+    letter-spacing: 3px;
+  }
+}
+
+/* Landscape mode */
+@media screen and (max-height: 480px) and (orientation: landscape) {
+  .site-header {
+    position: absolute;
+  }
+
+  main {
+    padding-top: 5rem;
+  }
+
+  .header-center {
+    flex-direction: row;
+  }
+
+  .header-right.active {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--background-dark);
+    backdrop-filter: blur(var(--blur-amount));
+    padding: var(--spacing-sm);
+    border-bottom-left-radius: 4px;
   }
 }

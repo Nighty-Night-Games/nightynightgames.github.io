@@ -94,3 +94,22 @@
 
     spawnLoop();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('.header-right');
+
+    toggle.addEventListener('click', () => {
+        nav.classList.toggle('active'); // Changed from 'show' to 'active'
+        toggle.setAttribute('aria-expanded', nav.classList.contains('active')); // Add accessibility
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!nav.contains(e.target) && !toggle.contains(e.target) && nav.classList.contains('active')) {
+            nav.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+});
+

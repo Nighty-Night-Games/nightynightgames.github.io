@@ -28,21 +28,31 @@
 
 <!-- Header -->
 <header class="site-header" role="banner">
-    <div class="social-links" aria-label="Social media links">
+    <div class="header-left social-links" aria-label="Social media links">
         <a href="https://x.com/nightynightgg" target="_blank" rel="noopener noreferrer">Twitter</a>
         <a href="https://www.youtube.com/@NightyNightGames" target="_blank" rel="noopener noreferrer">YouTube</a>
         <a href="https://twitch.tv/yourchannel" target="_blank" rel="noopener noreferrer">Twitch</a>
     </div>
 
-    <nav class="main-nav" role="navigation" aria-label="Main Navigation">
+    <div class="header-center">
+        <a href="/" class="logo" aria-label="Nighty Night Games">
+            <img src="favicon/android-chrome-192x192.png" alt="Nighty Night Games Logo" />
+        </a>
+        <button class="menu-toggle" aria-label="Toggle menu" aria-controls="site-menu" aria-expanded="false" role="button">☰</button>
+    </div>
+
+    <div class="header-right main-nav" id="site-menu" role="navigation" aria-label="Main Navigation">
         <a href="#games">Games</a>
         <a href="#about">About</a>
-    </nav>
+    </div>
 </header>
+
+
 
 <!-- Main Content -->
 <main role="main">
-    <div class="grain" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true" role="presentation"></div>
+
 
     <div class="title-wrap">
         <div class="ember-container" id="ember-container" aria-hidden="true"></div>
