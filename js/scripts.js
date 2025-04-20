@@ -97,19 +97,64 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.querySelector('.menu-toggle');
-    const nav = document.querySelector('.header-right');
+    const headerLeft = document.querySelector('.header-left');
+    const headerRight = document.querySelector('.header-right');
+    let isMenuOpen = false;
 
-    toggle.addEventListener('click', () => {
-        nav.classList.toggle('active'); // Changed from 'show' to 'active'
-        toggle.setAttribute('aria-expanded', nav.classList.contains('active')); // Add accessibility
+    function toggleMenu(force = null) {
+        isMenuOpen = force !== null ? force : !isMenuOpen;
+        headerLeft.classList.toggle('active', isMenuOpen);
+        headerRight.classList.toggle('active', isMenuOpen);
+        toggle.setAttribute('aria-expanded', isMenuOpen);
+
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+    }
+
+    // Toggle menu on button click
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
     });
 
     // Close menu when clicking outside
     document.addEventListener('click', (e) => {
-        if (!nav.contains(e.target) && !toggle.contains(e.target) && nav.classList.contains('active')) {
-            nav.classList.remove('active');
-            toggle.setAttribute('aria-expanded', 'false');
+        if (isMenuOpen &&
+            !headerLeft.contains(e.target) &&
+            !headerRight.contains(e.target) &&
+            !toggle.contains(e.target)) {
+            toggleMenu(false);
         }
     });
+
+    // Close menu on ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isMenuOpen) {
+            toggleMenu(false);
+        }
+    });
+
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (window.innerWidth > 768 && isMenuOpen) {
+                toggleMenu(false);
+            }
+        }, 100);
+    });
+
+    // Close menu when clicking on a link
+    const menuLinks = document.querySelectorAll('.header-left a, .header-right a');
+    menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                toggleMenu(false);
+            }
+        });
+    });
 });
+
+
 
