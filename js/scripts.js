@@ -97,18 +97,15 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.querySelector('.menu-toggle');
-    const headerLeft = document.querySelector('.header-left');
-    const headerRight = document.querySelector('.header-right');
+    const mobileMenu = document.getElementById('mobile-menu');
     let isMenuOpen = false;
 
     function toggleMenu(force = null) {
         isMenuOpen = force !== null ? force : !isMenuOpen;
 
         // Toggle menu classes
-        headerLeft.classList.toggle('active', isMenuOpen);
-        headerRight.classList.toggle('active', isMenuOpen);
-        headerLeft.setAttribute('aria-hidden', !isMenuOpen);
-        headerRight.setAttribute('aria-hidden', !isMenuOpen);
+        mobileMenu.classList.toggle('active', isMenuOpen);
+        mobileMenu.setAttribute('aria-hidden', !isMenuOpen);
 
         // Update ARIA attributes
         toggle.setAttribute('aria-expanded', isMenuOpen);
