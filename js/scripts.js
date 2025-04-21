@@ -3,16 +3,19 @@
     const loadingBar = document.querySelector('.loading-bar');
     const loadingText = document.querySelector('.loading-text');
     let progress = 0;
-    const target = 5;
-    const duration = 1000;
-    const stepTime = Math.floor(duration / target);
+    const maxProgress = 5;
+    const loadingDuration = 1000;
+    const stepTime = Math.floor(loadingDuration / maxProgress);
 
     const interval = setInterval(() => {
         progress++;
         loadingText.textContent = `${progress}%`;
         loadingBar.style.width = `${progress}%`;
 
-        if (progress >= target) clearInterval(interval);
+        // Update ARIA for screen readers
+        loadingBar.parentElement.setAttribute('aria-valuenow', progress);
+
+        if (progress >= maxProgress) clearInterval(interval);
     }, stepTime);
 
     // === EMBERS ===
@@ -26,21 +29,49 @@
 
     const riseHeightBase = 100;
     const riseHeightRange = 200;
+    const titleRect = title.getBoundingClientRect(); // Cache once
+
+    function animateEmber(ember, config) {
+        let startTime = null;
+
+        function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            const t = elapsed / config.duration;
+
+            if (t > 1) {
+                ember.remove();
+                emberCount--;
+                return;
+            }
+
+            const y = -(t ** 1.5) * config.riseHeight + Math.sin(t * 4 * Math.PI) * config.amplitude;
+            const x = config.direction * Math.sin(t * Math.PI) * 120;
+
+            ember.style.transform = `translate(${x}px, ${y}px) scale(${1 - t * 0.5})`;
+            ember.style.opacity = `${Math.min(1, t * 2) * (1 - t)}`;
+
+            requestAnimationFrame(step);
+        }
+
+        requestAnimationFrame(step);
+    }
 
     function spawnEmber() {
         if (emberCount >= maxEmbers) return;
 
         const ember = document.createElement('div');
         ember.classList.add('ember');
+        ember.setAttribute('role', 'presentation');
 
-        const titleRect = title.getBoundingClientRect();
         const left = Math.random() * titleRect.width;
         const size = (Math.random() * 15 + 3).toFixed(1);
-        const duration = 12000 + Math.random() * 6000;
+        const emberDuration = 12000 + Math.random() * 6000;
         const amplitude = 15 + Math.random() * 10;
         const direction = Math.random() < 0.5 ? -1 : 1;
         const flickerSpeed = (0.6 + Math.random()).toFixed(2);
         const flickerDelay = (Math.random() * 3).toFixed(2);
+        const riseHeight = riseHeightBase + Math.random() * riseHeightRange;
 
         Object.assign(ember.style, {
             position: 'absolute',
@@ -53,29 +84,12 @@
         emberContainer.appendChild(ember);
         emberCount++;
 
-        let startTime = null;
-        const riseHeight = riseHeightBase + Math.random() * riseHeightRange;
-
-        function animateEmber(timestamp) {
-            if (!startTime) startTime = timestamp;
-            const elapsed = timestamp - startTime;
-            const t = elapsed / duration;
-
-            if (t > 1) {
-                ember.remove();
-                emberCount--;
-                return;
-            }
-
-            const y = -(t ** 1.5) * riseHeight + Math.sin(t * 4 * Math.PI) * amplitude;
-            const x = direction * Math.sin(t * Math.PI) * 120;
-            ember.style.transform = `translate(${x}px, ${y}px) scale(${1 - t * 0.5})`;
-            ember.style.opacity = `${Math.min(1, t * 2) * (1 - t)}`;
-
-            requestAnimationFrame(animateEmber);
-        }
-
-        requestAnimationFrame(animateEmber);
+        animateEmber(ember, {
+            duration: emberDuration,
+            amplitude,
+            direction,
+            riseHeight
+        });
     }
 
     // === EMBER LOOP ===
@@ -110,44 +124,40 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update ARIA attributes
         toggle.setAttribute('aria-expanded', isMenuOpen);
 
-        // Toggle hamburger active state (ADD THIS LINE)
+        // Toggle hamburger active state
         toggle.classList.toggle('active', isMenuOpen);
 
         // Toggle body scroll
         document.body.classList.toggle('menu-open', isMenuOpen);
     }
 
-    // Toggle menu on button click
     toggle.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleMenu();
     });
 
-    // Close menu when clicking outside
     document.addEventListener('click', (e) => {
-        if (isMenuOpen &&
-            !headerLeft.contains(e.target) &&
-            !headerRight.contains(e.target) &&
-            !toggle.contains(e.target)) {
+        if (
+            isMenuOpen &&
+            !mobileMenu.contains(e.target) &&
+            !toggle.contains(e.target)
+        ) {
             toggleMenu(false);
         }
     });
 
-    // Close menu on ESC key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && isMenuOpen) {
             toggleMenu(false);
         }
     });
 
-    // Close menu on resize if desktop width is reached
     window.addEventListener('resize', () => {
         if (window.innerWidth >= 1024 && isMenuOpen) {
             toggleMenu(false);
         }
     });
 
-    // Close menu when clicking on a link
     const menuLinks = document.querySelectorAll('.header-left a, .header-right a');
     menuLinks.forEach(link => {
         link.addEventListener('click', () => {
@@ -157,6 +167,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-
-
