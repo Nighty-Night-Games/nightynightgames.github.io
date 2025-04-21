@@ -20,7 +20,7 @@
 
     // === EMBERS ===
     const emberContainer = document.getElementById('ember-container');
-    const title = document.querySelector('.title-wrap h1');
+    const title = document.querySelector('.title-ember-target');
     if (!emberContainer || !title) return;
 
     const isMobile = window.innerWidth < 768;
@@ -170,25 +170,111 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const aboutLinks = document.querySelectorAll('a[href="#about"]');
-    const mainContent = document.getElementById('main-content');
+    const pageContent = document.getElementById('page-content');
+    const originalContent = pageContent.innerHTML;
 
-    const originalContent = mainContent.innerHTML;
 
     const aboutContent = `
-        <div class="title-wrap">
-            <h1>About Us</h1>
-        </div>
-        <div class="underline"></div>
-        <p>Nighty Night Games is a small indie studio based in Germany, dedicated to crafting narrative-driven experiences that leave a mark.</p>
-        <p>We're currently working on <strong>Legacy of Atum: Dead Dynasty</strong>, a cinematic and challenging RPG steeped in myth and meaning.</p>
-        <p>Stay with us on this journey — we're just getting started.</p>
-    `;
+  <div class="title-wrap">
+    <div class="ember-container" id="ember-container" aria-hidden="true"></div>
+    <h1>
+      <span class="title-ember-target">Nighty Night Games</span>
+      <span class="title-visible">ABOUT US</span>
+    </h1>
+  </div>
+  <div class="underline"></div>
+  <p>Nighty Night Games is a small indie studio based in Germany, dedicated to crafting narrative-driven experiences that leave a mark.</p>
+  <p>We're currently working on <strong>Legacy of Atum: Dead Dynasty</strong>, a cinematic and challenging RPG steeped in myth and meaning.</p>
+  <p>Stay with us on this journey — we're just getting started.</p>
+`;
+
 
     aboutLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            mainContent.innerHTML = aboutContent;
+            pageContent.innerHTML = aboutContent;
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Re-init ember animation
+            const newEmberContainer = document.getElementById('ember-container');
+            const newTitle = document.querySelector('.title-wrap h1');
+
+            if (newEmberContainer && newTitle) {
+                const isMobile = window.innerWidth < 768;
+                const maxEmbers = isMobile ? 200 : 400;
+                let emberCount = 0;
+                const riseHeightBase = 100;
+                const riseHeightRange = 200;
+                const titleRect = newTitle.getBoundingClientRect();
+
+                function animateEmber(ember, config) {
+                    let startTime = null;
+                    function step(timestamp) {
+                        if (!startTime) startTime = timestamp;
+                        const elapsed = timestamp - startTime;
+                        const t = elapsed / config.duration;
+                        if (t > 1) {
+                            ember.remove();
+                            emberCount--;
+                            return;
+                        }
+                        const y = -(t ** 1.5) * config.riseHeight + Math.sin(t * 4 * Math.PI) * config.amplitude;
+                        const x = config.direction * Math.sin(t * Math.PI) * 120;
+                        ember.style.transform = `translate(${x}px, ${y}px) scale(${1 - t * 0.5})`;
+                        ember.style.opacity = `${Math.min(1, t * 2) * (1 - t)}`;
+                        requestAnimationFrame(step);
+                    }
+                    requestAnimationFrame(step);
+                }
+
+                function spawnEmber() {
+                    if (emberCount >= maxEmbers) return;
+                    const ember = document.createElement('div');
+                    ember.classList.add('ember');
+                    ember.setAttribute('role', 'presentation');
+
+                    const left = Math.random() * titleRect.width;
+                    const size = (Math.random() * 15 + 3).toFixed(1);
+                    const emberDuration = 12000 + Math.random() * 6000;
+                    const amplitude = 15 + Math.random() * 10;
+                    const direction = Math.random() < 0.5 ? -1 : 1;
+                    const flickerSpeed = (0.6 + Math.random()).toFixed(2);
+                    const flickerDelay = (Math.random() * 3).toFixed(2);
+                    const riseHeight = riseHeightBase + Math.random() * riseHeightRange;
+
+                    Object.assign(ember.style, {
+                        position: 'absolute',
+                        left: `${left}px`,
+                        width: `${size}px`,
+                        height: `${size}px`,
+                        animation: `ember-flicker ${flickerSpeed}s ${flickerDelay}s infinite ease-in-out`
+                    });
+
+                    newEmberContainer.appendChild(ember);
+                    emberCount++;
+                    animateEmber(ember, {
+                        duration: emberDuration,
+                        amplitude,
+                        direction,
+                        riseHeight
+                    });
+                }
+
+                function spawnLoop() {
+                    const spawn = () => {
+                        spawnEmber();
+                        setTimeout(spawnLoop, 150 + Math.random() * 200);
+                    };
+                    if ('requestIdleCallback' in window) {
+                        requestIdleCallback(spawn);
+                    } else {
+                        setTimeout(spawn, 100);
+                    }
+                }
+
+                spawnLoop();
+            }
+
         });
     });
 });

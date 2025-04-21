@@ -1,4 +1,15 @@
 ﻿/* === COMPONENTS === */
+#page-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Optional: only if you had vertical centering */
+    text-align: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg) var(--spacing-sm);
+}
+
+
 .project-progress {
     margin-top: var(--spacing-lg);
     gap: var(--spacing-sm);
@@ -87,6 +98,18 @@
     pointer-events: none;
     will-change: transform, opacity;
     contain: layout style paint;
+}
+
+.title-ember-target {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    font: inherit;
+}
+
+.title-visible {
+    position: relative;
+    z-index: 1;
 }
 
 .grain {
