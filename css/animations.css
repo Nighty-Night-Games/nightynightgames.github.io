@@ -1,0 +1,42 @@
+﻿/* === ANIMATIONS === */
+@keyframes ember-flicker {
+    0%   { filter: drop-shadow(0 0 6px #ffd87e) brightness(1.2); }
+    20%  { filter: drop-shadow(0 0 10px #ffe9a1) brightness(1.7); }
+    40%  { filter: drop-shadow(0 0 7px #ffd170) brightness(1.3); }
+    60%  { filter: drop-shadow(0 0 12px #ffeb91) brightness(1.9); }
+    80%  { filter: drop-shadow(0 0 8px rgba(230, 145, 123, 0.76)) brightness(1.5); }
+    100% { filter: drop-shadow(0 0 6px #f3d99e) brightness(2.2); }
+}
+
+@keyframes pulse-once {
+    0%   { background-color: #555; }
+    50%  { background-color: #aaa; }
+    100% { background-color: #777; }
+}
+
+@keyframes title-glow-pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
