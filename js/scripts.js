@@ -167,3 +167,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const aboutLinks = document.querySelectorAll('a[href="#about"]');
+    const mainContent = document.getElementById('main-content');
+
+    const originalContent = mainContent.innerHTML;
+
+    const aboutContent = `
+        <div class="title-wrap">
+            <h1>About Us</h1>
+        </div>
+        <div class="underline"></div>
+        <p>Nighty Night Games is a small indie studio based in Germany, dedicated to crafting narrative-driven experiences that leave a mark.</p>
+        <p>We're currently working on <strong>Legacy of Atum: Dead Dynasty</strong>, a cinematic and challenging RPG steeped in myth and meaning.</p>
+        <p>Stay with us on this journey — we're just getting started.</p>
+    `;
+
+    aboutLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            mainContent.innerHTML = aboutContent;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+});
+
