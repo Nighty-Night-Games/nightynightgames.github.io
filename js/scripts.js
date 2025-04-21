@@ -1,22 +1,33 @@
-﻿window.addEventListener('load', () => {
+﻿let hasLoaded = false;
+const finalProgress = 5;
+
+window.addEventListener('load', () => {
     // === LOADING BAR ===
     const loadingBar = document.querySelector('.loading-bar');
     const loadingText = document.querySelector('.loading-text');
-    let progress = 0;
-    const maxProgress = 5;
-    const loadingDuration = 1000;
-    const stepTime = Math.floor(loadingDuration / maxProgress);
 
-    const interval = setInterval(() => {
-        progress++;
-        loadingText.textContent = `${progress}%`;
-        loadingBar.style.width = `${progress}%`;
+    if (!hasLoaded) {
+        let progress = 0;
+        const loadingDuration = 1000;
+        const stepTime = Math.floor(loadingDuration / finalProgress);
 
-        // Update ARIA for screen readers
-        loadingBar.parentElement.setAttribute('aria-valuenow', progress);
+        const interval = setInterval(() => {
+            progress++;
+            loadingText.textContent = `${progress}%`;
+            loadingBar.style.width = `${progress}%`;
+            loadingBar.parentElement.setAttribute('aria-valuenow', progress);
 
-        if (progress >= maxProgress) clearInterval(interval);
-    }, stepTime);
+            if (progress >= finalProgress) {
+                clearInterval(interval);
+                hasLoaded = true;
+            }
+        }, stepTime);
+    } else {
+        // If already loaded, restore visual state
+        loadingText.textContent = `${finalProgress}%`;
+        loadingBar.style.width = `${finalProgress}%`;
+        loadingBar.parentElement.setAttribute('aria-valuenow', finalProgress);
+    }
 
     // === EMBERS ===
     const emberContainer = document.getElementById('ember-container');
@@ -151,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleMenu(false);
         }
     });
-
+    
     window.addEventListener('resize', () => {
         if (window.innerWidth >= 1024 && isMenuOpen) {
             toggleMenu(false);
@@ -172,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const aboutLinks = document.querySelectorAll('a[href="#about"]');
     const pageContent = document.getElementById('page-content');
     const originalContent = pageContent.innerHTML;
-
+    const aboutNavLinks = [document.getElementById('about-link'), document.getElementById('about-link-mobile')];
 
     const aboutContent = `
   <div class="title-wrap">
@@ -188,18 +199,52 @@ document.addEventListener('DOMContentLoaded', () => {
   <p>Stay with us on this journey — we're just getting started.</p>
 `;
 
-
     aboutLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
+
+            const currentTitle = document.querySelector('.title-visible');
+
+            if (currentTitle && currentTitle.textContent.trim() === 'ABOUT US') {
+                // Go back to homepage
+                pageContent.innerHTML = originalContent;
+
+                // Restore loading bar if already loaded
+                if (hasLoaded) {
+                    const loadingBar = document.querySelector('.loading-bar');
+                    const loadingText = document.querySelector('.loading-text');
+                    if (loadingBar && loadingText) {
+                        loadingText.textContent = `${finalProgress}%`;
+                        loadingBar.style.width = `${finalProgress}%`;
+                        loadingBar.parentElement.setAttribute('aria-valuenow', finalProgress);
+                    }
+                }
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // Set nav link text back to "About"
+                aboutNavLinks.forEach(l => {
+                    l.textContent = 'About';
+                    l.classList.remove('active');
+                });
+                return;
+            }
+
+            // Show About section
             pageContent.innerHTML = aboutContent;
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // Re-init ember animation
-            const newEmberContainer = document.getElementById('ember-container');
-            const newTitle = document.querySelector('.title-wrap h1');
+            // Set nav link text to "Home"
+            aboutNavLinks.forEach(l => {
+                l.textContent = 'Home';
+                l.classList.add('active');
+            });
 
+            // Re-init ember animation (same as you already have)
+            const newEmberContainer = document.getElementById('ember-container');
+            const newTitle = document.querySelector('.title-ember-target');
             if (newEmberContainer && newTitle) {
+                // your existing ember init logic...
                 const isMobile = window.innerWidth < 768;
                 const maxEmbers = isMobile ? 200 : 400;
                 let emberCount = 0;
@@ -274,7 +319,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 spawnLoop();
             }
-
         });
     });
 });

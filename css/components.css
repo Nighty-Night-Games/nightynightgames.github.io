@@ -9,6 +9,11 @@
     padding: var(--spacing-lg) var(--spacing-sm);
 }
 
+.nav-toggle-link.active {
+    font-weight: bold;
+    text-decoration: underline;
+    color: #ffe0a3;
+}
 
 .project-progress {
     margin-top: var(--spacing-lg);
