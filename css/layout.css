@@ -152,7 +152,7 @@ h1::after {
 }
 
 p {
-    font-size: 1.55rem;
+    font-size: 1.35rem;
     color: var(--text-white);
     max-width: 600px;
     margin: var(--spacing-sm) 0;
@@ -185,4 +185,6 @@ footer a.footer-contact:hover {
     color: var(--text-white);
     text-shadow: 0 0 4px var(--gold);
 }
+
+
 
