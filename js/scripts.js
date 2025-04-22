@@ -118,11 +118,26 @@ function startEmberSpawning(page) {
         const pageEmbers = countEmbersByPage(page);
 
         // Only spawn if under limits
-        if (pageEmbers < maxEmbers && activeEmbers.length < EMBER_CONFIG.MAX_EMBERS) {
+        if (
+            pageEmbers < maxEmbers &&
+            activeEmbers.length < EMBER_CONFIG.MAX_EMBERS &&
+            isTitleVisible()
+        ) {
             spawnEmber(page);
         }
     }, EMBER_CONFIG.SPAWN_RATE);
 }
+
+function isTitleVisible() {
+    const titleElement = document.querySelector('.title-visible');
+    if (!titleElement) return false;
+
+    const rect = titleElement.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+    return rect.top < viewportHeight && rect.bottom > 0;
+}
+
 
 // Spawn a new ember
 function spawnEmber(page) {
@@ -274,6 +289,24 @@ function handlePageTransition(newPage) {
         }
     }, 100);
 }
+
+window.addEventListener('scroll', debounce(() => {
+    const visible = isTitleVisible();
+
+    if (!visible && emberSpawnInterval) {
+        clearInterval(emberSpawnInterval);
+        emberSpawnInterval = null;
+
+        // Fade out active embers
+        activeEmbers.forEach(ember => {
+            ember.style.transition = 'opacity 0.6s ease-out';
+            ember.style.opacity = '0';
+        });
+    } else if (visible && !emberSpawnInterval) {
+        startEmberSpawning(currentPage);
+    }
+}, 100));
+
 
 // Count embers by page
 function countEmbersByPage(page) {
