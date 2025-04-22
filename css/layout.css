@@ -80,15 +80,21 @@
 .site-header a {
     color: var(--text-light);
     text-decoration: none;
-    font-size: 1.1em;
+    font-size: 1.2em;
     font-weight: bold;
-    transition: color var(--transition-default);
+    transition: color var(--transition-default), transform 0.3s ease, color 0.3s ease;
     text-transform: uppercase;
+    transform-origin: center bottom;
+    
 }
 
 .site-header a:hover {
+    transform: translateY(4px);
     color: var(--gold);
+    text-shadow: 0 0 5px var(--gold-light);
 }
+
+
 
 /* === MAIN CONTENT === */
 main {
