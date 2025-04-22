@@ -3,6 +3,12 @@ import { updateConfig } from './config.js';
 import { initEmberSystem } from './embers.js';
 import { startEmberSpawning } from './embers.js';
 
+// Export function to update title rectangle for ember positioning
+export function updateTitleRect() {
+    const el = document.querySelector('.title-visible');
+    if (el) window.currentTitleRect = el.getBoundingClientRect();
+}
+
 // Global state referenced elsewhere
 export function toggleMobileMenu(force = null) {
     const isMenuOpen = force !== null ? force : !window.isMenuOpen;
@@ -123,21 +129,17 @@ export function handleResize() {
     updateConfig();
 
     // Update title position for ember spawning
-    const titleElement = document.querySelector('.title-visible');
-    if (titleElement) {
-        window.currentTitleRect = titleElement.getBoundingClientRect();
-    }
+    updateTitleRect();
 
     // Close mobile menu on desktop
     if (window.innerWidth >= 1024 && window.isMenuOpen) {
         toggleMobileMenu(false);
     }
 
-    if (!window.emberSpawnInterval && titleElement) {
-        const page = titleElement?.textContent.toLowerCase().includes('about') ? 'about' : 'home';
+    if (!window.emberSpawnInterval && document.querySelector('.title-visible')) {
+        const page = document.querySelector('.title-visible')?.textContent.toLowerCase().includes('about') ? 'about' : 'home';
         startEmberSpawning(page);
     }
-    
 }
 
 /**
@@ -149,11 +151,8 @@ export function handleVisibilityChange() {
         // Pause animations if needed
     } else {
         // Resume animations if needed
-
-        // Update title position
-        const titleElement = document.querySelector('.title-visible');
-        if (titleElement) {
-            window.currentTitleRect = titleElement.getBoundingClientRect();
-        }
+        
+        // Update title position when tab becomes visible again
+        updateTitleRect();
     }
 }

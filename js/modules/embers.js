@@ -1,5 +1,6 @@
 ﻿import { DEVICE, EMBER_CONFIG } from './config.js';
 import { countEmbersByPage, isTitleVisible, debounce } from './utils.js';
+import { updateTitleRect } from './ui.js';
 
 // Global state
 let activeEmbers = [];
@@ -16,15 +17,14 @@ export function initEmberSystem() {
     // Create persistent ember container
     createEmberContainer();
 
-    // Find title element
-    const titleElement = document.querySelector('.title-visible');
-    if (!titleElement) return;
-
-    // Cache title position
-    window.currentTitleRect = titleElement.getBoundingClientRect();
+    // Find title element and update its position
+    updateTitleRect();
 
     // Detect current page
-    currentPage = titleElement.textContent.trim().toLowerCase().includes('about') ? 'about' : 'home';
+    const titleElement = document.querySelector('.title-visible');
+    if (titleElement) {
+        currentPage = titleElement.textContent.trim().toLowerCase().includes('about') ? 'about' : 'home';
+    }
 
     // Start ember spawning
     startEmberSpawning(currentPage);
@@ -34,6 +34,9 @@ export function initEmberSystem() {
     
     // Set up scroll event handler
     window.addEventListener('scroll', debounce(() => {
+        // Update title position on scroll
+        updateTitleRect();
+        
         const visible = isTitleVisible();
 
         if (!visible && emberSpawnInterval) {
@@ -242,7 +245,6 @@ export function handlePageTransition(newPage) {
             ember.style.opacity = '0';
 
             // Apply float-up effect
-            // For embers with existing transforms, we need to layer our float effect on top
             if (currentTransform) {
                 // Modify only the Y component and scale
                 ember.style.transform = currentTransform + ' translateY(-40px) scale(0.6)';
@@ -258,15 +260,14 @@ export function handlePageTransition(newPage) {
 
     // Update title position for ember spawning
     setTimeout(() => {
-        const titleElement = document.querySelector('.title-visible');
-        if (titleElement) {
-            window.currentTitleRect = titleElement.getBoundingClientRect();
+        // Use the dedicated function to update title rect
+        updateTitleRect();
 
-            // Start new ember spawning
-            startEmberSpawning(newPage);
-        }
+        // Start new ember spawning
+        startEmberSpawning(newPage);
     }, 100);
 }
+
 
 /**
  * Remove embers that are no longer visible
