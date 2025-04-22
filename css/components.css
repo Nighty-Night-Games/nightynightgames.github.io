@@ -103,12 +103,13 @@
     pointer-events: none;
     will-change: transform, opacity;
     contain: layout style paint;
+    transition: filter 0.5s ease-out;
 }
 
-.ember.transitioning {
-    /* Optional: you can customize the transitioning embers appearance */
-    filter: drop-shadow(0 0 4px rgba(255, 216, 126, 0.7)) brightness(1.0);
+.ember[data-transitioning="true"] {
+    filter: drop-shadow(0 0 8px #ffd170) brightness(1.4);
 }
+
 
 .title-ember-target {
     position: absolute;
