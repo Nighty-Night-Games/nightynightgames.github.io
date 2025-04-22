@@ -1,5 +1,92 @@
-﻿let hasLoaded = false;
+let hasLoaded = false;
 const finalProgress = 5;
+
+// PREPEND THESE TO EXISTING SCRIPT FILE (you already have the rest below)
+function reinitEmbersAfterSwap() {
+    const emberContainer = document.getElementById('ember-container');
+    const title = document.querySelector('.title-ember-target');
+
+    // Remove old embers to avoid overlap/flicker
+    document.querySelectorAll('.ember').forEach(e => e.remove());
+
+    if (!emberContainer || !title) return;
+
+    const isMobile = window.innerWidth < 768;
+    const maxEmbers = isMobile ? 200 : 400;
+    let emberCount = 0;
+    const riseHeightBase = 100;
+    const riseHeightRange = 200;
+    const titleRect = title.getBoundingClientRect();
+
+    function animateEmber(ember, config) {
+        let startTime = null;
+        function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            const t = elapsed / config.duration;
+            if (t > 1) {
+                ember.remove();
+                emberCount--;
+                return;
+            }
+            const y = -(t ** 1.5) * config.riseHeight + Math.sin(t * 4 * Math.PI) * config.amplitude;
+            const x = config.direction * Math.sin(t * Math.PI) * 120;
+            ember.style.transform = `translate(${x}px, ${y}px) scale(${1 - t * 0.5})`;
+            ember.style.opacity = `${Math.min(1, t * 2) * (1 - t)}`;
+            requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+    }
+
+    function spawnEmber() {
+        if (emberCount >= maxEmbers) return;
+        const ember = document.createElement('div');
+        ember.classList.add('ember');
+        ember.setAttribute('role', 'presentation');
+
+        const left = Math.random() * titleRect.width;
+        const size = (Math.random() * 15 + 3).toFixed(1);
+        const emberDuration = 12000 + Math.random() * 6000;
+        const amplitude = 15 + Math.random() * 10;
+        const direction = Math.random() < 0.5 ? -1 : 1;
+        const flickerSpeed = (0.6 + Math.random()).toFixed(2);
+        const flickerDelay = (Math.random() * 3).toFixed(2);
+        const riseHeight = riseHeightBase + Math.random() * riseHeightRange;
+
+        Object.assign(ember.style, {
+            position: 'absolute',
+            left: `${left}px`,
+            width: `${size}px`,
+            height: `${size}px`,
+            animation: `ember-flicker ${flickerSpeed}s ${flickerDelay}s infinite ease-in-out`
+        });
+
+        emberContainer.appendChild(ember);
+        emberCount++;
+        animateEmber(ember, {
+            duration: emberDuration,
+            amplitude,
+            direction,
+            riseHeight
+        });
+    }
+
+    function spawnLoop() {
+        const spawn = () => {
+            spawnEmber();
+            setTimeout(spawnLoop, 150 + Math.random() * 200);
+        };
+
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(spawn);
+        } else {
+            setTimeout(spawn, 100);
+        }
+    }
+
+    spawnLoop();
+}
+
 
 window.addEventListener('load', () => {
     // === LOADING BAR ===
@@ -207,7 +294,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (currentTitle && currentTitle.textContent.trim() === 'ABOUT US') {
                 // Go back to homepage
+                document.querySelectorAll('.ember').forEach(e => e.remove());
                 pageContent.innerHTML = originalContent;
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        reinitEmbersAfterSwap();
+                    });
+                });
 
                 // Restore loading bar if already loaded
                 if (hasLoaded) {
@@ -232,7 +325,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Show About section
             pageContent.innerHTML = aboutContent;
+            document.querySelectorAll('.ember').forEach(e => e.remove());
+            pageContent.innerHTML = aboutContent;
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+// Wait one animation frame so DOM is ready
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    reinitEmbersAfterSwap();
+                });
+            });
 
             // Set nav link text to "Home"
             aboutNavLinks.forEach(l => {
