@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize embers on first load - wait a short delay to ensure DOM is ready
     setTimeout(() => {
         reinitEmbersAfterSwap();
-    }, 100);
+    }, 50);
 });
 
 // Update the reinitEmbersAfterSwap function
@@ -56,7 +56,7 @@ function reinitEmbersAfterSwap() {
     const viewportHeight = window.innerHeight;
     
     const isMobile = window.innerWidth < 768;
-    const maxEmbers = isMobile ? 200 : 400;
+    const maxEmbers = isMobile ? 150 : 300;
     let emberCount = document.querySelectorAll('.ember').length;
     const riseHeightBase = 100;
     const riseHeightRange = 200;

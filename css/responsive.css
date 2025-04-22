@@ -14,9 +14,7 @@
         align-items: center;
         padding: 0 var(--spacing-md);
         height: 4rem;
-        background: var(--background-dark);
-        backdrop-filter: blur(var(--blur-amount));
-        border-bottom: 1px solid var(--border-light);
+        background: transparent;
         z-index: 100;
     }
 
@@ -83,9 +81,8 @@
         width: 100%;
         padding: var(--spacing-sm);
         gap: var(--spacing-sm);
-        background: var(--background-dark);
+        background: transparent;
         border-top: 1px solid var(--border-light);
-        backdrop-filter: blur(var(--blur-amount));
         opacity: 0;
         visibility: hidden;
         transform: translateY(-20px);
@@ -366,8 +363,7 @@
         position: absolute;
         top: 100%;
         right: 0;
-        background: var(--background-dark);
-        backdrop-filter: blur(var(--blur-amount));
+        background: transparent;
         padding: var(--spacing-sm);
         border-bottom-left-radius: 4px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
