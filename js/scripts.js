@@ -1,113 +1,105 @@
-// ===== EMBER SYSTEM - OPTIMIZED IMPLEMENTATION =====
-let hasLoaded = false;
-const finalProgress = 5;
-
-// Device and browser capability detection
-const isMobileBrowser = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-const isLowPowerDevice = isMobileBrowser || !window.matchMedia('(min-resolution: 2dppx)').matches;
-const useReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-// Organize constants by category
-const EMBER_CONFIG = {
-    GLOBAL: {
-        MAX_EMBERS: isLowPowerDevice ? 80 : 200,
-        CLEANUP_INTERVAL: 10000
-    },
-    HOME: {
-        MAX_EMBERS: isLowPowerDevice ? 50 : 150,
-        SPAWN_RATE: isLowPowerDevice ? 400 : 200
-    },
-    ABOUT: {
-        MAX_EMBERS: isLowPowerDevice ? 30 : 100,
-        SPAWN_RATE: isLowPowerDevice ? 600 : 350
-    },
-    ANIMATION: {
-        TRANSITION_DURATION: 8000,
-        BASE_DURATION: 12000,
-        RANDOM_DURATION: 6000,
-        BASE_AMPLITUDE: 15,
-        RANDOM_AMPLITUDE: 10
-    }
+// Detect device capabilities
+const DEVICE = {
+    isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+    isSmallScreen: window.matchMedia('(max-width: 768px)').matches,
+    lowPower: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    hasGPU: !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) &&
+        !window.matchMedia('(min-resolution: 2dppx)').matches),
+    supportsTouch: 'ontouchstart' in window
 };
 
-// Global state variables for ember system
-let currentActivePage = 'home';
+// Configure ember system based on device capability
+const EMBER_CONFIG = {
+    MAX_EMBERS: DEVICE.lowPower ? 60 : (DEVICE.isSmallScreen ? 100 : 200),
+    HOME_MAX_EMBERS: DEVICE.lowPower ? 40 : (DEVICE.isSmallScreen ? 80 : 150),
+    ABOUT_MAX_EMBERS: DEVICE.lowPower ? 25 : (DEVICE.isSmallScreen ? 60 : 100),
+    SPAWN_RATE: DEVICE.lowPower ? 500 : (DEVICE.isSmallScreen ? 300 : 200),
+    CLEANUP_INTERVAL: 8000,
+    USE_GPU: DEVICE.hasGPU,
+    SIZE_BASE: DEVICE.isSmallScreen ? 2 : 3,
+    SIZE_VARIANCE: DEVICE.isSmallScreen ? 8 : 15
+};
+
+// Global state
+let hasLoaded = false;
+const finalProgress = 5;
+let currentPage = 'home';
 let emberSpawnInterval = null;
 let activeEmbers = [];
+let isMenuOpen = false;
 
-// Utility function for debouncing
-function debounce(func, wait) {
-    let timeout;
-    return function(...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-    };
-}
-
-// Initialize the ember system on page load
+// Main initialization
 document.addEventListener('DOMContentLoaded', () => {
-    // Create a persistent ember container that stays across page changes
-    if (!document.getElementById('persistent-ember-container')) {
-        const persistentEmberContainer = document.createElement('div');
-        persistentEmberContainer.id = 'persistent-ember-container';
-        persistentEmberContainer.setAttribute('aria-hidden', 'true');
-        persistentEmberContainer.style.position = 'fixed';
-        persistentEmberContainer.style.top = '0';
-        persistentEmberContainer.style.left = '0';
-        persistentEmberContainer.style.width = '100%';
-        persistentEmberContainer.style.height = '100%';
-        persistentEmberContainer.style.pointerEvents = 'none';
-        persistentEmberContainer.style.zIndex = '10';
-        persistentEmberContainer.style.overflow = 'visible';
-        document.body.appendChild(persistentEmberContainer);
+    // Initialize page components
+    setupMobileMenu();
+    setupPageNavigation();
 
-        // But delay the actual ember system initialization until after page load
-        if (document.readyState === 'complete') {
-            initEmberSystem();
-        } else {
-            window.addEventListener('load', () => {
-                // Wait for first paint to complete
-                requestAnimationFrame(() => {
-                    // Then start ember system
-                    initEmberSystem();
-                });
-            });
-        }
-    }
+    // Set up loading bar
+    window.addEventListener('load', initLoadingBar);
 
-    // Set up periodic cleanup with requestIdleCallback if available
-    if (window.requestIdleCallback) {
-        window.requestIdleCallback(() => {
-            setInterval(cleanupInvisibleEmbers, EMBER_CONFIG.GLOBAL.CLEANUP_INTERVAL);
-        });
+    // Initialize embers after first paint
+    if (document.readyState === 'complete') {
+        requestAnimationFrame(() => initEmberSystem());
     } else {
-        setTimeout(() => {
-            setInterval(cleanupInvisibleEmbers, EMBER_CONFIG.GLOBAL.CLEANUP_INTERVAL);
-        }, 5000); // Delay cleanup start
+        window.addEventListener('load', () => {
+            requestAnimationFrame(() => initEmberSystem());
+        });
     }
+
+    // Set up responsive handlers
+    window.addEventListener('resize', debounce(handleResize, 150));
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 });
 
-// Main function to initialize the ember system
+// Initialize ember system
 function initEmberSystem() {
-    // Cache DOM elements at the start
+    // Create persistent ember container
+    createEmberContainer();
+
+    // Find title element
     const titleElement = document.querySelector('.title-visible');
+    if (!titleElement) return;
 
-    if (!titleElement) {
-        console.warn('Title element not found for ember initialization');
-        return;
-    }
-
-    // Store reference to persistent container
-    window.emberContainer = document.getElementById('persistent-ember-container');
+    // Cache title position
+    window.currentTitleRect = titleElement.getBoundingClientRect();
 
     // Detect current page
-    currentActivePage = titleElement.textContent.trim().toLowerCase().includes('about') ? 'about' : 'home';
+    currentPage = titleElement.textContent.trim().toLowerCase().includes('about') ? 'about' : 'home';
 
-    // Start ember spawning for current page
-    startEmberSpawning(currentActivePage);
+    // Start ember spawning
+    startEmberSpawning(currentPage);
+
+    // Set up periodic cleanup
+    setInterval(cleanupInvisibleEmbers, EMBER_CONFIG.CLEANUP_INTERVAL);
 }
 
-// Function to start spawning embers for the current page
+// Create the ember container
+function createEmberContainer() {
+    if (!document.getElementById('persistent-ember-container')) {
+        const container = document.createElement('div');
+        container.id = 'persistent-ember-container';
+        container.setAttribute('aria-hidden', 'true');
+
+        Object.assign(container.style, {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+            zIndex: '10',
+            overflow: 'visible'
+        });
+
+        document.body.appendChild(container);
+        window.emberContainer = container;
+    } else {
+        window.emberContainer = document.getElementById('persistent-ember-container');
+    }
+}
+
+// Start spawning embers for the current page
 function startEmberSpawning(page) {
     // Clear any existing spawn interval
     if (emberSpawnInterval) {
@@ -116,27 +108,117 @@ function startEmberSpawning(page) {
     }
 
     // Configure based on page
-    const config = {
-        maxEmbers: page === 'about' ? EMBER_CONFIG.ABOUT.MAX_EMBERS : EMBER_CONFIG.HOME.MAX_EMBERS,
-        spawnRate: page === 'about' ? EMBER_CONFIG.ABOUT.SPAWN_RATE : EMBER_CONFIG.HOME.SPAWN_RATE
-    };
+    const maxEmbers = page === 'about' ? EMBER_CONFIG.ABOUT_MAX_EMBERS : EMBER_CONFIG.HOME_MAX_EMBERS;
 
     // Start new spawn interval
     emberSpawnInterval = setInterval(() => {
-        const pageEmberCount = countEmbersByPage(page);
-        const totalEmberCount = activeEmbers.length;
+        // Don't spawn if document is hidden or menu is open on low power devices
+        if (document.hidden || (isMenuOpen && DEVICE.lowPower)) return;
 
-        // Only spawn if under both page and global limits
-        if (pageEmberCount < config.maxEmbers && totalEmberCount < EMBER_CONFIG.GLOBAL.MAX_EMBERS) {
+        const pageEmbers = countEmbersByPage(page);
+
+        // Only spawn if under limits
+        if (pageEmbers < maxEmbers && activeEmbers.length < EMBER_CONFIG.MAX_EMBERS) {
             spawnEmber(page);
         }
-    }, config.spawnRate);
+    }, EMBER_CONFIG.SPAWN_RATE);
 }
 
-// Function to handle page transitions
+// Spawn a new ember
+function spawnEmber(page) {
+    const container = window.emberContainer;
+    const titleRect = window.currentTitleRect;
+
+    if (!container || !titleRect) return;
+
+    // Create ember element
+    const ember = document.createElement('div');
+    ember.classList.add('ember');
+    ember.setAttribute('role', 'presentation');
+    ember.setAttribute('data-page', page);
+    ember.setAttribute('data-created', Date.now().toString());
+
+    // Generate random properties
+    const left = titleRect.left + Math.random() * titleRect.width;
+    const top = titleRect.top + Math.random() * titleRect.height * 0.2;
+    const size = EMBER_CONFIG.SIZE_BASE + Math.random() * EMBER_CONFIG.SIZE_VARIANCE;
+    const duration = 10000 + Math.random() * 8000;
+    const amplitude = 15 + Math.random() * 10;
+    const direction = Math.random() < 0.5 ? -1 : 1;
+    const flickerSpeed = (0.6 + Math.random()).toFixed(2);
+    const flickerDelay = (Math.random() * 3).toFixed(2);
+    const riseHeight = 100 + Math.random() * 200;
+
+    // Store animation data
+    ember.emberData = {
+        startTime: performance.now(),
+        duration: duration,
+        amplitude: amplitude,
+        direction: direction,
+        riseHeight: riseHeight
+    };
+
+    // Apply styles
+    Object.assign(ember.style, {
+        position: 'absolute',
+        left: `${left}px`,
+        top: `${top}px`,
+        width: `${size}px`,
+        height: `${size}px`,
+        background: 'radial-gradient(circle, #ffda96 0%, transparent 30%)',
+        borderRadius: '50%',
+        opacity: '0',
+        transform: EMBER_CONFIG.USE_GPU ? 'translate3d(0,0,0)' : 'translate(0,0)',
+        filter: 'drop-shadow(0 0 8px #ffd170) brightness(1.6)'
+    });
+
+    // Add animation only if not low power
+    if (!DEVICE.lowPower) {
+        ember.style.animation = `ember-flicker ${flickerSpeed}s ${flickerDelay}s infinite ease-in-out`;
+    }
+
+    // Add to container and tracking array
+    container.appendChild(ember);
+    activeEmbers.push(ember);
+
+    // Start animation loop for this ember
+    requestAnimationFrame(function animate(timestamp) {
+        if (!ember.isConnected) return;
+
+        const data = ember.emberData;
+        const elapsed = timestamp - data.startTime;
+        const t = elapsed / data.duration;
+
+        if (t > 1) {
+            // Remove when animation complete
+            const index = activeEmbers.indexOf(ember);
+            if (index !== -1) activeEmbers.splice(index, 1);
+            if (ember.isConnected) ember.remove();
+            return;
+        }
+
+        // Calculate animation values
+        const progress = t ** 1.5;
+        const yOffset = -progress * data.riseHeight + Math.sin(t * 4 * Math.PI) * data.amplitude;
+        const xOffset = data.direction * Math.sin(t * Math.PI) * 120;
+        const opacity = (t < 0.33 ? t * 3 : 1) * (1 - t ** 0.7);
+
+        // Apply values
+        ember.style.opacity = opacity.toFixed(2);
+        ember.style.transform = EMBER_CONFIG.USE_GPU
+            ? `translate3d(${xOffset}px, ${yOffset}px, 0) scale(${1 - t * 0.5})`
+            : `translate(${xOffset}px, ${yOffset}px) scale(${1 - t * 0.5})`;
+
+        // Continue animation
+        requestAnimationFrame(animate);
+    });
+
+    return ember;
+}
+
+// Handle page transition
 function handlePageTransition(newPage) {
-    // Don't do anything if it's the same page
-    if (newPage === currentActivePage) return;
+    if (newPage === currentPage) return;
 
     // Stop current ember spawning
     if (emberSpawnInterval) {
@@ -146,182 +228,54 @@ function handlePageTransition(newPage) {
 
     // Mark existing embers as transitioning
     activeEmbers.forEach(ember => {
-        if (ember.getAttribute('data-page') === currentActivePage) {
+        if (ember.getAttribute('data-page') === currentPage) {
             ember.setAttribute('data-transitioning', 'true');
 
             // Calculate remaining lifetime
-            const remainingLifetime = calculateRemainingLifetime(ember);
+            const creationTime = parseInt(ember.getAttribute('data-created')) || Date.now() - 5000;
+            const elapsedTime = Date.now() - creationTime;
+            const duration = Math.max(3000, 8000 - elapsedTime);
 
-            // Animate transitioning ember
-            animateTransitioningEmber(ember, {
-                duration: remainingLifetime
-            });
+            // Get current position for smooth transition
+            const currentTransform = ember.style.transform || '';
+
+            // Apply transition for both opacity and transform
+            ember.style.transition = `
+            opacity ${duration}ms ease-out,
+            transform ${Math.min(50, duration / 600)}ms ease-out
+        `;
+
+            // Apply fade out
+            ember.style.opacity = '0';
+
+            // Apply float-up effect
+            // For embers with existing transforms, we need to layer our float effect on top
+            if (currentTransform) {
+                // Modify only the Y component and scale
+                ember.style.transform = currentTransform + ' translateY(-40px) scale(0.6)';
+            } else {
+                // Simple transform for embers without existing transforms
+                ember.style.transform = 'translateY(-40px) scale(0.6)';
+            }
         }
     });
 
     // Update current page
-    currentActivePage = newPage;
+    currentPage = newPage;
 
-    // Start new ember spawning
-    startEmberSpawning(newPage);
-}
-
-// Function to calculate remaining lifetime of an ember
-function calculateRemainingLifetime(ember) {
-    const creationTime = parseInt(ember.getAttribute('data-created')) || Date.now() - 5000;
-    const elapsedTime = Date.now() - creationTime;
-    const originalDuration = parseInt(ember.getAttribute('data-duration')) || 15000;
-
-    // At least 3 seconds for a nice transition
-    return Math.max(3000, Math.min(EMBER_CONFIG.ANIMATION.TRANSITION_DURATION, originalDuration - elapsedTime));
-}
-
-// Function to animate a transitioning ember
-function animateTransitioningEmber(ember, config) {
-    try {
-        // Apply transition-specific styles
-        ember.style.filter = 'drop-shadow(0 0 8px #ffd170) brightness(1.4)';
-
-        // Get current opacity
-        const currentOpacity = parseFloat(getComputedStyle(ember).opacity) || 0.7;
-
-        // Apply a gentle fade out
-        const fadeOut = ember.animate(
-            [
-                { opacity: currentOpacity },
-                { opacity: 0 }
-            ],
-            {
-                duration: config.duration,
-                easing: 'ease-out',
-                fill: 'forwards'
-            }
-        );
-
-        // Remove the ember when animation completes
-        fadeOut.onfinish = () => {
-            try {
-                const index = activeEmbers.indexOf(ember);
-                if (index !== -1) {
-                    activeEmbers.splice(index, 1);
-                }
-                if (ember.isConnected) ember.remove();
-            } catch (e) {
-                console.warn('Error cleaning up transitioning ember:', e);
-            }
-        };
-    } catch (e) {
-        console.warn('Error animating transitioning ember:', e);
-        // Fallback removal
-        const index = activeEmbers.indexOf(ember);
-        if (index !== -1) {
-            activeEmbers.splice(index, 1);
-        }
-        if (ember.isConnected) ember.remove();
-    }
-}
-
-// Function to spawn a new ember
-function spawnEmber(page) {
-    try {
-        // Use cached container reference when possible
-        const persistentEmberContainer = window.emberContainer || document.getElementById('persistent-ember-container');
+    // Update title position for ember spawning
+    setTimeout(() => {
         const titleElement = document.querySelector('.title-visible');
+        if (titleElement) {
+            window.currentTitleRect = titleElement.getBoundingClientRect();
 
-        if (!persistentEmberContainer || !titleElement) {
-            console.warn('Missing elements for ember spawning');
-            return;
+            // Start new ember spawning
+            startEmberSpawning(newPage);
         }
-
-        // Get title position
-        const titleRect = window.currentTitleRect || titleElement.getBoundingClientRect();
-
-        // Create new ember
-        const ember = document.createElement('div');
-        ember.classList.add('ember');
-        ember.setAttribute('role', 'presentation');
-        ember.setAttribute('data-page', page);
-        ember.setAttribute('data-created', Date.now().toString());
-
-        // Configure appearance with optimized random values
-        const left = titleRect.left + Math.random() * titleRect.width;
-        const top = titleRect.top + Math.random() * titleRect.height * 0.2;
-        const size = (Math.random() * 15 + 3).toFixed(1);
-        const duration = EMBER_CONFIG.ANIMATION.BASE_DURATION + Math.random() * EMBER_CONFIG.ANIMATION.RANDOM_DURATION;
-        const amplitude = EMBER_CONFIG.ANIMATION.BASE_AMPLITUDE + Math.random() * EMBER_CONFIG.ANIMATION.RANDOM_AMPLITUDE;
-        const direction = Math.random() < 0.5 ? -1 : 1;
-        const flickerSpeed = (0.6 + Math.random()).toFixed(2);
-        const flickerDelay = (Math.random() * 3).toFixed(2);
-        const riseHeight = 100 + Math.random() * 200;
-
-        // Store duration for later use
-        ember.setAttribute('data-duration', duration.toString());
-
-        // Apply initial styles
-        Object.assign(ember.style, {
-            position: 'absolute',
-            left: `${left}px`,
-            top: `${top}px`,
-            width: `${size}px`,
-            height: `${size}px`,
-            background: 'radial-gradient(circle, #ffda96 0%, transparent 30%)',
-            borderRadius: '50%',
-            opacity: '0',
-            filter: 'drop-shadow(0 0 8px #ffd170) brightness(1.6)',
-            animation: `ember-flicker ${flickerSpeed}s ${flickerDelay}s infinite ease-in-out`
-        });
-
-        // Add to container and tracking array
-        persistentEmberContainer.appendChild(ember);
-        activeEmbers.push(ember);
-
-        // Animate the ember
-        animateEmber(ember, {
-            duration,
-            amplitude,
-            direction,
-            riseHeight
-        });
-    } catch (e) {
-        console.warn('Error spawning ember:', e);
-    }
+    }, 100);
 }
 
-// Function to animate an ember with optimized handling
-function animateEmber(ember, config) {
-    const startTime = performance.now();
-
-    function step(timestamp) {
-        const elapsed = timestamp - startTime;
-        const t = elapsed / config.duration;
-
-        if (t > 1 || !ember.isConnected) {
-            const index = activeEmbers.indexOf(ember);
-            if (index !== -1) {
-                activeEmbers.splice(index, 1);
-            }
-            if (ember.isConnected) ember.remove();
-            return;
-        }
-
-        // More efficient calculation
-        const progress = t ** 1.5;
-        const yOffset = -progress * config.riseHeight + Math.sin(t * 4 * Math.PI) * config.amplitude;
-        const xOffset = config.direction * Math.sin(t * Math.PI) * 120;
-
-        // Set opacity with fewer calculations
-        ember.style.opacity = (t < 0.33 ? t * 3 : 1) * (1 - t ** 0.7);
-
-        // Use translate3d for GPU acceleration
-        ember.style.transform = `translate3d(${xOffset}px, ${yOffset}px, 0) scale(${1 - t * 0.5})`;
-
-        requestAnimationFrame(step);
-    }
-
-    requestAnimationFrame(step);
-}
-
-// Function to count embers by page - streamlined
+// Count embers by page
 function countEmbersByPage(page) {
     let count = 0;
     for (let i = 0; i < activeEmbers.length; i++) {
@@ -332,24 +286,166 @@ function countEmbersByPage(page) {
     return count;
 }
 
-// Function to clean up invisible or offscreen embers - optimized
+// Clean up invisible or offscreen embers
 function cleanupInvisibleEmbers() {
     let i = activeEmbers.length;
     while (i--) {
         const ember = activeEmbers[i];
         if (!ember.isConnected || parseFloat(ember.style.opacity || '0') < 0.1) {
-            ember.remove();
+            if (ember.isConnected) ember.remove();
             activeEmbers.splice(i, 1);
         }
     }
-    // No need to create a new array - just splice from the existing one
 }
 
-// ===== INTEGRATE WITH PAGE NAVIGATION =====
-document.addEventListener('DOMContentLoaded', () => {
-    const aboutLinks = document.querySelectorAll('a[href="#about"]');
+// Handle window resize
+function handleResize() {
+    // Update screen size detection
+    DEVICE.isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
+
+    // Update title position for ember spawning
+    const titleElement = document.querySelector('.title-visible');
+    if (titleElement) {
+        window.currentTitleRect = titleElement.getBoundingClientRect();
+    }
+
+    // Close mobile menu if we're resizing to desktop
+    if (window.innerWidth >= 1024 && isMenuOpen) {
+        toggleMobileMenu(false);
+    }
+}
+
+// Handle visibility change
+function handleVisibilityChange() {
+    if (document.hidden) {
+        // Pause extensive operations when tab is inactive
+        if (emberSpawnInterval) {
+            clearInterval(emberSpawnInterval);
+            emberSpawnInterval = null;
+        }
+    } else {
+        // Resume operations when tab becomes active
+        if (!emberSpawnInterval && window.currentTitleRect) {
+            startEmberSpawning(currentPage);
+        }
+    }
+}
+
+// Initialize loading bar
+function initLoadingBar() {
+    const loadingBar = document.querySelector('.loading-bar');
+    const loadingText = document.querySelector('.loading-text');
+
+    if (!hasLoaded && loadingBar && loadingText) {
+        let progress = 0;
+        const loadingDuration = DEVICE.lowPower ? 600 : 1000;
+        const stepTime = Math.floor(loadingDuration / finalProgress);
+
+        const interval = setInterval(() => {
+            progress++;
+            loadingText.textContent = `${progress}%`;
+            loadingBar.style.width = `${progress}%`;
+
+            const container = loadingBar.parentElement;
+            if (container) {
+                container.setAttribute('aria-valuenow', progress);
+            }
+
+            if (progress >= finalProgress) {
+                clearInterval(interval);
+                hasLoaded = true;
+                loadingBar.classList.add('loaded');
+            }
+        }, stepTime);
+    } else if (loadingBar && loadingText) {
+        // If already loaded, restore visual state
+        loadingText.textContent = `${finalProgress}%`;
+        loadingBar.style.width = `${finalProgress}%`;
+
+        const container = loadingBar.parentElement;
+        if (container) {
+            container.setAttribute('aria-valuenow', finalProgress);
+        }
+    }
+}
+
+// Set up the mobile menu functionality
+function setupMobileMenu() {
+    const toggle = document.querySelector('.menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (!toggle || !mobileMenu) return;
+
+    // Set up toggle button
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMobileMenu();
+    });
+
+    // Set up close on outside click
+    document.addEventListener('click', (e) => {
+        if (isMenuOpen && !mobileMenu.contains(e.target) && !toggle.contains(e.target)) {
+            toggleMobileMenu(false);
+        }
+    });
+
+    // Set up escape key handling
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isMenuOpen) {
+            toggleMobileMenu(false);
+        }
+    });
+
+    // Close menu when links are clicked
+    const menuLinks = document.querySelectorAll('.header-left a, .header-right a');
+    menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth < 1024) {
+                toggleMobileMenu(false);
+            }
+        });
+    });
+
+    // Touch device handling
+    if (DEVICE.supportsTouch) {
+        mobileMenu.addEventListener('touchstart', (e) => {
+            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+                e.stopPropagation();
+            }
+        }, { passive: false });
+    }
+}
+
+// Toggle mobile menu state
+function toggleMobileMenu(force = null) {
+    isMenuOpen = force !== null ? force : !isMenuOpen;
+
+    const mobileMenu = document.getElementById('mobile-menu');
+    const toggle = document.querySelector('.menu-toggle');
+
+    if (!mobileMenu || !toggle) return;
+
+    // Toggle menu classes
+    mobileMenu.classList.toggle('active', isMenuOpen);
+    mobileMenu.setAttribute('aria-hidden', !isMenuOpen);
+
+    // Update ARIA attributes
+    toggle.setAttribute('aria-expanded', isMenuOpen);
+
+    // Toggle hamburger active state
+    toggle.classList.toggle('active', isMenuOpen);
+
+    // Toggle body scroll
+    document.body.classList.toggle('menu-open', isMenuOpen);
+}
+
+// Set up page navigation
+function setupPageNavigation() {
     const pageContent = document.getElementById('page-content');
-    const originalContent = pageContent ? pageContent.innerHTML : '';
+    if (!pageContent) return;
+
+    const originalContent = pageContent.innerHTML;
+
     const aboutNavLinks = [
         document.getElementById('about-link'),
         document.getElementById('about-link-mobile')
@@ -391,204 +487,96 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to switch between pages
     function switchPage(toAbout) {
-        if (!pageContent) return;
+        // Create fade effect
+        const fadeOut = pageContent.animate(
+            [{ opacity: 1 }, { opacity: 0 }],
+            { duration: 300, easing: 'ease-out', fill: 'forwards' }
+        );
 
-        // Update page content
-        pageContent.innerHTML = toAbout ? aboutContent : originalContent;
+        fadeOut.onfinish = () => {
+            // Update page content
+            pageContent.innerHTML = toAbout ? aboutContent : originalContent;
 
-        // Handle ember transition
-        handlePageTransition(toAbout ? 'about' : 'home');
+            // Handle ember transition
+            handlePageTransition(toAbout ? 'about' : 'home');
 
-        // Update navigation links
-        aboutNavLinks.forEach(l => {
-            if (l) {
-                l.textContent = toAbout ? 'Home' : 'About';
-                l.classList.toggle('active', toAbout);
+            // Update navigation links
+            aboutNavLinks.forEach(l => {
+                if (l) {
+                    l.textContent = toAbout ? 'Home' : 'About';
+                    l.classList.toggle('active', toAbout);
+                }
+            });
+
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Accessibility focus management
+            setTimeout(() => {
+                const heading = document.querySelector('.title-visible');
+                if (heading) {
+                    heading.setAttribute('tabindex', '-1');
+                    heading.focus();
+                    // Remove tabindex after focus
+                    setTimeout(() => heading.removeAttribute('tabindex'), 1000);
+                }
+            }, 100);
+
+            // Restore loading bar if applicable
+            if (hasLoaded && !toAbout) {
+                const loadingBar = document.querySelector('.loading-bar');
+                const loadingText = document.querySelector('.loading-text');
+                if (loadingBar && loadingText) {
+                    loadingText.textContent = `${finalProgress}%`;
+                    loadingBar.style.width = `${finalProgress}%`;
+                    loadingBar.parentElement.setAttribute('aria-valuenow', finalProgress);
+                }
             }
-        });
 
-        // Smooth scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        // Focus management - focus the page heading for screen readers
-        setTimeout(() => {
-            const heading = document.querySelector('.title-visible');
-            if (heading) {
-                heading.setAttribute('tabindex', '-1');
-                heading.focus();
-                // Remove tabindex after focus to avoid persistent tab stop
-                setTimeout(() => heading.removeAttribute('tabindex'), 1000);
-            }
-        }, 100);
-
-        // Restore loading bar if applicable
-        if (hasLoaded && !toAbout) {
-            const loadingBar = document.querySelector('.loading-bar');
-            const loadingText = document.querySelector('.loading-text');
-            if (loadingBar && loadingText) {
-                loadingText.textContent = `${finalProgress}%`;
-                loadingBar.style.width = `${finalProgress}%`;
-                loadingBar.parentElement.setAttribute('aria-valuenow', finalProgress);
-            }
-        }
-
-        // Cache the new title position for ember spawning
-        setTimeout(() => {
-            const titleElement = document.querySelector('.title-visible');
-            if (titleElement) {
-                window.currentTitleRect = titleElement.getBoundingClientRect();
-            }
-        }, 50);
+            // Fade in effect
+            pageContent.animate(
+                [{ opacity: 0 }, { opacity: 1 }],
+                { duration: 300, easing: 'ease-in', fill: 'forwards' }
+            );
+        };
     }
 
     // Set up click handlers for about/home links
+    const aboutLinks = document.querySelectorAll('a[href="#about"]');
     aboutLinks.forEach(link => {
         if (!link) return;
 
         link.addEventListener('click', (e) => {
             e.preventDefault();
+
             const currentTitle = document.querySelector('.title-visible');
             const isCurrentlyAbout = currentTitle &&
                 currentTitle.textContent.trim().toLowerCase().includes('about');
 
             // Switch to the other page
             switchPage(!isCurrentlyAbout);
-        });
-    });
 
-    // Better handling for touch devices in mobile menu
-    if ('ontouchstart' in window) {
-        const menuArea = document.querySelector('.mobile-menu');
-        if (menuArea) {
-            menuArea.addEventListener('touchstart', (e) => {
-                // Prevent default only if we're operating on a menu link
-                if (e.target.tagName === 'A') {
-                    e.stopPropagation();
-                }
-            }, { passive: false });
-        }
-    }
-});
-
-// Handle window resize with debounce
-window.addEventListener('resize', debounce(() => {
-    // Recalculate ember position on resize if needed
-    const titleElement = document.querySelector('.title-visible');
-    if (titleElement) {
-        // Cache the new title position
-        window.currentTitleRect = titleElement.getBoundingClientRect();
-    }
-
-    // Handle mobile menu if needed
-    const mobileMenu = document.getElementById('mobile-menu');
-    const isMenuOpen = mobileMenu && mobileMenu.classList.contains('active');
-
-    if (window.innerWidth >= 1024 && isMenuOpen && mobileMenu) {
-        // Close mobile menu if we resize to desktop
-        const toggle = document.querySelector('.menu-toggle');
-
-        mobileMenu.classList.remove('active');
-        mobileMenu.setAttribute('aria-hidden', 'true');
-
-        if (toggle) {
-            toggle.setAttribute('aria-expanded', 'false');
-            toggle.classList.remove('active');
-        }
-
-        document.body.classList.remove('menu-open');
-    }
-}, 150)); // 150ms debounce
-
-// ===== LOADING BAR FUNCTIONALITY =====
-window.addEventListener('load', () => {
-    const loadingBar = document.querySelector('.loading-bar');
-    const loadingText = document.querySelector('.loading-text');
-
-    if (!hasLoaded && loadingBar && loadingText) {
-        let progress = 0;
-        const loadingDuration = 1000;
-        const stepTime = Math.floor(loadingDuration / finalProgress);
-
-        const interval = setInterval(() => {
-            progress++;
-            loadingText.textContent = `${progress}%`;
-            loadingBar.style.width = `${progress}%`;
-
-            const container = loadingBar.parentElement;
-            if (container) {
-                container.setAttribute('aria-valuenow', progress);
-            }
-
-            if (progress >= finalProgress) {
-                clearInterval(interval);
-                hasLoaded = true;
-            }
-        }, stepTime);
-    } else if (loadingBar && loadingText) {
-        // If already loaded, restore visual state
-        loadingText.textContent = `${finalProgress}%`;
-        loadingBar.style.width = `${finalProgress}%`;
-
-        const container = loadingBar.parentElement;
-        if (container) {
-            container.setAttribute('aria-valuenow', finalProgress);
-        }
-    }
-});
-
-// ===== MOBILE MENU FUNCTIONALITY =====
-document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.querySelector('.menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (!toggle || !mobileMenu) return;
-
-    let isMenuOpen = false;
-
-    function toggleMenu(force = null) {
-        isMenuOpen = force !== null ? force : !isMenuOpen;
-
-        // Toggle menu classes
-        mobileMenu.classList.toggle('active', isMenuOpen);
-        mobileMenu.setAttribute('aria-hidden', !isMenuOpen);
-
-        // Update ARIA attributes
-        toggle.setAttribute('aria-expanded', isMenuOpen);
-
-        // Toggle hamburger active state
-        toggle.classList.toggle('active', isMenuOpen);
-
-        // Toggle body scroll
-        document.body.classList.toggle('menu-open', isMenuOpen);
-    }
-
-    toggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleMenu();
-    });
-
-    document.addEventListener('click', (e) => {
-        if (
-            isMenuOpen &&
-            !mobileMenu.contains(e.target) &&
-            !toggle.contains(e.target)
-        ) {
-            toggleMenu(false);
-        }
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && isMenuOpen) {
-            toggleMenu(false);
-        }
-    });
-
-    const menuLinks = document.querySelectorAll('.header-left a, .header-right a');
-    menuLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth < 1024) {
-                toggleMenu(false);
+            // Update URL without scrolling
+            const newHash = !isCurrentlyAbout ? '#about' : '';
+            if (history.pushState) {
+                history.pushState(null, null, newHash || window.location.pathname);
+            } else {
+                window.location.hash = newHash;
             }
         });
     });
-});
+
+    // Check for hash in URL on page load
+    if (window.location.hash === '#about') {
+        setTimeout(() => switchPage(true), 100);
+    }
+}
+
+// Utility function for debouncing
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
