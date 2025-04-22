@@ -105,6 +105,11 @@
     contain: layout style paint;
 }
 
+.ember.transitioning {
+    /* Optional: you can customize the transitioning embers appearance */
+    filter: drop-shadow(0 0 4px rgba(255, 216, 126, 0.7)) brightness(1.0);
+}
+
 .title-ember-target {
     position: absolute;
     opacity: 0;
