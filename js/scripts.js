@@ -583,4 +583,29 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
+    // Add debouncing for resize events
+    function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    }
+
+    window.addEventListener('resize', debounce(function() {
+        // Your resize handler code
+    }, 250));
+    
+    // Clean up unused embers
+    function cleanupEmbers() {
+        document.querySelectorAll('.ember').forEach(ember => {
+            // Remove embers that are out of viewport or too transparent
+            if (ember.getBoundingClientRect().top < -100 ||
+                parseFloat(getComputedStyle(ember).opacity) < 0.1) {
+                ember.remove();
+                emberCount--;
+            }
+        });
+    }
 });
