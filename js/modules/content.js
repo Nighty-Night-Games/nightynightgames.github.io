@@ -15,6 +15,7 @@ const PAGE_COMMON = {
   tagline: `<blockquote class="studio-tagline">Nighty Night Games — Sleep well, dream deep, play meaningfully.</blockquote>`
 };
 
+
 // Store content for different pages
 export const pageContent = {
   // Original content is loaded from DOM during initialization
@@ -47,12 +48,38 @@ ${PAGE_COMMON.title('About NNG')}
   games: `
 ${PAGE_COMMON.title('Our Games')}
 <section class="games-section">
-  <p><strong>Explore Our Worlds:</strong> Every game we create is a portal into a hand-crafted, emotionally resonant storyworld.</p>
-
-  <h2>Legacy of Atum: Dead Dynasty</h2>
-  <p><strong>Legacy of Atum</strong> is an atmospheric RPG set in a myth-infused version of ancient Egypt, blending deep storytelling with real-time combat and strategic survival mechanics.</p>
-  <p>Players will experience the journey of <strong>Nui</strong>, a reluctant hero with a haunted past, as he navigates the ruins of a fallen dynasty, makes moral choices, and uncovers the secrets of forgotten gods.</p>
-
+  <div class="games-intro">
+    <p><strong>Explore Our Worlds:</strong> Every game we create is a portal into a hand-crafted, emotionally resonant storyworld.</p>
+  </div>
+  
+  <div class="game-card">
+    <h2 class="game-title">Legacy of Atum: Dead Dynasty</h2>
+    <span class="game-status in-development">In Development</span>
+    
+    <div class="game-media">
+      <img src="/images/game/The%20Sandstorm%20Fortress.png" alt="Legacy of Atum: Dead Dynasty - Game screenshot showing an ancient Egyptian temple" />
+    </div>
+    
+    <p><strong>Legacy of Atum</strong> is an atmospheric RPG set in a myth-infused version of ancient Egypt, blending deep storytelling with real-time combat and strategic survival mechanics.</p>
+    
+    <p>Players will experience the journey of <strong>Nui</strong>, a reluctant hero with a haunted past, as he navigates the ruins of a fallen dynasty, makes moral choices, and uncovers the secrets of forgotten gods.</p>
+    
+    <div class="game-features">
+      <span class="game-feature">Action RPG</span>
+      <span class="game-feature">Ancient Egypt</span>
+      <span class="game-feature">Narrative-Driven</span>
+      <span class="game-feature">Strategic Combat</span>
+      <span class="game-feature">Moral Choices</span>
+    </div>
+    
+    <a href="#" class="cta-button">Learn More</a>
+  </div>
+  
+  <hr class="divider" />
+  
+  <h2>Future Projects</h2>
+  <p>We're always exploring new narratives and worlds. Sign up for our newsletter to be the first to hear about upcoming games and announcements.</p>
+  
   ${PAGE_COMMON.tagline}
 </section>`
 };

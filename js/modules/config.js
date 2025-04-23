@@ -26,7 +26,8 @@ const getEmberConfig = () => ({
     CLEANUP_INTERVAL: 8000,
     USE_GPU: DEVICE.hasGPU,
     SIZE_BASE: DEVICE.isSmallScreen ? 2 : 3,
-    SIZE_VARIANCE: DEVICE.isSmallScreen ? 8 : 15
+    SIZE_VARIANCE: DEVICE.isSmallScreen ? 8 : 15,
+    GAMES_MAX_EMBERS: DEVICE.lowPower ? 30 : (DEVICE.isSmallScreen ? 70 : 120),
 });
 
 // Configure ember system based on device capability
