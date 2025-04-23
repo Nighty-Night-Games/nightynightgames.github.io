@@ -1,5 +1,19 @@
-@import url('./core.css');        /* Variables, reset, base */
-@import url('./layout.css');      /* Default mobile-first layout */
-@import url('./components.css');  /* Visual modules and elements */
-@import url('./responsive.css');  /* Responsive overrides LAST */
-@import url('./animations.css');  /* Optional: can be last or above responsive */
+/* Main CSS import file - organized by importance and scope */
+
+/* Base styles and variables */
+@import url('./core.css');
+
+/* Layout and structure */
+@import url('./layout.css');
+
+/* Reusable components */
+@import url('./components.css');
+
+/* Page-specific styles */
+@import url('./pages.css');
+
+/* Animations */
+@import url('./animations.css');
+
+/* Responsive overrides (always last) */
+@import url('./responsive.css');
