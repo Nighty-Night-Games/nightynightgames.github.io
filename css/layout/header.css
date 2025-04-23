@@ -1,0 +1,103 @@
+﻿/* === HEADER === */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4rem;
+    padding: var(--spacing-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    z-index: 100;
+}
+
+.header-left,
+.header-right {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    left: 0;
+    width: 100%;
+    background: transparent;
+    z-index: 99;
+    flex-direction: column;
+    padding: var(--spacing-sm);
+}
+
+.header-left {
+    top: 4rem;
+}
+
+.header-right {
+    top: calc(4rem + 120px);
+}
+
+.header-center {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    height: 64px;
+    width: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    will-change: transform, filter;
+    cursor: pointer;
+    margin-top: 0.8rem;
+}
+
+.logo img:hover {
+    transform: scale(1.03);
+    filter: brightness(1.1) drop-shadow(0 0 4px var(--gold-glow));
+}
+
+.menu-toggle {
+    display: block;
+    background: none;
+    border: none;
+    color: var(--text-white);
+    cursor: pointer;
+    font-size: 1.4em;
+    padding: var(--spacing-xs);
+    transition: color var(--transition-default), transform var(--transition-default);
+}
+
+.menu-toggle:hover,
+.menu-toggle.active {
+    color: var(--gold);
+}
+
+.menu-toggle.active {
+    transform: rotate(90deg);
+}
+
+.site-header .social-links,
+.site-header .main-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.site-header a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: color var(--transition-default), transform 0.3s ease;
+    text-transform: uppercase;
+    transform-origin: center bottom;
+}
+
+.site-header a:hover {
+    transform: translateY(4px);
+    color: var(--gold);
+    text-shadow: 0 0 5px var(--gold-light);
+}

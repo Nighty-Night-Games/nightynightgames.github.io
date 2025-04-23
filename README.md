@@ -16,15 +16,31 @@ Nighty Night Games is an indie game studio from Berlin, Germany, focused on craf
 - Dynamic content loading
 - Atmospheric ember particle effects
 - Mobile-friendly navigation
+- Optimized for performance and accessibility
+- SEO-friendly with structured data
 
 ## Tech Stack
 
 - HTML5
-- CSS3
-- Vanilla JavaScript
-~~~~
+- CSS3 with custom animations
+- Vanilla JavaScript (ES6+)
+- Modular architecture
+- Custom state management
+- No external frameworks or dependencies
+- Progressive Web App (PWA) capabilities
+- Modern build pipeline
+
+## SEO & Performance
+
+The website includes:
+- Semantic HTML structure
+- Optimized sitemap
+- Proper robots.txt configuration
+- Web manifest for PWA support
+- Performance-optimized assets
+
 ## Contact
 
 For inquiries, please visit [our website](https://nightynightgames.com).
 
-© 2024 Nighty Night Games
+© 2025 Nighty Night Games

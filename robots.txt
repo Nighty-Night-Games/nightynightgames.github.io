@@ -1,8 +1,18 @@
 User-agent: *
 Allow: /
-Disallow: /wp-admin/
+Disallow: /admin/
 Disallow: /*.php$
 Disallow: /*?
 Disallow: /cgi-bin/
+Disallow: /temp/
+Disallow: /private/
+
+# Allow JavaScript and CSS for better rendering
+Allow: /*.js$
+Allow: /*.css$
+
+# Search engines should wait at least 10 seconds between requests
 Crawl-delay: 10
+
+# Location of sitemap file
 Sitemap: https://nightynightgames.com/sitemap.xml

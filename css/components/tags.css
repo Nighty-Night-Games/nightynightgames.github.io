@@ -1,0 +1,115 @@
+﻿/* Tag Components */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.tag {
+    background: rgba(255, 208, 120, 0.1);
+    color: var(--gold);
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(255, 208, 120, 0.2);
+    transition: all 0.3s ease;
+}
+
+.tag:hover {
+    background: rgba(255, 208, 120, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Featured Project Tags */
+.featured-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+}
+
+.featured-tag {
+    background: rgba(255, 208, 120, 0.1);
+    color: var(--gold);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 208, 120, 0.2);
+    transition: all 0.3s ease;
+}
+
+.featured-tag:hover {
+    background: rgba(255, 208, 120, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Feature tags */
+.about-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+}
+
+.about-feature {
+    background: rgba(255, 208, 120, 0.1);
+    color: var(--gold);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 208, 120, 0.2);
+}
+
+/* Game Features */
+.game-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+}
+
+.game-feature {
+    background: rgba(255, 208, 120, 0.1);
+    color: var(--gold);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 208, 120, 0.2);
+    transition: all 0.3s ease;
+}
+
+.game-feature:hover {
+    background: rgba(255, 208, 120, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Status Tags */
+.featured-status {
+    background: rgba(65, 184, 131, 0.15);
+    color: #5fcea3;
+    border: 1px solid rgba(65, 184, 131, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.game-status {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.game-status.in-development {
+    background: rgba(65, 184, 131, 0.15);
+    color: #5fcea3;
+    border: 1px solid rgba(65, 184, 131, 0.3);
+}

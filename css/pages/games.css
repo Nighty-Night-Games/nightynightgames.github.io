@@ -1,0 +1,100 @@
+﻿/* === GAMES PAGE === */
+.games-section {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1rem;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Games intro section */
+.games-intro {
+  margin: 2rem 0;
+  text-align: center;
+  position: relative;
+}
+
+.games-intro:after {
+  content: '';
+  position: absolute;
+  bottom: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.games-intro p {
+  font-size: 1.3rem;
+  line-height: 1.6;
+  color: var(--text-white);
+}
+
+.games-intro strong {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* Game card refinements */
+.game-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255, 208, 120, 0.1);
+}
+
+.game-title {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.game-media {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.game-media img {
+  width: 100%;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.game-card:hover .game-media img {
+  transform: scale(1.02);
+}
+
+.game-card-content {
+  margin: 1.5rem 0;
+}
+
+.game-card-content p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-white);
+}
+
+.upcoming-games {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.upcoming-placeholder {
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px dashed rgba(255, 208, 120, 0.2);
+  border-radius: 8px;
+  padding: 3rem;
+  text-align: center;
+  color: rgba(255, 208, 120, 0.7);
+  font-size: 1.2rem;
+  font-style: italic;
+}

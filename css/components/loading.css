@@ -1,0 +1,73 @@
+﻿/* Loading Components */
+.loading-bar-container {
+    width: 300px;
+    height: 8px;
+    background-color: transparent;
+    border: 1px solid var(--gold-glow);
+    box-shadow: 0 0 6px rgba(255, 224, 163, 0.2), 0 0 12px rgba(255, 224, 163, 0.1);
+    margin-top: var(--spacing-sm);
+    overflow: hidden;
+    border-radius: 4px;
+    position: relative;
+}
+
+.loading-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+    box-shadow: inset 0 0 4px #fff3c4, 0 0 6px var(--gold);
+    transition: width var(--transition-default);
+}
+
+.loading-bar.loaded {
+    animation: pulse-once 0.6s ease-in-out;
+}
+
+.loading-text {
+    margin-top: var(--spacing-xs);
+    font-size: 0.9em;
+    color: var(--text-white);
+    letter-spacing: 1px;
+}
+
+/* Project Components */
+.project-progress {
+    margin-top: var(--spacing-lg);
+    gap: var(--spacing-sm);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90%;
+}
+
+.project-caption {
+    font-size: var(--font-size-base);
+    color: var(--text-light);
+    margin-bottom: var(--spacing-xs);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.project-label {
+    font-size: 1.1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    background: rgba(255, 248, 214, 0.05);
+    backdrop-filter: blur(2px);
+    transition: all var(--transition-default);
+    text-shadow: 0 0 4px var(--gold-glow);
+    text-decoration: none;
+}
+
+.project-label:hover {
+    color: var(--text-white);
+    border-color: var(--text-white);
+    background: rgba(255, 255, 255, 0.08);
+    text-shadow: 0 0 6px var(--text-white);
+    transform: scale(1.03);
+}

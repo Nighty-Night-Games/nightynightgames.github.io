@@ -12,8 +12,5 @@
 /* Page-specific styles */
 @import url('./pages.css');
 
-/* Animations */
-@import url('./animations.css');
-
 /* Responsive overrides (always last) */
 @import url('./responsive.css');

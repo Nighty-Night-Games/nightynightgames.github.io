@@ -1,0 +1,66 @@
+﻿/* Button Components */
+.button {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+}
+
+.button-primary {
+    background: linear-gradient(145deg, var(--gold), var(--gold-glow));
+    color: rgba(0, 0, 0, 0.8);
+    border: none;
+}
+
+.button-primary:hover {
+    background: linear-gradient(145deg, var(--gold-light), var(--gold));
+    box-shadow: 0 4px 12px rgba(255, 224, 163, 0.25);
+}
+
+.button-secondary {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+}
+
+.button-secondary:hover {
+    background: rgba(255, 224, 163, 0.08);
+    border-color: var(--gold-light);
+    color: var(--gold-light);
+}
+
+/* Button hover effects */
+.cta-button, .primary-button, .secondary-button, .featured-link {
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-button::after, 
+.primary-button::after, 
+.secondary-button::after, 
+.featured-link::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.cta-button:hover::after, 
+.primary-button:hover::after, 
+.secondary-button:hover::after, 
+.featured-link:hover::after {
+    left: 100%;
+}

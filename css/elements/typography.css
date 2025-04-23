@@ -1,0 +1,79 @@
+﻿/* === TYPOGRAPHY BASICS === */
+h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 var(--spacing-sm);
+    line-height: 1.2;
+    font-weight: 600;
+    color: var(--text-white);
+}
+
+p {
+    margin: 0 0 var(--spacing-sm);
+    line-height: 1.6;
+}
+
+a {
+    color: var(--gold);
+    text-decoration: none;
+    transition: color var(--transition-default);
+}
+
+a:hover {
+    color: var(--gold-light);
+}
+
+/* Title Components from components.css */
+.title-wrap {
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+    margin-bottom: var(--spacing-md);
+}
+
+h1 {
+    font-size: clamp(4em, 8vw, 8em);
+    letter-spacing: 10px;
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    max-width: 90vw;
+    word-wrap: break-word;
+    color: var(--text-title);
+    position: relative;
+    z-index: 1;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    border-radius: 12px;
+    background: radial-gradient(circle, rgba(255, 224, 163, 0.08) 0%, transparent 70%);
+    filter: blur(8px);
+    opacity: 0.85;
+    transform: translate(-50%, -50%);
+    animation: title-glow-pulse 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.title-ember-target {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    font: inherit;
+}
+
+.title-visible {
+    position: relative;
+    z-index: 1;
+}
+
+.underline {
+    display: inline-block;
+    width: 150px;
+    height: 2px;
+    background-color: var(--underline-color);
+    margin: var(--spacing-sm) auto var(--spacing-md);
+}
