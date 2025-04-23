@@ -1,50 +1,44 @@
 ﻿import { debounce } from './utils.js';
 import { updateConfig } from './config.js';
-import { initEmberSystem } from './embers.js';
-import { startEmberSpawning } from './embers.js';
-import { updateTitleRect, getCurrentPageFromTitle } from './utils.js';
-import { updateLoadingBar } from './utils.js';
+import { initEmberSystem, startEmberSpawning } from './embers.js';
+import { updateTitleRect, getCurrentPageFromTitle, updateLoadingBar } from './utils.js';
 
-// Global state referenced elsewhere
+/**
+ * Toggle mobile menu state
+ */
 export function toggleMobileMenu(force = null) {
+    // Get/set state
     const isMenuOpen = force !== null ? force : !window.isMenuOpen;
     window.isMenuOpen = isMenuOpen;
-
+    
+    // Get elements
     const mobileMenu = document.getElementById('mobile-menu');
     const toggle = document.querySelector('.menu-toggle');
-
     if (!mobileMenu || !toggle) return;
-
-    // Toggle menu classes
+    
+    // Update UI (all in one pass)
     mobileMenu.classList.toggle('active', isMenuOpen);
     mobileMenu.setAttribute('aria-hidden', !isMenuOpen);
-
-    // Update ARIA attributes
     toggle.setAttribute('aria-expanded', isMenuOpen);
-
-    // Toggle hamburger active state
     toggle.classList.toggle('active', isMenuOpen);
-
-    // Toggle body scroll
     document.body.classList.toggle('menu-open', isMenuOpen);
 }
 
 /**
- * Initialize the loading bar
+ * Initialize loading bar animation
  */
 export function initLoadingBar() {
     const loadingBar = document.querySelector('.loading-bar');
     const loadingText = document.querySelector('.loading-text');
-
+    
     if (!window.hasLoaded && loadingBar && loadingText) {
+        // Animate progress
         let progress = 0;
-        const loadingDuration = window.DEVICE?.lowPower ? 600 : 1000;
-        const stepTime = Math.floor(loadingDuration / window.finalProgress);
-
+        const stepTime = Math.floor((window.DEVICE?.lowPower ? 600 : 1000) / window.finalProgress);
+        
         const interval = setInterval(() => {
-            progress++;
-            updateLoadingBar(progress);
-
+            updateLoadingBar(++progress);
+            
             if (progress >= window.finalProgress) {
                 clearInterval(interval);
                 window.hasLoaded = true;
@@ -52,87 +46,75 @@ export function initLoadingBar() {
             }
         }, stepTime);
     } else {
-        updateLoadingBar(window.finalProgress); // ✅ uses correct value
+        // Just set final value
+        updateLoadingBar(window.finalProgress);
     }
 }
 
 /**
- * Set up the mobile menu toggle
+ * Set up mobile menu interactions
  */
 export function setupMobileMenu() {
+    // Get elements
     const menuToggle = document.querySelector('.menu-toggle');
     const mobileMenu = document.querySelector('.mobile-menu');
-
     if (!menuToggle || !mobileMenu) return;
-
-    menuToggle.addEventListener('click', (e) => {
+    
+    // Toggle menu on button click
+    menuToggle.addEventListener('click', e => {
         e.stopPropagation();
         toggleMobileMenu();
     });
-
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (window.isMenuOpen && !menuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
-            toggleMobileMenu(false);
-        }
+    
+    // Set up all closing methods at once
+    const closeMenu = () => window.isMenuOpen && toggleMobileMenu(false);
+    
+    // Close when clicking outside
+    document.addEventListener('click', e => {
+        window.isMenuOpen && 
+        !menuToggle.contains(e.target) && 
+        !mobileMenu.contains(e.target) && 
+        toggleMobileMenu(false);
     });
-
-    // Set up escape key handling
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && window.isMenuOpen) {
-            toggleMobileMenu(false);
-        }
+    
+    // Close on escape key
+    document.addEventListener('keydown', e => e.key === 'Escape' && closeMenu());
+    
+    // Close when links clicked (mobile only)
+    document.querySelectorAll('.header-left a, .header-right a').forEach(link => {
+        link.addEventListener('click', () => window.innerWidth < 1024 && closeMenu());
     });
-
-    // Close menu when links are clicked
-    const menuLinks = document.querySelectorAll('.header-left a, .header-right a');
-    menuLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth < 1024) {
-                toggleMobileMenu(false);
-            }
-        });
-    });
-
-    // Touch device handling
+    
+    // Touch handling
     if (window.DEVICE?.supportsTouch) {
-        mobileMenu.addEventListener('touchstart', (e) => {
-            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
-                e.stopPropagation();
-            }
+        mobileMenu.addEventListener('touchstart', e => {
+            (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') && e.stopPropagation();
         }, { passive: false });
     }
 }
 
 /**
- * Handle window resize events
+ * Handle window resize
  */
 export function handleResize() {
+    // Update config and check title visibility
     updateConfig();
-
-    if (updateTitleRect() && !window.emberSpawnInterval) {
+    
+    // Restart embers if needed
+    updateTitleRect() && !window.emberSpawnInterval && 
         startEmberSpawning(getCurrentPageFromTitle());
-    }
-
-    if (window.innerWidth >= 1024 && window.isMenuOpen) {
-        toggleMobileMenu(false);
-    }
+    
+    // Close mobile menu on desktop
+    window.innerWidth >= 1024 && window.isMenuOpen && toggleMobileMenu(false);
 }
 
-
 /**
- * Handle document visibility changes
+ * Handle visibility changes
  */
 export function handleVisibilityChange() {
-    // Stop animations when tab is not visible
-    if (document.hidden) {
-        // Pause animations if needed
-    } else {
-        // Resume animations if needed
-        
-        // Update title position when tab becomes visible again
-        if (updateTitleRect() && !window.emberSpawnInterval) {
+    if (!document.hidden) {
+        // Restart embers when tab becomes visible
+        updateTitleRect() && !window.emberSpawnInterval && 
             startEmberSpawning(getCurrentPageFromTitle());
-        }
     }
 }

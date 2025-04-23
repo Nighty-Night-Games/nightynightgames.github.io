@@ -10,50 +10,57 @@ import { state } from './modules/state.js';
 // Set initial progress value
 state.finalProgress = 5;
 
-// Initialize all modules when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Initializing application...');
-    
-    // First initialize DOM cache for element references
+/**
+ * Initialize application modules
+ */
+function initApp() {
+    // Initialize DOM cache first (required by other modules)
     initDom();
     
     // Then initialize all other modules
     initMenu();
     initNavigation();
     
-    // Initialize embers after first paint
-    if (document.readyState === 'complete') {
-        requestAnimationFrame(initEmbers);
-    } else {
-        window.addEventListener('load', () => {
-            requestAnimationFrame(initEmbers);
-        });
-    }
-    
-    // Initialize loading bar
-    window.addEventListener('load', initLoadingBar);
-    
-    // Set up responsive handlers
+    // Set up global handlers
     window.addEventListener('resize', debounce(handleResize, 150));
     document.addEventListener('visibilitychange', handleVisibilityChange);
-});
+}
+
+/**
+ * Initialize embers system
+ */
+function initEmberSystem() {
+    requestAnimationFrame(initEmbers);
+}
 
 // Handle window resize
-function handleResize() {
-    updateConfig();
-    // Additional resize logic if needed
-}
+const handleResize = () => updateConfig();
 
 // Handle visibility change
-function handleVisibilityChange() {
-    // Logic for visibility changes
-}
+const handleVisibilityChange = () => {};
 
-// Utility function for debouncing
+/**
+ * Debounce utility
+ */
 function debounce(func, wait = 100) {
     let timeout;
-    return function(...args) {
+    return (...args) => {
         clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
+        timeout = setTimeout(() => func(...args), wait);
     };
 }
+
+// Initialize app when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    initApp();
+    
+    // Initialize embers after first paint
+    if (document.readyState === 'complete') {
+        initEmberSystem();
+    } else {
+        window.addEventListener('load', initEmberSystem);
+    }
+    
+    // Initialize loading bar after full load
+    window.addEventListener('load', initLoadingBar);
+});

@@ -3,48 +3,35 @@ import { DEVICE, EMBER_CONFIG } from './config.js';
 import { countEmbersByPage, isTitleVisible, updateTitleRect, getCurrentPageFromTitle, debounce } from './utils.js';
 import { state, update } from './state.js';
 
-// Module state
-let activeEmbers = [];
-let emberSpawnInterval = null;
-let currentPage = 'home';
+// Module state (minimal)
+let activeEmbers = [], emberSpawnInterval = null, currentPage = 'home';
 
 /**
- * Initialize the ember system
+ * Initialize ember system
  */
 export function init() {
-    // Store in state
+    // Set up global refs and create container
     state.activeEmbers = activeEmbers;
-    window.activeEmbers = activeEmbers; // For backward compatibility
-    
-    // Create persistent ember container
+    window.activeEmbers = activeEmbers;
     createEmberContainer();
-
-    // Find title element and update its position
     updateTitleRect();
-
-    // Detect current page
+    
+    // Set current page and start spawning
     currentPage = getCurrentPageFromTitle();
     update('currentPage', currentPage);
-
-    // Start ember spawning
     startEmberSpawning(currentPage);
-
-    // Set up periodic cleanup
+    
+    // Set up maintenance
     setInterval(cleanupInvisibleEmbers, EMBER_CONFIG.CLEANUP_INTERVAL);
     
-    // Set up scroll event handler
+    // Handle scroll visibility
     window.addEventListener('scroll', debounce(() => {
-        // Update title position on scroll
         updateTitleRect();
-        
         const visible = isTitleVisible();
-
+        
         if (!visible && emberSpawnInterval) {
             clearInterval(emberSpawnInterval);
-            emberSpawnInterval = null;
-            state.emberSpawnInterval = null;
-
-            // Fade out active embers
+            emberSpawnInterval = state.emberSpawnInterval = null;
             activeEmbers.forEach(ember => {
                 ember.style.transition = 'opacity 0.6s ease-out';
                 ember.style.opacity = '0';
@@ -56,94 +43,74 @@ export function init() {
 }
 
 /**
- * Create container for embers
+ * Create ember container element
  */
 function createEmberContainer() {
-    if (!document.getElementById('persistent-ember-container')) {
-        const container = document.createElement('div');
+    let container = document.getElementById('persistent-ember-container');
+    
+    if (!container) {
+        container = document.createElement('div');
         container.id = 'persistent-ember-container';
         container.setAttribute('aria-hidden', 'true');
-
+        
         Object.assign(container.style, {
-            position: 'fixed',
-            top: '0',
-            left: '0',
-            width: '100%',
-            height: '100%',
-            pointerEvents: 'none',
-            zIndex: '10',
-            overflow: 'visible'
+            position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', 
+            pointerEvents: 'none', zIndex: '10', overflow: 'visible'
         });
-
+        
         document.body.appendChild(container);
-        window.emberContainer = container;
-    } else {
-        window.emberContainer = document.getElementById('persistent-ember-container');
     }
+    
+    window.emberContainer = container;
 }
 
 /**
- * Start spawning embers for a specific page
- * @param {string} page - Page identifier
+ * Start ember spawning for a page
  */
 export function startEmberSpawning(page) {
-    // Clear any existing spawn interval
+    // Clear existing interval
     if (emberSpawnInterval) {
         clearInterval(emberSpawnInterval);
         emberSpawnInterval = null;
     }
-
-    // Configure based on page
-    let maxEmbers;
-    if (page === 'about') {
-        maxEmbers = EMBER_CONFIG.ABOUT_MAX_EMBERS;
-    } else if (page === 'games') {
-        maxEmbers = EMBER_CONFIG.GAMES_MAX_EMBERS || EMBER_CONFIG.ABOUT_MAX_EMBERS; // Fallback if not defined
-    } else {
-        maxEmbers = EMBER_CONFIG.HOME_MAX_EMBERS;
-    }
-
-    // Start new spawn interval
+    
+    // Set max embers based on page
+    const maxEmbers = page === 'about' ? EMBER_CONFIG.ABOUT_MAX_EMBERS : 
+                      page === 'games' ? (EMBER_CONFIG.GAMES_MAX_EMBERS || EMBER_CONFIG.ABOUT_MAX_EMBERS) : 
+                      EMBER_CONFIG.HOME_MAX_EMBERS;
+    
+    // Create spawn interval
     emberSpawnInterval = setInterval(() => {
-        // Don't spawn if document is hidden or menu is open on low power devices
+        // Skip under certain conditions
         if (document.hidden || (state.isMenuOpen && DEVICE.lowPower)) return;
-
-        const pageEmbers = countEmbersByPage(page);
-
-        // Only spawn if under limits
-        if (
-            pageEmbers < maxEmbers &&
-            activeEmbers.length < EMBER_CONFIG.MAX_EMBERS &&
-            isTitleVisible()
-        ) {
+        
+        // Only spawn if under limits and title visible
+        if (countEmbersByPage(page) < maxEmbers && 
+            activeEmbers.length < EMBER_CONFIG.MAX_EMBERS && 
+            isTitleVisible()) {
             spawnEmber(page);
         }
     }, EMBER_CONFIG.SPAWN_RATE);
     
-    // Update state
-    state.emberSpawnInterval = emberSpawnInterval;
-    window.emberSpawnInterval = emberSpawnInterval; // For backward compatibility
+    // Store references
+    state.emberSpawnInterval = window.emberSpawnInterval = emberSpawnInterval;
 }
 
 /**
- * Create and animate a new ember
- * @param {string} page - Page this ember belongs to
- * @return {HTMLElement} - The ember element
+ * Create a new ember element
  */
 function spawnEmber(page) {
     const container = window.emberContainer;
     const titleRect = window.currentTitleRect || state.currentTitleRect;
-
     if (!container || !titleRect) return;
-
-    // Create ember element
+    
+    // Create element with minimal properties
     const ember = document.createElement('div');
     ember.classList.add('ember');
-    ember.setAttribute('role', 'presentation');
     ember.setAttribute('data-page', page);
-    ember.setAttribute('data-created', Date.now().toString());
-
-    // Generate random properties
+    ember.setAttribute('data-created', Date.now());
+    
+    // Generate random values
     const left = titleRect.left + Math.random() * titleRect.width;
     const top = titleRect.top + Math.random() * titleRect.height * 0.2;
     const size = EMBER_CONFIG.SIZE_BASE + Math.random() * EMBER_CONFIG.SIZE_VARIANCE;
@@ -153,141 +120,119 @@ function spawnEmber(page) {
     const flickerSpeed = (0.6 + Math.random()).toFixed(2);
     const flickerDelay = (Math.random() * 3).toFixed(2);
     const riseHeight = 100 + Math.random() * 200;
-
+    
     // Store animation data
     ember.emberData = {
         startTime: performance.now(),
-        duration: duration,
-        amplitude: amplitude,
-        direction: direction,
-        riseHeight: riseHeight
+        duration, amplitude, direction, riseHeight
     };
-
-    // Apply styles
+    
+    // Apply minimal styles
     Object.assign(ember.style, {
         position: 'absolute',
         left: `${left}px`,
         top: `${top}px`,
         width: `${size}px`,
         height: `${size}px`,
-        background: 'radial-gradient(circle, #ffda96 0%, transparent 30%)',
-        borderRadius: '50%',
         opacity: '0',
         transform: EMBER_CONFIG.USE_GPU ? 'translate3d(0,0,0)' : 'translate(0,0)',
         filter: 'drop-shadow(0 0 8px #ffd170) brightness(1.6)'
     });
-
-    // Add animation only if not low power
+    
+    // Add animation if not low power
     if (!DEVICE.lowPower) {
         ember.style.animation = `ember-flicker ${flickerSpeed}s ${flickerDelay}s infinite ease-in-out`;
     }
-
-    // Add to container and tracking array
+    
+    // Add to container and tracking
     container.appendChild(ember);
     activeEmbers.push(ember);
-
-    // Start animation loop for this ember
-    requestAnimationFrame(function animate(timestamp) {
+    
+    // Animation loop
+    const animate = function(timestamp) {
         if (!ember.isConnected) return;
-
+        
         const data = ember.emberData;
         const elapsed = timestamp - data.startTime;
         const t = elapsed / data.duration;
-
+        
         if (t > 1) {
-            // Remove when animation complete
+            // Remove when complete
             const index = activeEmbers.indexOf(ember);
             if (index !== -1) activeEmbers.splice(index, 1);
             if (ember.isConnected) ember.remove();
             return;
         }
-
-        // Calculate animation values
+        
+        // Calculate animation values - use combined calculations
         const progress = t ** 1.5;
         const yOffset = -progress * data.riseHeight + Math.sin(t * 4 * Math.PI) * data.amplitude;
         const xOffset = data.direction * Math.sin(t * Math.PI) * 120;
         const opacity = (t < 0.33 ? t * 3 : 1) * (1 - t ** 0.7);
-
-        // Apply values
+        const scale = 1 - t * 0.5;
+        
+        // Apply values in one step
         ember.style.opacity = opacity.toFixed(2);
         ember.style.transform = EMBER_CONFIG.USE_GPU
-            ? `translate3d(${xOffset}px, ${yOffset}px, 0) scale(${1 - t * 0.5})`
-            : `translate(${xOffset}px, ${yOffset}px) scale(${1 - t * 0.5})`;
-
-        // Continue animation
+            ? `translate3d(${xOffset}px, ${yOffset}px, 0) scale(${scale})`
+            : `translate(${xOffset}px, ${yOffset}px) scale(${scale})`;
+        
         requestAnimationFrame(animate);
-    });
-
+    };
+    
+    requestAnimationFrame(animate);
     return ember;
 }
 
 /**
- * Handle page transition effects on embers
- * @param {string} newPage - Page being navigated to
+ * Handle page transition
  */
 export function handlePageTransition(newPage) {
     if (newPage === currentPage) return;
-
-    // Stop current ember spawning
+    
+    // Stop spawning
     if (emberSpawnInterval) {
         clearInterval(emberSpawnInterval);
-        emberSpawnInterval = null;
-        state.emberSpawnInterval = null;
+        emberSpawnInterval = state.emberSpawnInterval = null;
     }
-
-    // Mark existing embers as transitioning
+    
+    // Transition existing embers
     activeEmbers.forEach(ember => {
         if (ember.getAttribute('data-page') === currentPage) {
             ember.setAttribute('data-transitioning', 'true');
-
-            // Calculate remaining lifetime
+            
+            // Calculate remaining time
             const creationTime = parseInt(ember.getAttribute('data-created')) || Date.now() - 5000;
-            const elapsedTime = Date.now() - creationTime;
-            const duration = Math.max(3000, 8000 - elapsedTime);
-
-            // Get current position for smooth transition
-            const currentTransform = ember.style.transform || '';
-
-            // Apply transition for both opacity and transform
-            ember.style.transition = `
-            opacity ${duration}ms ease-out,
-            transform ${Math.min(50, duration / 600)}ms ease-out
-        `;
-
-            // Apply fade out
+            const duration = Math.max(3000, 8000 - (Date.now() - creationTime));
+            
+            // Apply transition in one step
+            ember.style.transition = `opacity ${duration}ms ease-out, transform ${Math.min(50, duration / 600)}ms ease-out`;
             ember.style.opacity = '0';
-
-            // Apply float-up effect
-            if (currentTransform) {
-                // Modify only the Y component and scale
-                ember.style.transform = currentTransform + ' translateY(-40px) scale(0.6)';
-            } else {
-                // Simple transform for embers without existing transforms
-                ember.style.transform = 'translateY(-40px) scale(0.6)';
-            }
+            
+            // Modify transform to add float-up effect
+            const currentTransform = ember.style.transform || '';
+            ember.style.transform = currentTransform ? 
+                currentTransform + ' translateY(-40px) scale(0.6)' : 
+                'translateY(-40px) scale(0.6)';
         }
     });
-
-    // Update current page
+    
+    // Update page and start new spawning
     currentPage = newPage;
     update('currentPage', newPage);
-
-    // Update title position for ember spawning
+    
     setTimeout(() => {
-        // Use the dedicated function to update title rect
         updateTitleRect();
-
-        // Start new ember spawning
         startEmberSpawning(newPage);
     }, 100);
 }
 
 /**
- * Remove embers that are no longer visible
+ * Clean up invisible embers
  */
 function cleanupInvisibleEmbers() {
-    let i = activeEmbers.length;
-    while (i--) {
+    // Use single reverse loop for efficiency
+    for (let i = activeEmbers.length - 1; i >= 0; i--) {
         const ember = activeEmbers[i];
         if (!ember.isConnected || parseFloat(ember.style.opacity || '0') < 0.1) {
             if (ember.isConnected) ember.remove();
@@ -297,8 +242,7 @@ function cleanupInvisibleEmbers() {
 }
 
 /**
- * Get current active embers count
- * @return {number} - Number of active embers
+ * Get active embers count
  */
 export function getActiveEmbersCount() {
     return activeEmbers.length;

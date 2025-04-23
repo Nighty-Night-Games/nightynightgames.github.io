@@ -1,85 +1,80 @@
 ﻿// utils.js
-export function debounce(func, wait = 100) {
+
+// DOM helper functions
+export const debounce = (func, wait = 100) => {
     let timeout;
-    return function(...args) {
+    return (...args) => {
         clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
+        timeout = setTimeout(() => func(...args), wait);
     };
-}
+};
 
-export function toggleClasses(element, classMap) {
+export const toggleClasses = (element, classMap) => {
     if (!element) return;
-    Object.entries(classMap).forEach(([className, shouldHave]) => {
+    for (const [className, shouldHave] of Object.entries(classMap)) {
         element.classList.toggle(className, shouldHave);
-    });
-}
+    }
+};
 
-export function setAttributes(element, attrMap) {
+export const setAttributes = (element, attrMap) => {
     if (!element) return;
-    Object.entries(attrMap).forEach(([attr, value]) => {
+    for (const [attr, value] of Object.entries(attrMap)) {
         element.setAttribute(attr, value);
-    });
-}
+    }
+};
 
-export function isInViewport(element, offset = 0) {
+export const isInViewport = (element, offset = 0) => {
     if (!element) return false;
     const rect = element.getBoundingClientRect();
-    return rect.top < window.innerHeight + offset && rect.bottom > 0 - offset;
-}
+    return rect.top < window.innerHeight + offset && rect.bottom > -offset;
+};
 
-// Functions needed by other modules
-export function updateTitleRect() {
+// Title and page-related utilities
+export const getTitleElement = () => document.querySelector('.title-visible');
+
+export const updateTitleRect = () => {
     const el = getTitleElement();
     if (el) {
         window.currentTitleRect = el.getBoundingClientRect();
         return true;
     }
     return false;
-}
+};
 
-export function getCurrentPageFromTitle() {
+export const getCurrentPageFromTitle = () => {
     const el = getTitleElement();
-    if (!el) return 'home';
-    return el.textContent.trim().toLowerCase().includes('about') ? 'about' : 'home';
-}
+    return el?.textContent.trim().toLowerCase().includes('about') ? 'about' : 'home';
+};
 
-export function getTitleElement() {
-    return document.querySelector('.title-visible');
-}
-
-export function countEmbersByPage(page) {
-    let count = 0;
-    if (!window.activeEmbers) return count;
+export const isTitleVisible = () => {
+    const titleElement = getTitleElement();
+    if (!titleElement) return false;
     
-    for (let i = 0; i < window.activeEmbers.length; i++) {
-        if (window.activeEmbers[i].getAttribute('data-page') === page) {
-            count++;
-        }
+    const rect = titleElement.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+};
+
+// Ember-related utilities
+export const countEmbersByPage = page => {
+    if (!window.activeEmbers?.length) return 0;
+    
+    let count = 0;
+    for (const ember of window.activeEmbers) {
+        if (ember.getAttribute('data-page') === page) count++;
     }
     return count;
-}
+};
 
-export function isTitleVisible() {
-    const titleElement = document.querySelector('.title-visible');
-    if (!titleElement) return false;
-
-    const rect = titleElement.getBoundingClientRect();
-    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-
-    return rect.top < viewportHeight && rect.bottom > 0;
-}
-
-export function updateLoadingBar(progress) {
+// Loading bar utility
+export const updateLoadingBar = progress => {
     const loadingBar = document.querySelector('.loading-bar');
     const loadingText = document.querySelector('.loading-text');
-
     if (!loadingBar || !loadingText) return;
 
+    // Update text and bar width
     loadingText.textContent = `${progress}%`;
     loadingBar.style.width = `${progress}%`;
-
-    const container = loadingBar.parentElement;
-    if (container) {
-        container.setAttribute('aria-valuenow', progress);
-    }
-}
+    
+    // Update ARIA attribute
+    loadingBar.parentElement?.setAttribute('aria-valuenow', progress);
+};

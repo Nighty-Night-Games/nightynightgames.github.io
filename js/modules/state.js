@@ -1,4 +1,6 @@
 ﻿// state.js
+
+// Application state object
 export const state = {
     hasLoaded: false,
     isMenuOpen: false,
@@ -9,28 +11,37 @@ export const state = {
     currentPage: 'home'
 };
 
-// Optional: Add state change subscriptions
+// State change listeners
 const listeners = {};
 
-export function subscribe(key, callback) {
-    if (!listeners[key]) {
-        listeners[key] = [];
-    }
-    listeners[key].push(callback);
+/**
+ * Subscribe to state changes
+ * @returns {Function} Unsubscribe function
+ */
+export const subscribe = (key, callback) => {
+    (listeners[key] = listeners[key] || []).push(callback);
     return () => unsubscribe(key, callback);
-}
+};
 
-export function unsubscribe(key, callback) {
+/**
+ * Unsubscribe from state changes
+ */
+export const unsubscribe = (key, callback) => {
     if (listeners[key]) {
         listeners[key] = listeners[key].filter(cb => cb !== callback);
     }
-}
+};
 
-export function update(key, value) {
+/**
+ * Update state and notify listeners
+ */
+export const update = (key, value) => {
     const oldValue = state[key];
     state[key] = value;
 
-    if (listeners[key]) {
-        listeners[key].forEach(callback => callback(value, oldValue));
+    if (listeners[key]?.length) {
+        for (const callback of listeners[key]) {
+            callback(value, oldValue);
+        }
     }
-}
+};

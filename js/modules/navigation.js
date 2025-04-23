@@ -2,189 +2,37 @@
 import { handlePageTransition } from './embers.js';
 import { pageContent } from './content.js';
 import { updateLoadingBar, getTitleElement } from './utils.js';
-import { state, update } from './state.js';
+import { state } from './state.js';
 import { get, getAll } from './dom.js';
 
 // Module state
 let currentPageContent = '';
 
-/**
- * Set up games link click handlers
- */
-function setupGamesLinks() {
-    // Get all games links by ID prefix
-    const gamesLinks = getAll('a[id^="games-link"]') || 
-                      document.querySelectorAll('a[id^="games-link"]');
-    
-    console.log('Games links found:', gamesLinks.length);
-    
-    // Add click handler to each link
-    gamesLinks.forEach(link => {
-        // Save default text for later reference
-        if (!link.getAttribute('data-default-text')) {
-            link.setAttribute('data-default-text', link.textContent);
-        }
-        
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            console.log('Games link clicked');
-            
-            // Get current page from content or title
-            const currentPage = currentPageContent || getCurrentPageFromTitle();
-            
-            if (currentPage === 'games') {
-                // If already on games page, go back to home
-                history.pushState({ page: 'home' }, '', './');
-                switchToHome();
-            } else {
-                // If on home or about, go to games
-                history.pushState({ page: 'games' }, '', '#games');
-                switchToGames();
-            }
-        });
-    });
-}
+// Page configuration - centralize all page-specific settings
+const PAGES = {
+    home: {
+        url: './',
+        hash: '',
+        title: 'Home'
+    },
+    about: {
+        url: '#about',
+        hash: '#about',
+        title: 'About'
+    },
+    games: {
+        url: '#games',
+        hash: '#games',
+        title: 'Games'
+    }
+};
 
-/**
- * Switch to games page
- */
-function switchToGames() {
-    const pageContentEl = get('pageContent') || document.getElementById('page-content');
-    if (!pageContentEl) return;
-
-    // Create fade effect
-    const fadeOut = pageContentEl.animate(
-        [{ opacity: 1 }, { opacity: 0 }],
-        { duration: 300, easing: 'ease-out', fill: 'forwards' }
-    );
-
-    fadeOut.onfinish = () => {
-        // Update page content
-        pageContentEl.innerHTML = pageContent.games;
-        currentPageContent = 'games';
-
-        // Handle ember transition
-        handlePageTransition('games');
-
-        // Update navigation links - first, update Games links to Home
-        const gamesLinks = getAll('a[id^="games-link"]') || 
-                          document.querySelectorAll('a[id^="games-link"]');
-        
-        gamesLinks.forEach(l => {
-            if (l) {
-                l.textContent = 'Home';
-                l.classList.add('active');
-            }
-        });
-        
-        // Make sure About links show About (not Home)
-        const aboutLinks = getAll('.nav-toggle-link:not([id^="games-link"])') || 
-                          document.querySelectorAll('.nav-toggle-link:not([id^="games-link"])');
-        
-        aboutLinks.forEach(l => {
-            if (l) {
-                l.textContent = 'About';
-                l.classList.remove('active');
-            }
-        });
-
-        // Smooth scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        // Accessibility: focus new title
-        setTimeout(() => {
-            const heading = getTitleElement();
-            if (heading) {
-                heading.setAttribute('tabindex', '-1');
-                heading.focus();
-                setTimeout(() => heading.removeAttribute('tabindex'), 1000);
-            }
-        }, 100);
-
-        // Fade in effect
-        pageContentEl.animate(
-            [{ opacity: 0 }, { opacity: 1 }],
-            { duration: 300, easing: 'ease-in', fill: 'forwards' }
-        );
-    };
-}
-
-/**
- * Switch from games back to home page
- */
-function switchToHome() {
-    const pageContentEl = get('pageContent') || document.getElementById('page-content');
-    if (!pageContentEl) return;
-    
-    // Create fade effect
-    const fadeOut = pageContentEl.animate(
-        [{ opacity: 1 }, { opacity: 0 }],
-        { duration: 300, easing: 'ease-out', fill: 'forwards' }
-    );
-
-    fadeOut.onfinish = () => {
-        // Update page content
-        pageContentEl.innerHTML = pageContent.home;
-        currentPageContent = 'home';
-
-        // Handle ember transition
-        handlePageTransition('home');
-
-        // Reset all navigation links to their default state
-        resetNavigationLinks();
-
-        // Smooth scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        // Accessibility focus management
-        setTimeout(() => {
-            const heading = getTitleElement();
-            if (heading) {
-                heading.setAttribute('tabindex', '-1');
-                heading.focus();
-                setTimeout(() => heading.removeAttribute('tabindex'), 1000);
-            }
-        }, 100);
-
-        // Restore loading bar if applicable
-        if (state && state.hasLoaded) {
-            updateLoadingBar(state.finalProgress);
-        }
-
-        // Fade in effect
-        pageContentEl.animate(
-            [{ opacity: 0 }, { opacity: 1 }],
-            { duration: 300, easing: 'ease-in', fill: 'forwards' }
-        );
-    };
-}
-
-/**
- * Reset all navigation links to their default state
- */
-function resetNavigationLinks() {
-    // Reset games links
-    const gamesLinks = getAll('a[id^="games-link"]') || 
-                      document.querySelectorAll('a[id^="games-link"]');
-    
-    gamesLinks.forEach(l => {
-        if (l) {
-            l.textContent = l.getAttribute('data-default-text') || 'Games';
-            l.classList.remove('active');
-        }
-    });
-    
-    // Reset about links
-    const aboutLinks = getAll('.nav-toggle-link:not([id^="games-link"])') || 
-                      document.querySelectorAll('.nav-toggle-link:not([id^="games-link"])');
-    
-    aboutLinks.forEach(l => {
-        if (l) {
-            l.textContent = 'About';
-            l.classList.remove('active');
-        }
-    });
-}
+// Animation configuration
+const ANIMATION = {
+    duration: 300,
+    fadeOutEasing: 'ease-out',
+    fadeInEasing: 'ease-in'
+};
 
 /**
  * Initialize navigation
@@ -193,155 +41,240 @@ export function init() {
     // Store original page content
     const pageContentEl = get('pageContent') || document.getElementById('page-content');
     if (pageContentEl) {
-        // Save the initial home content
         pageContent.home = pageContentEl.innerHTML;
         currentPageContent = 'home';
     }
     
-    // Set up about link click handlers
-    setupAboutLinks();
-    
-    // Set up games link click handlers
-    setupGamesLinks();
+    // Set up navigation links for all pages
+    setupAllNavLinks();
     
     // Handle browser back/forward navigation
-    window.addEventListener('popstate', (e) => {
-        const currentPage = currentPageContent || getCurrentPageFromTitle();
-        
-        if (e.state && e.state.page) {
-            if (e.state.page === 'about') {
-                switchPage(true);
-            } else if (e.state.page === 'games') {
-                switchToGames();
-            } else if (e.state.page === 'home') {
-                if (currentPage === 'about') {
-                    switchPage(false);
-                } else if (currentPage === 'games') {
-                    switchToHome();
-                }
-            }
-        } else if (window.location.hash === '#about') {
-            switchPage(true);
-        } else if (window.location.hash === '#games') {
-            switchToGames();
-        } else {
-            // Assume home page when no hash or state
-            if (currentPage === 'about') {
-                switchPage(false);
-            } else if (currentPage === 'games') {
-                switchToHome();
-            }
+    window.addEventListener('popstate', handlePopState);
+    
+    // Check for hash on page load
+    handleInitialHash();
+}
+
+/**
+ * Set up all navigation links
+ */
+function setupAllNavLinks() {
+    // Set up games links
+    setupNavLinks('a[id^="games-link"]', 'games');
+    
+    // Set up about links
+    setupNavLinks('a[href="#about"]', 'about');
+    
+    // Save original link texts for all links
+    document.querySelectorAll('.nav-toggle-link, .nav-games-link').forEach(link => {
+        if (!link.getAttribute('data-default-text')) {
+            link.setAttribute('data-default-text', link.textContent);
         }
     });
+}
 
-    // Check for hash on page load
-    if (window.location.hash === '#about') {
-        history.replaceState({ page: 'about' }, '', '#about');
-        setTimeout(() => {
-            switchPage(true);
-        }, 100);
-    } else if (window.location.hash === '#games') {
-        history.replaceState({ page: 'games' }, '', '#games');
-        setTimeout(() => {
-            switchToGames();
-        }, 100);
+/**
+ * Handle initial URL hash on page load
+ */
+function handleInitialHash() {
+    // Get page from hash
+    const hash = window.location.hash;
+    const page = Object.keys(PAGES).find(key => PAGES[key].hash === hash);
+    
+    if (page && page !== 'home') {
+        history.replaceState({ page }, '', PAGES[page].hash);
+        setTimeout(() => switchToPage(page), 100);
     }
 }
 
 /**
- * Set up click handlers for about/home links
+ * Handle popstate events (browser back/forward)
  */
-function setupAboutLinks() {
-    const aboutLinks = document.querySelectorAll('a[href="#about"]');
-    aboutLinks.forEach(link => {
-        if (!link) return;
+function handlePopState(e) {
+    if (e.state && e.state.page) {
+        switchToPage(e.state.page);
+    } else {
+        // Determine page from hash
+        const hash = window.location.hash;
+        const page = hash ? 
+            Object.keys(PAGES).find(key => PAGES[key].hash === hash) || 'home' 
+            : 'home';
+        
+        switchToPage(page);
+    }
+}
 
-        link.addEventListener('click', (e) => {
+/**
+ * Set up navigation links
+ * @param {string} selector - CSS selector for links
+ * @param {string} targetPage - Target page
+ */
+function setupNavLinks(selector, targetPage) {
+    const links = document.querySelectorAll(selector);
+    
+    links.forEach(link => {
+        if (!link) return;
+        
+        // Save default text
+        if (!link.getAttribute('data-default-text')) {
+            link.setAttribute('data-default-text', link.textContent);
+        }
+        
+        link.addEventListener('click', e => {
             e.preventDefault();
             
-            // Get current page from content or title
             const currentPage = currentPageContent || getCurrentPageFromTitle();
             
-            if (currentPage === 'about') {
-                // If already on about page, go back to home
-                history.pushState({ page: 'home' }, '', './');
-                switchPage(false);
+            if (currentPage === targetPage) {
+                // If already on target page, go to home
+                navigateTo('home');
             } else {
-                // If on home or games, go to about
-                history.pushState({ page: 'about' }, '', '#about');
-                switchPage(true);
-                
-                // If coming from games page, reset game links
-                if (currentPage === 'games') {
-                    const gamesLinks = getAll('a[id^="games-link"]') || 
-                                    document.querySelectorAll('a[id^="games-link"]');
-                    
-                    gamesLinks.forEach(l => {
-                        if (l) {
-                            l.textContent = l.getAttribute('data-default-text') || 'Games';
-                            l.classList.remove('active');
-                        }
-                    });
-                }
+                // Navigate to target page
+                navigateTo(targetPage);
             }
         });
     });
 }
 
 /**
- * Switch between home and about pages
- * @param {boolean} toAbout - Whether switching to about page
+ * Navigate to a page
+ * @param {string} page - Target page
  */
-export function switchPage(toAbout) {
+function navigateTo(page) {
+    history.pushState({ page }, '', PAGES[page].url);
+    switchToPage(page);
+}
+
+/**
+ * Switch to any page
+ * @param {string} targetPage - Target page
+ */
+function switchToPage(targetPage) {
     const pageContentEl = get('pageContent') || document.getElementById('page-content');
-    if (!pageContentEl) return;
+    if (!pageContentEl || currentPageContent === targetPage) return;
     
-    // Create fade effect
+    // Fade out animation
     const fadeOut = pageContentEl.animate(
         [{ opacity: 1 }, { opacity: 0 }],
-        { duration: 300, easing: 'ease-out', fill: 'forwards' }
+        { duration: ANIMATION.duration, easing: ANIMATION.fadeOutEasing, fill: 'forwards' }
     );
 
     fadeOut.onfinish = () => {
-        // Update page content
-        pageContentEl.innerHTML = toAbout ? pageContent.about : pageContent.home;
-        currentPageContent = toAbout ? 'about' : 'home';
-
-        // Handle ember transition
-        handlePageTransition(toAbout ? 'about' : 'home');
-
-        // Update navigation links
-        const aboutNavLinks = getAll('.nav-toggle-link') || document.querySelectorAll('.nav-toggle-link');
-        aboutNavLinks.forEach(l => {
-            if (l && !l.id.startsWith('games-link')) {
-                l.textContent = toAbout ? 'Home' : 'About';
-                l.classList.toggle('active', toAbout);
-            }
-        });
-
-        // Smooth scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        // Accessibility focus management
-        setTimeout(() => {
-            const heading = getTitleElement();
-            if (heading) {
-                heading.setAttribute('tabindex', '-1');
-                heading.focus();
-                // Remove tabindex after focus
-                setTimeout(() => heading.removeAttribute('tabindex'), 1000);
-            }
-        }, 100);
-
-        // Restore loading bar if applicable
-        if (state.hasLoaded && !toAbout) {
+        // Update content and state
+        pageContentEl.innerHTML = pageContent[targetPage];
+        currentPageContent = targetPage;
+        
+        // Additional page transitions
+        handlePageTransition(targetPage);
+        updateLinks(targetPage);
+        scrollToTop();
+        focusPageTitle();
+        
+        // Restore loading bar for home page
+        if (state?.hasLoaded && targetPage === 'home') {
             updateLoadingBar(state.finalProgress);
         }
 
-        // Fade in effect
+        // Fade in animation
         pageContentEl.animate(
             [{ opacity: 0 }, { opacity: 1 }],
-            { duration: 300, easing: 'ease-in', fill: 'forwards' }
+            { duration: ANIMATION.duration, easing: ANIMATION.fadeInEasing, fill: 'forwards' }
         );
     };
+}
+
+/**
+ * Scroll to top of page
+ */
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Focus on page title for accessibility
+ */
+function focusPageTitle() {
+    setTimeout(() => {
+        const heading = getTitleElement();
+        if (heading) {
+            heading.setAttribute('tabindex', '-1');
+            heading.focus();
+            setTimeout(() => heading.removeAttribute('tabindex'), 1000);
+        }
+    }, 100);
+}
+
+/**
+ * Update navigation link text and state
+ * @param {string} currentPage - Current page
+ */
+function updateLinks(currentPage) {
+    // Get link collections
+    const gamesLinks = getAll('a[id^="games-link"]') || 
+                      document.querySelectorAll('a[id^="games-link"]');
+    
+    const aboutLinks = getAll('.nav-toggle-link:not([id^="games-link"])') || 
+                      document.querySelectorAll('.nav-toggle-link:not([id^="games-link"])');
+    
+    // Link update configuration for each page state
+    const linkConfig = {
+        home: {
+            gamesLinks: { text: 'default', active: false },
+            aboutLinks: { text: 'About', active: false }
+        },
+        about: {
+            gamesLinks: { text: 'default', active: false },
+            aboutLinks: { text: 'Home', active: true }
+        },
+        games: {
+            gamesLinks: { text: 'Home', active: true },
+            aboutLinks: { text: 'About', active: false }
+        }
+    };
+    
+    // Get config for current page
+    const config = linkConfig[currentPage];
+    
+    // Update games links
+    updateLinkGroup(gamesLinks, 
+        config.gamesLinks.text === 'default' ? null : config.gamesLinks.text, 
+        config.gamesLinks.active);
+    
+    // Update about links
+    updateLinkGroup(aboutLinks, 
+        config.aboutLinks.text, 
+        config.aboutLinks.active);
+}
+
+/**
+ * Update a group of links
+ * @param {NodeList} links - Link elements
+ * @param {string|null} text - New text (null for default)
+ * @param {boolean} active - Whether links should be active
+ */
+function updateLinkGroup(links, text, active) {
+    links.forEach(link => {
+        if (!link) return;
+        
+        // Set text (use default or specified)
+        link.textContent = text === null ? 
+            (link.getAttribute('data-default-text') || 'Link') : 
+            text;
+        
+        // Set active state
+        active ? link.classList.add('active') : link.classList.remove('active');
+    });
+}
+
+// Legacy functions for backward compatibility
+export function switchPage(toAbout) {
+    switchToPage(toAbout ? 'about' : 'home');
+}
+
+// Helper to get current page from document title if needed
+function getCurrentPageFromTitle() {
+    const title = document.title.toLowerCase();
+    if (title.includes('about')) return 'about';
+    if (title.includes('games')) return 'games';
+    return 'home';
 }
