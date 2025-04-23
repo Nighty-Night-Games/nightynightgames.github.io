@@ -101,3 +101,12 @@
     color: var(--gold);
     text-shadow: 0 0 5px var(--gold-light);
 }
+
+/* Active navigation link - stays lowered and colored when on its page */
+.site-header a.active {
+    transform: translateY(4px);
+    color: var(--gold);
+    text-shadow: 0 0 5px var(--gold-light);
+    text-decoration: none; /* Explicitly remove underline */
+    border-bottom: none; /* Remove any potential bottom border */
+}

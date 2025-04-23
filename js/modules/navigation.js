@@ -2,7 +2,7 @@
 import { handlePageTransition } from './embers.js';
 import { pageContent } from './content.js';
 import { updateLoadingBar, getTitleElement } from './utils.js';
-import { state } from './state.js';
+import { state, update } from './state.js';
 import { get, getAll } from './dom.js';
 
 // Module state
@@ -84,6 +84,9 @@ function handleInitialHash() {
     if (page && page !== 'home') {
         history.replaceState({ page }, '', PAGES[page].hash);
         setTimeout(() => switchToPage(page), 100);
+    } else {
+        // Even if we're on home page, update the active state
+        updateLinks('home');
     }
 }
 
@@ -152,6 +155,9 @@ function navigateTo(page) {
 function switchToPage(targetPage) {
     const pageContentEl = get('pageContent') || document.getElementById('page-content');
     if (!pageContentEl || currentPageContent === targetPage) return;
+    
+    // Update application state
+    update('currentPage', targetPage);
     
     // Fade out animation
     const fadeOut = pageContentEl.animate(
@@ -224,10 +230,10 @@ function updateLinks(currentPage) {
         },
         about: {
             gamesLinks: { text: 'default', active: false },
-            aboutLinks: { text: 'Home', active: true }
+            aboutLinks: { text: 'Back', active: true }
         },
         games: {
-            gamesLinks: { text: 'Home', active: true },
+            gamesLinks: { text: 'Back', active: true },
             aboutLinks: { text: 'About', active: false }
         }
     };
@@ -262,7 +268,11 @@ function updateLinkGroup(links, text, active) {
             text;
         
         // Set active state
-        active ? link.classList.add('active') : link.classList.remove('active');
+        if (active) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
     });
 }
 
