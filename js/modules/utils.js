@@ -78,3 +78,72 @@ export const updateLoadingBar = progress => {
     // Update ARIA attribute
     loadingBar.parentElement?.setAttribute('aria-valuenow', progress);
 };
+// Initialize newsletter form
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('newsletter-form');
+  
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const emailInput = form.querySelector('.newsletter-input');
+      const submitButton = form.querySelector('.newsletter-button');
+      const email = emailInput.value.trim();
+      
+      // Basic validation
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        showFormMessage(form, 'Please enter a valid email address', 'error');
+        return;
+      }
+      
+      // Change button state
+      const originalText = submitButton.textContent;
+      submitButton.textContent = 'Sending...';
+      submitButton.disabled = true;
+      
+      try {
+        // Simulate API call (replace with actual implementation)
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Success
+        emailInput.value = '';
+        showFormMessage(form, 'Thanks for subscribing!', 'success');
+      } catch (error) {
+        console.error('Newsletter error:', error);
+        showFormMessage(form, 'An error occurred. Please try again.', 'error');
+      } finally {
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+      }
+    });
+  }
+});
+
+// Display form message
+function showFormMessage(form, message, type) {
+  // Remove any existing message
+  const existingMessage = form.querySelector('.form-message');
+  if (existingMessage) {
+    existingMessage.remove();
+  }
+  
+  // Create message element
+  const messageEl = document.createElement('p');
+  messageEl.className = `form-message ${type}`;
+  messageEl.textContent = message;
+  
+  // Add to form
+  form.appendChild(messageEl);
+  
+  // Auto-remove after delay
+  setTimeout(() => {
+    if (messageEl.isConnected) {
+      messageEl.style.opacity = '0';
+      setTimeout(() => {
+        if (messageEl.isConnected) {
+          messageEl.remove();
+        }
+      }, 300);
+    }
+  }, 4000);
+}
