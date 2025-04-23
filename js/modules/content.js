@@ -116,7 +116,7 @@ ${PAGE_COMMON.title('About NNG')}
 </section>`,
 
   games: `
-${PAGE_COMMON.title('Our Games')}
+${PAGE_COMMON.title('Games')}
 <section class="games-section">
   <div class="games-intro">
     <p><strong>Explore Our Worlds:</strong> Every game we craft is a portal into hand-built, emotionally resonant storyworlds.</p>
@@ -126,13 +126,13 @@ ${PAGE_COMMON.title('Our Games')}
 
   ${PAGE_COMMON.divider}
 
-  <h2>On the Horizon</h2>
+ <!-- <h2>On the Horizon</h2>
   <p>Nighty Night Games is always dreaming deeper. New worlds, new stories, and new myths are brewing beneath the surface. <strong>Join the journey</strong> and be among the first to hear what's next.</p>
 
   <div class="upcoming-games">
     <div class="upcoming-placeholder">Coming Soon...</div>
     <div class="upcoming-placeholder">Coming Soon...</div>
-  </div>
+  </div>-->
 
   ${PAGE_COMMON.tagline}
 </section>`

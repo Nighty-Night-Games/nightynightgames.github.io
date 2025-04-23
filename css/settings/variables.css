@@ -11,6 +11,12 @@
     --background-dark: rgba(0, 0, 0, 0.35);
     --border-light: rgba(255, 255, 255, 0.05);
     --underline-color: #aeacac;
+    
+    /* Accent Colors (for scroll.css) */
+    --color-accent: var(--gold-glow, #d6b36d);
+    --color-accent-hover: var(--gold, #ffe0a3);
+    --color-accent-dark: #b39249;
+    --color-bg-dark: var(--background-main, #0a0a0a);
 
     /* Typography */
     --font-main: 'Courier New', Courier, monospace;
