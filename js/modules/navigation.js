@@ -2,6 +2,7 @@
 
 import { handlePageTransition } from './embers.js';
 import { pageContent } from './content.js';
+import { updateLoadingBar } from './utils.js';
 
 // Global variables for page state
 let currentPageContent = '';
@@ -91,7 +92,7 @@ function switchPage(toAbout) {
 
         // Accessibility focus management
         setTimeout(() => {
-            const heading = document.querySelector('.title-visible');
+            const heading = getTitleElement();
             if (heading) {
                 heading.setAttribute('tabindex', '-1');
                 heading.focus();
@@ -102,17 +103,7 @@ function switchPage(toAbout) {
 
         // Restore loading bar if applicable - FIX: Use window. prefix for global variables
         if (window.hasLoaded && !toAbout) {
-            const loadingBar = document.querySelector('.loading-bar');
-            const loadingText = document.querySelector('.loading-text');
-            if (loadingBar && loadingText) {
-                loadingText.textContent = `${window.finalProgress}%`;
-                loadingBar.style.width = `${window.finalProgress}%`;
-                
-                const container = loadingBar.parentElement;
-                if (container) {
-                    container.setAttribute('aria-valuenow', window.finalProgress);
-                }
-            }
+            updateLoadingBar(window.finalProgress);
         }
 
         // Fade in effect

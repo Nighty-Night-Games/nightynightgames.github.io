@@ -3,6 +3,7 @@
 import { debounce } from './modules/utils.js';
 import { initEmberSystem } from './modules/embers.js';
 import { setupPageNavigation } from './modules/navigation.js';
+
 import { 
     setupMobileMenu, 
     initLoadingBar, 

@@ -2,12 +2,8 @@
 import { updateConfig } from './config.js';
 import { initEmberSystem } from './embers.js';
 import { startEmberSpawning } from './embers.js';
-
-// Export function to update title rectangle for ember positioning
-export function updateTitleRect() {
-    const el = document.querySelector('.title-visible');
-    if (el) window.currentTitleRect = el.getBoundingClientRect();
-}
+import { updateTitleRect, getCurrentPageFromTitle } from './utils.js';
+import { updateLoadingBar } from './utils.js';
 
 // Global state referenced elsewhere
 export function toggleMobileMenu(force = null) {
@@ -63,13 +59,7 @@ export function initLoadingBar() {
         }, stepTime);
     } else if (loadingBar && loadingText) {
         // If already loaded, restore visual state
-        loadingText.textContent = `${window.finalProgress}%`;
-        loadingBar.style.width = `${window.finalProgress}%`;
-
-        const container = loadingBar.parentElement;
-        if (container) {
-            container.setAttribute('aria-valuenow', window.finalProgress);
-        }
+        updateLoadingBar(progress);
     }
 }
 
@@ -125,22 +115,17 @@ export function setupMobileMenu() {
  * Handle window resize events
  */
 export function handleResize() {
-    // Update device configuration
     updateConfig();
 
-    // Update title position for ember spawning
-    updateTitleRect();
+    if (updateTitleRect() && !window.emberSpawnInterval) {
+        startEmberSpawning(getCurrentPageFromTitle());
+    }
 
-    // Close mobile menu on desktop
     if (window.innerWidth >= 1024 && window.isMenuOpen) {
         toggleMobileMenu(false);
     }
-
-    if (!window.emberSpawnInterval && document.querySelector('.title-visible')) {
-        const page = document.querySelector('.title-visible')?.textContent.toLowerCase().includes('about') ? 'about' : 'home';
-        startEmberSpawning(page);
-    }
 }
+
 
 /**
  * Handle document visibility changes
@@ -153,6 +138,8 @@ export function handleVisibilityChange() {
         // Resume animations if needed
         
         // Update title position when tab becomes visible again
-        updateTitleRect();
+        if (updateTitleRect() && !window.emberSpawnInterval) {
+            startEmberSpawning(getCurrentPageFromTitle());
+        }
     }
 }

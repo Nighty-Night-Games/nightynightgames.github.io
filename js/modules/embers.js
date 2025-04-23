@@ -1,6 +1,8 @@
 ﻿import { DEVICE, EMBER_CONFIG } from './config.js';
 import { countEmbersByPage, isTitleVisible, debounce } from './utils.js';
-import { updateTitleRect } from './ui.js';
+import { updateTitleRect } from './utils.js';
+import { getTitleElement } from './utils.js';
+import { getCurrentPageFromTitle } from './utils.js';
 
 // Global state
 let activeEmbers = [];
@@ -21,10 +23,7 @@ export function initEmberSystem() {
     updateTitleRect();
 
     // Detect current page
-    const titleElement = document.querySelector('.title-visible');
-    if (titleElement) {
-        currentPage = titleElement.textContent.trim().toLowerCase().includes('about') ? 'about' : 'home';
-    }
+    currentPage = getCurrentPageFromTitle();
 
     // Start ember spawning
     startEmberSpawning(currentPage);

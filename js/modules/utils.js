@@ -13,6 +13,22 @@ export function debounce(func, wait) {
     };
 }
 
+export function updateTitleRect() {
+    const el = getTitleElement();
+    if (el) {
+        window.currentTitleRect = el.getBoundingClientRect();
+        return true;
+    }
+    return false;
+}
+
+export function getCurrentPageFromTitle() {
+    const el = getTitleElement();
+    if (!el) return 'home';
+    return el.textContent.trim().toLowerCase().includes('about') ? 'about' : 'home';
+}
+
+
 /**
  * Count embers by page attribute
  * @param {string} page - Page identifier
@@ -43,3 +59,31 @@ export function isTitleVisible() {
 
     return rect.top < viewportHeight && rect.bottom > 0;
 }
+
+export function getTitleElement() {
+    return document.querySelector('.title-visible');
+}
+
+export function getPageContentElement() {
+    return document.getElementById('page-content');
+}
+
+/**
+ * Update the loading bar and loading text
+ * @param {number} progress - The percentage to display (0–100)
+ */
+export function updateLoadingBar(progress) {
+    const loadingBar = document.querySelector('.loading-bar');
+    const loadingText = document.querySelector('.loading-text');
+
+    if (!loadingBar || !loadingText) return;
+
+    loadingText.textContent = `${progress}%`;
+    loadingBar.style.width = `${progress}%`;
+
+    const container = loadingBar.parentElement;
+    if (container) {
+        container.setAttribute('aria-valuenow', progress);
+    }
+}
+
