@@ -6,6 +6,7 @@ import { init as initNavigation } from './modules/navigation.js';
 import { init as initEmbers } from './modules/embers.js';
 import { updateConfig } from './modules/config.js';
 import { state } from './modules/state.js';
+import { init as initScrolling } from './modules/scrolling.js';
 
 // Set initial progress value
 state.finalProgress = 5;
@@ -20,6 +21,7 @@ function initApp() {
     // Then initialize all other modules
     initMenu();
     initNavigation();
+    initScrolling();
     
     // Set up global handlers
     window.addEventListener('resize', debounce(handleResize, 150));

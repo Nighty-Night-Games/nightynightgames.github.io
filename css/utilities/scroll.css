@@ -1,18 +1,18 @@
-﻿/* scroll.css */
+﻿/* scroll.css - Modified version */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: smooth; /* Keep this, it's useful */
 }
 
-/* Enable snap scrolling on the main content */
-main {
-  scroll-snap-type: y mandatory;
+/* Make snap scrolling optional with a class instead of applying to all main elements */
+.snap-scroll {
+  scroll-snap-type: y proximity; /* Change from mandatory to proximity for gentler snapping */
   height: 100vh;
   overflow-y: scroll;
-  scroll-padding-top: 60px; /* Adjust based on your header height */
+  scroll-padding-top: 60px;
 }
 
-/* Make each section snap into place */
-main > #page-content > section {
+/* Only apply to sections inside elements with the snap-scroll class */
+.snap-scroll > section {
   scroll-snap-align: start;
   min-height: 100vh;
   display: flex;
@@ -20,8 +20,9 @@ main > #page-content > section {
   justify-content: center;
 }
 
-/* Back to top button */
+/* Keep the back-to-top button styling */
 .back-to-top {
+  /* Keep existing styles */
   position: fixed;
   bottom: 2rem;
   right: 2rem;
