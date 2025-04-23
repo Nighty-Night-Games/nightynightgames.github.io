@@ -1,10 +1,9 @@
-﻿import { DEVICE, EMBER_CONFIG } from './config.js';
-import { countEmbersByPage, isTitleVisible, debounce } from './utils.js';
-import { updateTitleRect } from './utils.js';
-import { getTitleElement } from './utils.js';
-import { getCurrentPageFromTitle } from './utils.js';
+﻿// embers.js
+import { DEVICE, EMBER_CONFIG } from './config.js';
+import { countEmbersByPage, isTitleVisible, updateTitleRect, getCurrentPageFromTitle, debounce } from './utils.js';
+import { state, update } from './state.js';
 
-// Global state
+// Module state
 let activeEmbers = [];
 let emberSpawnInterval = null;
 let currentPage = 'home';
@@ -12,9 +11,10 @@ let currentPage = 'home';
 /**
  * Initialize the ember system
  */
-export function initEmberSystem() {
-    // Make activeEmbers accessible globally
-    window.activeEmbers = activeEmbers;
+export function init() {
+    // Store in state
+    state.activeEmbers = activeEmbers;
+    window.activeEmbers = activeEmbers; // For backward compatibility
     
     // Create persistent ember container
     createEmberContainer();
@@ -24,6 +24,7 @@ export function initEmberSystem() {
 
     // Detect current page
     currentPage = getCurrentPageFromTitle();
+    update('currentPage', currentPage);
 
     // Start ember spawning
     startEmberSpawning(currentPage);
@@ -41,6 +42,7 @@ export function initEmberSystem() {
         if (!visible && emberSpawnInterval) {
             clearInterval(emberSpawnInterval);
             emberSpawnInterval = null;
+            state.emberSpawnInterval = null;
 
             // Fade out active embers
             activeEmbers.forEach(ember => {
@@ -97,7 +99,7 @@ export function startEmberSpawning(page) {
     // Start new spawn interval
     emberSpawnInterval = setInterval(() => {
         // Don't spawn if document is hidden or menu is open on low power devices
-        if (document.hidden || (window.isMenuOpen && DEVICE.lowPower)) return;
+        if (document.hidden || (state.isMenuOpen && DEVICE.lowPower)) return;
 
         const pageEmbers = countEmbersByPage(page);
 
@@ -110,6 +112,10 @@ export function startEmberSpawning(page) {
             spawnEmber(page);
         }
     }, EMBER_CONFIG.SPAWN_RATE);
+    
+    // Update state
+    state.emberSpawnInterval = emberSpawnInterval;
+    window.emberSpawnInterval = emberSpawnInterval; // For backward compatibility
 }
 
 /**
@@ -119,7 +125,7 @@ export function startEmberSpawning(page) {
  */
 function spawnEmber(page) {
     const container = window.emberContainer;
-    const titleRect = window.currentTitleRect;
+    const titleRect = window.currentTitleRect || state.currentTitleRect;
 
     if (!container || !titleRect) return;
 
@@ -219,6 +225,7 @@ export function handlePageTransition(newPage) {
     if (emberSpawnInterval) {
         clearInterval(emberSpawnInterval);
         emberSpawnInterval = null;
+        state.emberSpawnInterval = null;
     }
 
     // Mark existing embers as transitioning
@@ -256,6 +263,7 @@ export function handlePageTransition(newPage) {
 
     // Update current page
     currentPage = newPage;
+    update('currentPage', newPage);
 
     // Update title position for ember spawning
     setTimeout(() => {
@@ -266,7 +274,6 @@ export function handlePageTransition(newPage) {
         startEmberSpawning(newPage);
     }, 100);
 }
-
 
 /**
  * Remove embers that are no longer visible

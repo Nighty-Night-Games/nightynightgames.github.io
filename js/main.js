@@ -1,57 +1,59 @@
 ﻿// js/main.js
+import { init as initDom } from './modules/dom.js';
+import { init as initMenu } from './modules/menu.js';
+import { init as initLoadingBar } from './modules/loadingbar.js';
+import { init as initNavigation } from './modules/navigation.js';
+import { init as initEmbers } from './modules/embers.js';
+import { updateConfig } from './modules/config.js';
+import { state } from './modules/state.js';
 
-import { debounce } from './modules/utils.js';
-import { initEmberSystem } from './modules/embers.js';
-import { setupPageNavigation } from './modules/navigation.js';
+// Set initial progress value
+state.finalProgress = 5;
 
-import { 
-    setupMobileMenu, 
-    initLoadingBar, 
-    handleResize, 
-    handleVisibilityChange 
-} from './modules/ui.js';
-import { DEVICE } from './modules/config.js';
-
-// Global state that needs to be shared between modules
-window.hasLoaded = false;
-window.isMenuOpen = false;
-window.finalProgress = 5;  // For loading bar
-window.DEVICE = DEVICE;    // Make DEVICE available globally
-window.activeEmbers = [];  // Initialize empty array for activeEmbers
-
-// Initialize when DOM is ready
+// Initialize all modules when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize page components
-    setupMobileMenu();
-    setupPageNavigation();
-
-    // Set up loading bar
-    window.addEventListener('load', initLoadingBar);
-
+    console.log('Initializing application...');
+    
+    // First initialize DOM cache for element references
+    initDom();
+    
+    // Then initialize all other modules
+    initMenu();
+    initNavigation();
+    
     // Initialize embers after first paint
     if (document.readyState === 'complete') {
-        requestAnimationFrame(() => initEmberSystem());
+        requestAnimationFrame(initEmbers);
     } else {
         window.addEventListener('load', () => {
-            requestAnimationFrame(() => initEmberSystem());
+            requestAnimationFrame(initEmbers);
         });
     }
-
+    
+    // Initialize loading bar
+    window.addEventListener('load', initLoadingBar);
+    
     // Set up responsive handlers
     window.addEventListener('resize', debounce(handleResize, 150));
     document.addEventListener('visibilitychange', handleVisibilityChange);
 });
 
-if (window.location.hash === '#about') {
-    history.replaceState({ page: 'about' }, '', '#about');
-    setTimeout(() => {
-        const aboutLink = document.querySelector('.nav-toggle-link');
-        if (aboutLink) aboutLink.click();
-    }, 100);
+// Handle window resize
+function handleResize() {
+    updateConfig();
+    // Additional resize logic if needed
 }
 
-// Show ember count in console for debug
-setInterval(() => {
-    console.log('Active Embers:', window.activeEmbers.length);
-}, 5000);
+// Handle visibility change
+function handleVisibilityChange() {
+    // Logic for visibility changes
+}
 
+// Utility function for debouncing
+function debounce(func, wait = 100) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}

@@ -1,18 +1,19 @@
-﻿// js/modules/navigation.js
-
+﻿// navigation.js
 import { handlePageTransition } from './embers.js';
 import { pageContent } from './content.js';
-import { updateLoadingBar } from './utils.js';
+import { updateLoadingBar, getTitleElement } from './utils.js';
+import { state, update } from './state.js';
+import { get, getAll } from './dom.js';
 
-// Global variables for page state
+// Module state
 let currentPageContent = '';
 
 /**
- * Set up page navigation and history handling
+ * Initialize navigation
  */
-export function setupPageNavigation() {
+export function init() {
     // Store original page content
-    const pageContentEl = document.getElementById('page-content');
+    const pageContentEl = get('pageContent') || document.getElementById('page-content');
     if (pageContentEl) {
         // Save the initial home content
         pageContent.home = pageContentEl.innerHTML;
@@ -28,6 +29,17 @@ export function setupPageNavigation() {
             switchPage(e.state.page === 'about');
         }
     });
+
+    // Check for hash on page load
+    if (window.location.hash === '#about') {
+        history.replaceState({ page: 'about' }, '', '#about');
+        setTimeout(() => {
+            const aboutLink = document.querySelector('.nav-toggle-link');
+            if (aboutLink) {
+                switchPage(true);
+            }
+        }, 100);
+    }
 }
 
 /**
@@ -35,7 +47,7 @@ export function setupPageNavigation() {
  */
 function setupAboutLinks() {
     // Get all navigation toggle links
-    const aboutLinks = document.querySelectorAll('.nav-toggle-link');
+    const aboutLinks = getAll('.nav-toggle-link') || document.querySelectorAll('.nav-toggle-link');
     
     // Add click handler to each link
     aboutLinks.forEach(link => {
@@ -60,8 +72,8 @@ function setupAboutLinks() {
  * Switch between home and about pages
  * @param {boolean} toAbout - Whether switching to about page
  */
-function switchPage(toAbout) {
-    const pageContentEl = document.getElementById('page-content');
+export function switchPage(toAbout) {
+    const pageContentEl = get('pageContent') || document.getElementById('page-content');
     if (!pageContentEl) return;
     
     // Create fade effect
@@ -79,7 +91,7 @@ function switchPage(toAbout) {
         handlePageTransition(toAbout ? 'about' : 'home');
 
         // Update navigation links
-        const aboutNavLinks = document.querySelectorAll('.nav-toggle-link');
+        const aboutNavLinks = getAll('.nav-toggle-link') || document.querySelectorAll('.nav-toggle-link');
         aboutNavLinks.forEach(l => {
             if (l) {
                 l.textContent = toAbout ? 'Home' : 'About';
@@ -101,9 +113,9 @@ function switchPage(toAbout) {
             }
         }, 100);
 
-        // Restore loading bar if applicable - FIX: Use window. prefix for global variables
-        if (window.hasLoaded && !toAbout) {
-            updateLoadingBar(window.finalProgress);
+        // Restore loading bar if applicable
+        if (state.hasLoaded && !toAbout) {
+            updateLoadingBar(state.finalProgress);
         }
 
         // Fade in effect
@@ -113,6 +125,3 @@ function switchPage(toAbout) {
         );
     };
 }
-
-// Expose switchPage for use in other modules if needed
-export { switchPage };

@@ -43,13 +43,7 @@ export function initLoadingBar() {
 
         const interval = setInterval(() => {
             progress++;
-            loadingText.textContent = `${progress}%`;
-            loadingBar.style.width = `${progress}%`;
-
-            const container = loadingBar.parentElement;
-            if (container) {
-                container.setAttribute('aria-valuenow', progress);
-            }
+            updateLoadingBar(progress);
 
             if (progress >= window.finalProgress) {
                 clearInterval(interval);
@@ -57,9 +51,8 @@ export function initLoadingBar() {
                 loadingBar.classList.add('loaded');
             }
         }, stepTime);
-    } else if (loadingBar && loadingText) {
-        // If already loaded, restore visual state
-        updateLoadingBar(progress);
+    } else {
+        updateLoadingBar(window.finalProgress); // ✅ uses correct value
     }
 }
 
