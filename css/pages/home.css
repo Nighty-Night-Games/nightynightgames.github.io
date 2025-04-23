@@ -4,10 +4,11 @@
   flex-direction: column;
   align-items: center;
   min-height: 75vh;
-  padding: 2rem 1rem;
   position: relative;
   overflow: hidden;
-}
+       background: url('/images/hero-background.jpg') center/cover no-repeat;
+       padding: 4rem 2rem; /* Additional spacing for better structure */
+   }
 
 .hero-section:before {
   content: '';
@@ -19,7 +20,9 @@
   background: radial-gradient(circle at center, rgba(40, 40, 40, 0.2) 0%, rgba(20, 20, 20, 0.6) 70%);
   z-index: -1;
   pointer-events: none;
-}
+       backdrop-filter: blur(8px); /* Add subtle blur for better text contrast */
+       opacity: 0.9; /* Enhance the gradient overlay's visibility */
+   }
 
 .hero-content {
   max-width: 800px;
@@ -29,11 +32,13 @@
 }
 
 .hero-tagline {
-  font-size: 1.5rem;
+
   line-height: 1.6;
   margin-bottom: 2.5rem;
   color: var(--text-white);
-}
+  font-size: 2rem; /* Make the hero tagline stand out */
+  font-weight: bold;
+   }
 
 .hero-tagline .highlight {
   color: var(--gold);
@@ -55,11 +60,53 @@
 .hero-cta {
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
   flex-wrap: wrap;
-}
+  gap: 2rem;
+  padding: 1rem; /* Add some space inside the CTA container */
+   }
+
+   .hero-cta button {
+       font-size: 1rem;
+       padding: 12px 20px;
+       background: var(--gold);
+       border: none;
+       color: white;
+       border-radius: 4px;
+       cursor: pointer;
+       transition: background 0.3s ease;
+   }
+
+   .hero-cta button:hover {
+       background: #b9892d;
+   }
 
 /* Featured Project Section */
+   .featured-project {
+       display: grid;
+       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+       gap: 2rem;
+       background: #1a1a1a;
+       padding: 2rem;
+       border-radius: 8px;
+   }
+
+   .featured-project h2 {
+       text-transform: uppercase;
+       letter-spacing: 2px;
+   }
+
+   .featured-card {
+       background: rgba(0, 0, 0, 0.8);
+       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+       transition: transform 0.3s ease, box-shadow 0.3s ease;
+       border-radius: 10px;
+       padding: 1.5rem;
+   }
+
+   .featured-card:hover {
+       transform: scale(1.05);
+       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+   }
 .featured-project {
   padding: 4rem 1rem;
   max-width: 1200px;
@@ -86,12 +133,12 @@
 }
 
 /* Mission Section */
-.studio-mission {
-  background: rgba(0, 0, 0, 0.2);
-  padding: 5rem 1rem;
-  position: relative;
-  overflow: hidden;
-}
+   .studio-mission {
+       background: linear-gradient(to bottom, #222, #000);
+       color: var(--text-white);
+       text-align: center;
+       padding: 3rem 2rem;
+   }
 
 .studio-mission:before {
   content: '';
@@ -113,11 +160,11 @@
   text-align: center;
 }
 
-.mission-content h2 {
-  font-size: 2rem;
-  color: var(--gold);
-  margin-bottom: 1.5rem;
-}
+   .mission-content h2 {
+       font-size: 2.5rem;
+       color: var(--gold);
+       margin-bottom: 1.5rem;
+   }
 
 .mission-content > p {
   font-size: 1.2rem;
@@ -133,18 +180,20 @@
   gap: 2rem;
 }
 
-.mission-pillar {
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  padding: 2rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+   .mission-pillar {
+       padding: 3rem;
+       transition: all 0.4s ease;
+   }
 
 .mission-pillar:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
+
+   .mission-pillar:hover {
+       transform: translateY(-10px);
+       filter: saturate(1.2);
+   }
 
 .pillar-icon {
   font-size: 2.5rem;
