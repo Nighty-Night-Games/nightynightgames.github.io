@@ -49,8 +49,31 @@ const GAME_CARD = {
 
 // === PAGE CONTENT ===
 export const pageContent = {
-  home: '',
-
+  home: `
+    <section class="hero-section">
+      <div class="title-wrap">
+        <div id="ember-container" class="ember-container" aria-hidden="true"></div>
+        <h1>
+          <span class="title-ember-target">Nighty Night Games</span>
+          <span class="title-visible">Nighty Night Games</span>
+        </h1>
+      </div>
+      <div class="underline" aria-hidden="true"></div>
+      
+      <div class="hero-content">
+        <p class="hero-tagline">For those who seek <span class="highlight">meaningful experiences</span> — we craft games with <span class="highlight">grit, depth, and devotion</span>.</p>
+        
+        <div class="hero-cta">
+          <a href="#games" class="cta-button">Discover Our Games</a>
+          <a href="#about" class="cta-button outline">About NNG</a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Rest of the sections from my previous reply -->
+    <!-- Featured Project Section, Mission Section, etc. -->
+  `,
+  
   about: `
 ${PAGE_COMMON.title('About NNG')}
 <section class="about-section">

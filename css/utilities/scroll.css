@@ -1,0 +1,59 @@
+﻿/* scroll.css */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enable snap scrolling on the main content */
+main {
+  scroll-snap-type: y mandatory;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-padding-top: 60px; /* Adjust based on your header height */
+}
+
+/* Make each section snap into place */
+main > #page-content > section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Back to top button */
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 3rem;
+  height: 3rem;
+  background-color: var(--color-accent);
+  color: var(--color-bg-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 900;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.back-to-top:hover, .back-to-top:focus {
+  background-color: var(--color-accent-hover, var(--color-accent-dark, var(--color-accent)));
+  transform: translateY(-5px);
+}
+
+.back-to-top svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentColor;
+}
