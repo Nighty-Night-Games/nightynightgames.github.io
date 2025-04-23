@@ -39,5 +39,28 @@ export const pageContent = {
 
     <blockquote class="studio-tagline">Nighty Night Games — Sleep well, dream deep, play meaningfully.</blockquote>
 </section>
-    `
+    `,
+
+    games: `
+<div class="title-wrap games-title">
+    <div class="ember-container" id="ember-container" aria-hidden="true"></div>
+    <h1>
+      <span class="title-ember-target">Nighty Night Games</span>
+      <span class="title-visible">Our Games</span>
+    </h1>
+</div>
+<div class="underline"></div>
+
+<section class="games-section">
+    <p><strong>Explore Our Worlds:</strong> Every game we create is a portal into a hand-crafted, emotionally resonant storyworld.</p>
+
+    <h2>Legacy of Atum: Dead Dynasty</h2>
+    <p><strong>Legacy of Atum</strong> is an atmospheric RPG set in a myth-infused version of ancient Egypt, blending deep storytelling with real-time combat and strategic survival mechanics.</p>
+
+    <p>Players will experience the journey of <strong>Nui</strong>, a reluctant hero with a haunted past, as he navigates the ruins of a fallen dynasty, makes moral choices, and uncovers the secrets of forgotten gods.</p>
+
+    <blockquote class="studio-tagline">Nighty Night Games — Sleep well, dream deep, play meaningfully.</blockquote>
+</section>
+`
+
 };

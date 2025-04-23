@@ -94,7 +94,14 @@ export function startEmberSpawning(page) {
     }
 
     // Configure based on page
-    const maxEmbers = page === 'about' ? EMBER_CONFIG.ABOUT_MAX_EMBERS : EMBER_CONFIG.HOME_MAX_EMBERS;
+    let maxEmbers;
+    if (page === 'about') {
+        maxEmbers = EMBER_CONFIG.ABOUT_MAX_EMBERS;
+    } else if (page === 'games') {
+        maxEmbers = EMBER_CONFIG.GAMES_MAX_EMBERS || EMBER_CONFIG.ABOUT_MAX_EMBERS; // Fallback if not defined
+    } else {
+        maxEmbers = EMBER_CONFIG.HOME_MAX_EMBERS;
+    }
 
     // Start new spawn interval
     emberSpawnInterval = setInterval(() => {
