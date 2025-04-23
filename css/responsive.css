@@ -1,4 +1,7 @@
-﻿@media screen and (min-width: 1024px) {
+﻿/* ====== RESPONSIVE STYLES ====== */
+
+/* Desktop (min-width: 1024px) */
+@media screen and (min-width: 1024px) {
     .desktop-only {
         display: flex !important;
     }
@@ -14,19 +17,18 @@
         align-items: center;
         padding: 0 var(--spacing-md);
         height: 4rem;
-        background: transparent;
         z-index: 100;
     }
 
+    /* Header sections */
     .header-left,
     .header-center,
     .header-right {
         display: flex !important;
         align-items: center !important;
-        justify-content: center;
         flex-direction: row !important;
-        background: none !important;
         position: static !important;
+        background: none !important;
         padding: 0 !important;
         opacity: 1 !important;
         visibility: visible !important;
@@ -45,6 +47,7 @@
 
     .header-center {
         justify-self: center;
+        justify-content: center;
     }
 
     .header-right {
@@ -54,11 +57,9 @@
     }
 }
 
-
-/* ============================================= */
-/* === MEDIA QUERIES: TABLET (max-width: 1023px) === */
-/* ============================================= */
+/* Tablet (max-width: 1023px) */
 @media screen and (max-width: 1023px) {
+    /* Menu toggle */
     .menu-toggle {
         display: block;
         background: none;
@@ -70,6 +71,7 @@
         z-index: 30;
     }
 
+    /* Header sections */
     .header-left,
     .header-right {
         display: none;
@@ -81,12 +83,11 @@
         width: 100%;
         padding: var(--spacing-sm);
         gap: var(--spacing-sm);
-        background: transparent;
         border-top: 1px solid var(--border-light);
         opacity: 0;
         visibility: hidden;
         transform: translateY(-20px);
-        transition: all 0.3s ease;
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
         z-index: 90;
     }
 
@@ -120,14 +121,14 @@
         font-size: 0.95rem;
     }
 
+    /* Main content */
     main {
+        padding: var(--spacing-lg) var(--spacing-sm);
         padding-top: calc(4rem + var(--spacing-lg));
-        padding-left: var(--spacing-sm);
-        padding-right: var(--spacing-sm);
     }
 
     h1 {
-        font-size: 4rem;
+        font-size: clamp(3rem, 8vw, 4rem);
         letter-spacing: 3px;
         margin-bottom: var(--spacing-md);
     }
@@ -143,6 +144,7 @@
         height: 2px;
     }
 
+    /* Project elements */
     .project-progress {
         text-align: center;
         margin-top: var(--spacing-md);
@@ -163,6 +165,7 @@
         font-size: 0.85rem;
     }
 
+    /* Footer */
     footer {
         padding: var(--spacing-sm);
         font-size: 0.9rem;
@@ -172,25 +175,12 @@
     footer .footer-contact {
         font-size: 0.9rem;
     }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
 }
 
-/* ============================================= */
-/* === MEDIA QUERIES: MOBILE (max-width: 768px) === */
-/* ============================================= */
+/* Mobile (max-width: 768px) */
 @media screen and (max-width: 768px) {
     .header-right {
-        top: calc(4rem + 120px); /* Relative to .header-left height */
+        top: calc(4rem + 120px);
     }
 
     .project-progress {
@@ -211,10 +201,9 @@
     }
 }
 
-/* ============================================= */
-/* === MEDIA QUERIES: SMALL MOBILE (max-width: 480px) === */
-/* ============================================= */
+/* Small Mobile (max-width: 480px) */
 @media screen and (max-width: 480px) {
+    /* Header */
     .site-header {
         height: 3rem;
         padding: 0 var(--spacing-sm);
@@ -222,15 +211,15 @@
 
     .header-center {
         justify-content: flex-start;
-        flex-direction: row;
     }
 
     .header-center .logo {
-        display: none; /* or 'display: flex' if you want to show it aligned left */
+        display: none;
     }
 
+    /* Content */
     h1 {
-        font-size: 2.2rem;
+        font-size: clamp(1.8rem, 7vw, 2.2rem);
         letter-spacing: 2px;
         margin-bottom: var(--spacing-sm);
         text-align: center;
@@ -249,10 +238,10 @@
         margin: 0 auto var(--spacing-sm);
     }
 
+    /* Project elements */
     .project-progress {
         gap: var(--spacing-xs);
         font-size: 0.75rem;
-        text-align: center;
     }
 
     .project-label {
@@ -262,18 +251,13 @@
 
     .loading-bar-container {
         width: 90%;
-        margin: 10%;
+        margin: var(--spacing-xs) auto;
     }
 
-    .loading-text {
-        font-size: 0.85rem;
-        text-align: center;
-    }
-
+    /* Footer */
     footer {
         padding: var(--spacing-xs) var(--spacing-sm);
         font-size: 0.7rem;
-        text-align: center;
         line-height: 1.5;
     }
 
@@ -285,20 +269,15 @@
 
     footer .footer-contact {
         font-size: 0.8rem;
-        display: block;
         margin-top: var(--spacing-xs);
     }
 
     .menu-toggle {
         font-size: 1.2rem;
-        padding: var(--spacing-xs);
     }
 }
 
-
-/* ============================================= */
-/* === MEDIA QUERIES: EXTRA SMALL MOBILE (max-width: 360px) === */
-/* ============================================= */
+/* Extra Small Mobile (max-width: 360px) */
 @media screen and (max-width: 360px) {
     .header-left {
         flex-wrap: wrap;
@@ -337,19 +316,12 @@
         font-size: 0.7rem;
         padding: var(--spacing-xs);
     }
-
-    footer .footer-contact {
-        font-size: 0.8rem;
-    }
 }
 
-/* ============================================= */
-/* === MEDIA QUERIES: LANDSCAPE (max-height: 480px) === */
-/* ============================================= */
+/* Landscape Orientation (max-height: 480px) */
 @media screen and (max-height: 480px) and (orientation: landscape) {
     .site-header {
         position: absolute;
-        width: 100%;
         padding: var(--spacing-sm);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
@@ -363,7 +335,6 @@
         position: absolute;
         top: 100%;
         right: 0;
-        background: transparent;
         padding: var(--spacing-sm);
         border-bottom-left-radius: 4px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -392,6 +363,5 @@
     footer {
         font-size: 0.75rem;
         padding: var(--spacing-xs);
-        text-align: center;
     }
 }

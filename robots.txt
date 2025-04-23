@@ -1,3 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /wp-admin/
+Disallow: /*.php$
+Disallow: /*?
+Disallow: /cgi-bin/
+Crawl-delay: 10
 Sitemap: https://nightynightgames.com/sitemap.xml

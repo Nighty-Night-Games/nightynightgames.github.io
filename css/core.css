@@ -1,5 +1,6 @@
 ﻿/* === ROOT VARIABLES === */
 :root {
+    /* Colors */
     --gold: #ffe0a3;
     --gold-glow: #d6b36d;
     --gold-light: #fff5cc;
@@ -11,16 +12,19 @@
     --border-light: rgba(255, 255, 255, 0.05);
     --underline-color: #aeacac;
 
+    /* Typography */
     --font-main: 'Courier New', Courier, monospace;
     --font-size-base: 1rem;
     --font-size-lg: 1.5rem;
     --font-size-sm: 0.875rem;
 
+    /* Spacing */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
     --spacing-md: 1.5rem;
     --spacing-lg: 2.5rem;
 
+    /* Effects */
     --transition-default: 0.2s ease;
     --blur-amount: 6px;
 }
@@ -33,41 +37,57 @@
 }
 
 /* === BASE STYLES === */
-html, body {
+html {
     height: 100%;
-    font-family: var(--font-main);
-    color: var(--text-light);
-    background: var(--background-main);
-    overflow-x: hidden;
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 body {
+    height: 100%;
+    font-family: var(--font-main);
+    color: var(--text-light);
+    background-color: var(--background-main);
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background:
-            url('../images/blackhole-bg.webp') center center fixed no-repeat,
-            url('https://grainy-gradients.vercel.app/noise.svg') center center / cover no-repeat,
-            url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+    background-image: 
+        url('../images/blackhole-bg.webp'),
+        url('https://grainy-gradients.vercel.app/noise.svg'),
+        url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+    background-position: center center, center center, center center;
+    background-repeat: no-repeat, no-repeat, repeat;
+    background-attachment: fixed, scroll, scroll;
     background-size: cover, cover, auto;
     background-blend-mode: normal, overlay, overlay;
 }
 
 /* === UTILITY CLASSES === */
 .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
 }
 
 body.menu-open {
     position: fixed;
     width: 100%;
     overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

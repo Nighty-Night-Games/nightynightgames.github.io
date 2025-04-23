@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Optional: only if you had vertical centering */
+    justify-content: center;
     text-align: center;
     gap: var(--spacing-md);
     padding: var(--spacing-lg) var(--spacing-sm);
@@ -15,6 +15,7 @@
     color: #ffe0a3;
 }
 
+/* Project Components */
 .project-progress {
     margin-top: var(--spacing-lg);
     gap: var(--spacing-sm);
@@ -37,7 +38,6 @@
     font-size: 1.1em;
     font-weight: bold;
     text-transform: uppercase;
-    text-decoration: none;
     color: var(--gold);
     border: 1px solid var(--gold);
     padding: 0.25rem 0.75rem;
@@ -46,6 +46,7 @@
     backdrop-filter: blur(2px);
     transition: all var(--transition-default);
     text-shadow: 0 0 4px var(--gold-glow);
+    text-decoration: none;
 }
 
 .project-label:hover {
@@ -56,6 +57,7 @@
     transform: scale(1.03);
 }
 
+/* Loading Components */
 .loading-bar-container {
     width: 300px;
     height: 8px;
@@ -87,6 +89,7 @@
     letter-spacing: 1px;
 }
 
+/* Ember Effects */
 .ember-container {
     position: absolute;
     width: 100%;
@@ -110,7 +113,7 @@
     filter: drop-shadow(0 0 8px #ffd170) brightness(1.4);
 }
 
-
+/* Title Elements */
 .title-ember-target {
     position: absolute;
     opacity: 0;
@@ -123,6 +126,7 @@
     z-index: 1;
 }
 
+/* Visual Effects */
 .grain {
     position: absolute;
     top: 0;
@@ -136,6 +140,7 @@
     pointer-events: none;
 }
 
+/* Mobile Menu */
 .mobile-menu {
     display: none;
     flex-direction: column;
@@ -148,7 +153,7 @@
     transform: translateY(-20px);
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .mobile-menu.active {
@@ -171,7 +176,7 @@
     width: 100%;
 }
 
-/* Show only on desktop */
+/* Responsive Utilities */
 .desktop-only {
     display: none;
 }
@@ -214,7 +219,7 @@
     margin-bottom: var(--spacing-md);
     line-height: 1.8;
     font-size: 1.1rem;
-    color: var(--text-white); /* brighter and clearer */
+    color: var(--text-white);
 }
 
 .about-section strong {
@@ -243,8 +248,5 @@
 }
 
 .about-title {
-    margin-top: 6rem; /* Match the home title spacing */
+    margin-top: 6rem;
 }
-
-
-
