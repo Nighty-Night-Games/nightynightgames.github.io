@@ -1,10 +1,12 @@
 ﻿/* Card Components */
 .card {
     background: rgba(0, 0, 0, 0.2);
+    flex-wrap: wrap;
     border: 1px solid rgba(255, 208, 120, 0.15);
     border-radius: 6px;
     padding: 1.5rem;
     margin: 1rem 0;
+    max-width: 95%;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 

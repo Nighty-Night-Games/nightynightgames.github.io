@@ -8,6 +8,7 @@ html {
 
 body {
     min-height: 100vh;
+    max-width: 100%;
     height: 100%;
     font-family: var(--font-main);
     color: var(--text-light);
