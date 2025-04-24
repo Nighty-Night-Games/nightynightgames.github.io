@@ -9,140 +9,104 @@ import { init as initLoadingBar, removeLoadingBar } from './loadingbar.js';
 // Module state
 let currentPageContent = '';
 
-// Page configuration - centralize all page-specific settings
+// Centralized page configuration
 const PAGES = {
-    home: {
-        url: './',
-        hash: '',
-        title: 'Home'
-    },
-    about: {
-        url: '#about',
-        hash: '#about',
-        title: 'About'
-    },
-    games: {
-        url: '#games',
-        hash: '#games',
-        title: 'Games'
-    }
+    home: { url: './', hash: '', title: 'Home' },
+    about: { url: '#about', hash: '#about', title: 'About' },
+    games: { url: '#games', hash: '#games', title: 'Games' },
 };
 
 // Animation configuration
 const ANIMATION = {
     duration: 300,
     fadeOutEasing: 'ease-out',
-    fadeInEasing: 'ease-in'
+    fadeInEasing: 'ease-in',
 };
 
 /**
- * Initialize navigation
+ * Initialize navigation functionality.
  */
 export function init() {
-    // Store original page content
+    initPageContent();
+    setupNavigationLinks();
+    window.addEventListener('popstate', handlePopState);
+    processInitialHash();
+}
+
+/**
+ * Initialize and store the initial page content.
+ */
+function initPageContent() {
     const pageContentEl = get('pageContent') || document.getElementById('page-content');
     if (pageContentEl) {
         pageContent.home = pageContentEl.innerHTML;
         currentPageContent = 'home';
     }
-    
-    // Set up navigation links for all pages
-    setupAllNavLinks();
-    
-    // Handle browser back/forward navigation
-    window.addEventListener('popstate', handlePopState);
-    
-    // Check for hash on page load
-    handleInitialHash();
 }
 
 /**
- * Set up all navigation links
+ * Set up navigation links for all pages.
  */
-function setupAllNavLinks() {
-    // Set up games links
+function setupNavigationLinks() {
     setupNavLinks('a[id^="games-link"]', 'games');
-    
-    // Set up about links
     setupNavLinks('a[href="#about"]', 'about');
-    
-    // Save original link texts for all links
+
     document.querySelectorAll('.nav-toggle-link, .nav-games-link').forEach(link => {
-        if (!link.getAttribute('data-default-text')) {
+        if (!link.hasAttribute('data-default-text')) {
             link.setAttribute('data-default-text', link.textContent);
         }
     });
 }
 
 /**
- * Handle initial URL hash on page load
+ * Handle the initial URL hash when the page loads.
  */
-function handleInitialHash() {
-    // Get page from hash
+function processInitialHash() {
     const hash = window.location.hash;
-    const page = Object.keys(PAGES).find(key => PAGES[key].hash === hash);
-    
-    if (page && page !== 'home') {
-        history.replaceState({ page }, '', PAGES[page].hash);
-        setTimeout(() => switchToPage(page), 100);
+    const targetPage = Object.keys(PAGES).find(page => PAGES[page].hash === hash) || 'home';
+    if (targetPage !== 'home') {
+        history.replaceState({ page: targetPage }, '', PAGES[targetPage].hash);
+        setTimeout(() => switchToPage(targetPage), 100);
     } else {
-        // Even if we're on home page, update the active state
-        updateLinks('home');
+        updateLinkStates('home');
     }
 }
 
 /**
- * Handle popstate events (browser back/forward)
+ * Handle browser back/forward navigation events.
  */
-function handlePopState(e) {
-    if (e.state && e.state.page) {
-        switchToPage(e.state.page);
-    } else {
-        // Determine page from hash
-        const hash = window.location.hash;
-        const page = hash ? 
-            Object.keys(PAGES).find(key => PAGES[key].hash === hash) || 'home' 
-            : 'home';
-        
-        switchToPage(page);
-    }
+function handlePopState(event) {
+    const page = event.state?.page || getPageFromHash();
+    switchToPage(page);
 }
 
 /**
- * Set up navigation links
- * @param {string} selector - CSS selector for links
- * @param {string} targetPage - Target page
+ * Retrieve the target page from the current URL hash.
+ * @returns {string} Page name.
+ */
+function getPageFromHash() {
+    const hash = window.location.hash;
+    return Object.keys(PAGES).find(page => PAGES[page].hash === hash) || 'home';
+}
+
+/**
+ * Set up navigation links for a specific page.
+ * @param {string} selector - CSS selector for links.
+ * @param {string} targetPage - Target page name.
  */
 function setupNavLinks(selector, targetPage) {
-    const links = document.querySelectorAll(selector);
-    
-    links.forEach(link => {
-        if (!link) return;
-        
-        // Save default text
-        if (!link.getAttribute('data-default-text')) {
-            link.setAttribute('data-default-text', link.textContent);
-        }
-        
-        link.addEventListener('click', e => {
-            e.preventDefault();
-            
-            const currentPage = currentPageContent || getCurrentPageFromTitle();
-            
-            if (currentPage === targetPage) {
-                // If already on target page, go to home
-                navigateTo('home');
-            } else {
-                // Navigate to target page
-                navigateTo(targetPage);
-            }
+    document.querySelectorAll(selector).forEach(link => {
+        link.setAttribute('data-default-text', link.getAttribute('data-default-text') || link.textContent);
+        link.addEventListener('click', event => {
+            event.preventDefault();
+            navigateTo(targetPage === currentPageContent ? 'home' : targetPage);
         });
     });
 }
 
 /**
- * Navigate to a page
- * @param {string} page - Target page
+ * Navigate to a specific page.
+ * @param {string} page - Page name.
  */
 function navigateTo(page) {
     history.pushState({ page }, '', PAGES[page].url);
@@ -150,144 +114,95 @@ function navigateTo(page) {
 }
 
 /**
- * Switch to any page
- * @param {string} targetPage - Target page name
+ * Switch to the specified page.
+ * @param {string} targetPage - Page name.
  */
 function switchToPage(targetPage) {
     const pageContentEl = get('pageContent') || document.getElementById('page-content');
     if (!pageContentEl || currentPageContent === targetPage) return;
 
-    // Update application state
     update('currentPage', targetPage);
 
-    // Fade-out animation before loading new content
-    const fadeOut = pageContentEl.animate(
-        [{ opacity: 1 }, { opacity: 0 }],
-        { duration: ANIMATION.duration, easing: ANIMATION.fadeOutEasing, fill: 'forwards' }
-    );
+    const fadeOut = pageContentEl.animate([{ opacity: 1 }, { opacity: 0 }], {
+        duration: ANIMATION.duration,
+        easing: ANIMATION.fadeOutEasing,
+        fill: 'forwards',
+    });
 
     fadeOut.onfinish = () => {
-        // Set new page content
-        pageContentEl.innerHTML = pageContent[targetPage];
-        currentPageContent = targetPage;
-
-        // Handle loading bar based on the page
-        if (targetPage === 'games') {
-            initLoadingBar(); // Initialize loading bar on Games page
-        } else {
-            removeLoadingBar(); // Ensure it's removed from other pages
-        }
-
-        // Additional page transitions
-        handlePageTransition(targetPage);
-        updateLinks(targetPage);
-        scrollToTop();
-        focusPageTitle();
-
-        // Fade-in animation for new content
-        pageContentEl.animate(
-            [{ opacity: 0 }, { opacity: 1 }],
-            { duration: ANIMATION.duration, easing: ANIMATION.fadeInEasing, fill: 'forwards' }
-        );
+        loadNewPageContent(pageContentEl, targetPage);
+        pageContentEl.animate([{ opacity: 0 }, { opacity: 1 }], {
+            duration: ANIMATION.duration,
+            easing: ANIMATION.fadeInEasing,
+            fill: 'forwards',
+        });
     };
 }
 
 /**
- * Scroll to top of page
+ * Load new content into the page.
+ * @param {HTMLElement} container - The container for page content.
+ * @param {string} targetPage - The target page name.
+ */
+function loadNewPageContent(container, targetPage) {
+    container.innerHTML = pageContent[targetPage];
+    currentPageContent = targetPage;
+
+    targetPage === 'games' ? initLoadingBar() : removeLoadingBar();
+    handlePageTransition(targetPage);
+    updateLinkStates(targetPage);
+    scrollToTop();
+    focusOnPageTitle();
+}
+
+/**
+ * Scroll to the top of the page.
  */
 function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 /**
- * Focus on page title for accessibility
+ * Focus on the page title for accessibility purposes.
  */
-function focusPageTitle() {
+function focusOnPageTitle() {
     setTimeout(() => {
-        const heading = getTitleElement();
-        if (heading) {
-            heading.setAttribute('tabindex', '-1');
-            heading.focus();
-            setTimeout(() => heading.removeAttribute('tabindex'), 1000);
+        const title = getTitleElement();
+        if (title) {
+            title.setAttribute('tabindex', '-1');
+            title.focus();
+            setTimeout(() => title.removeAttribute('tabindex'), 1000);
         }
     }, 100);
 }
 
 /**
- * Update navigation link text and state
- * @param {string} currentPage - Current page
+ * Update the states and text of navigation links.
+ * @param {string} currentPage - The current page name.
  */
-function updateLinks(currentPage) {
-    // Get link collections
-    const gamesLinks = getAll('a[id^="games-link"]') || 
-                      document.querySelectorAll('a[id^="games-link"]');
-    
-    const aboutLinks = getAll('.nav-toggle-link:not([id^="games-link"])') || 
-                      document.querySelectorAll('.nav-toggle-link:not([id^="games-link"])');
-    
-    // Link update configuration for each page state
-    const linkConfig = {
-        home: {
-            gamesLinks: { text: 'default', active: false },
-            aboutLinks: { text: 'About', active: false }
-        },
-        about: {
-            gamesLinks: { text: 'default', active: false },
-            aboutLinks: { text: 'Back', active: true }
-        },
-        games: {
-            gamesLinks: { text: 'Back', active: true },
-            aboutLinks: { text: 'About', active: false }
-        }
+function updateLinkStates(currentPage) {
+    const config = {
+        home: { games: { text: null, active: false }, about: { text: 'About', active: false } },
+        games: { games: { text: 'Back', active: true }, about: { text: 'About', active: false } },
+        about: { games: { text: null, active: false }, about: { text: 'Back', active: true } },
     };
-    
-    // Get config for current page
-    const config = linkConfig[currentPage];
-    
-    // Update games links
-    updateLinkGroup(gamesLinks, 
-        config.gamesLinks.text === 'default' ? null : config.gamesLinks.text, 
-        config.gamesLinks.active);
-    
-    // Update about links
-    updateLinkGroup(aboutLinks, 
-        config.aboutLinks.text, 
-        config.aboutLinks.active);
+
+    applyLinkUpdates('a[id^="games-link"]', config[currentPage].games);
+    applyLinkUpdates('.nav-toggle-link:not([id^="games-link"])', config[currentPage].about);
 }
 
 /**
- * Update a group of links
- * @param {NodeList} links - Link elements
- * @param {string|null} text - New text (null for default)
- * @param {boolean} active - Whether links should be active
+ * Apply updates to a collection of links.
+ * @param {string} selector - CSS selector for the links.
+ * @param {Object} config - Configuration for text and active state.
  */
-function updateLinkGroup(links, text, active) {
-    links.forEach(link => {
-        if (!link) return;
-        
-        // Set text (use default or specified)
-        link.textContent = text === null ? 
-            (link.getAttribute('data-default-text') || 'Link') : 
-            text;
-        
-        // Set active state
-        if (active) {
-            link.classList.add('active');
+function applyLinkUpdates(selector, config) {
+    document.querySelectorAll(selector).forEach(link => {
+        if (config.text !== null) {
+            link.textContent = config.text;
         } else {
-            link.classList.remove('active');
+            link.textContent = link.getAttribute('data-default-text') || 'Link';
         }
+        link.classList.toggle('active', config.active);
     });
-}
-
-// Legacy functions for backward compatibility
-export function switchPage(toAbout) {
-    switchToPage(toAbout ? 'about' : 'home');
-}
-
-// Helper to get current page from document title if needed
-function getCurrentPageFromTitle() {
-    const title = document.title.toLowerCase();
-    if (title.includes('about')) return 'about';
-    if (title.includes('games')) return 'games';
-    return 'home';
 }

@@ -15,34 +15,45 @@ state.finalProgress = 5;
  * Initialize application modules
  */
 function initApp() {
-    // Initialize DOM cache first (required by other modules)
-    initDom();
-    
-    // Then initialize all other modules
+    initDom(); // Initialize DOM cache first
+    initModules(); // Initialize other modules
+    setupGlobalHandlers(); // Set up event listeners
+}
+
+/**
+ * Initialize various app modules
+ */
+function initModules() {
     initMenu();
     initNavigation();
     initScrolling();
-    
-    // Set up global handlers
-    window.addEventListener('resize', debounce(handleResize, 150));
+    initLoadingBar(); // Initialize loading bar
+}
+
+/**
+ * Configure global event handlers
+ */
+function setupGlobalHandlers() {
+    window.addEventListener('resize', debounce(updateConfig, 150));
     document.addEventListener('visibilitychange', handleVisibilityChange);
 }
 
 /**
- * Initialize embers system
+ * Initialize embers for interactive visuals
  */
 function initEmberSystem() {
     requestAnimationFrame(initEmbers);
 }
 
-// Handle window resize
-const handleResize = () => updateConfig();
-
-// Handle visibility change
-const handleVisibilityChange = () => {};
+/**
+ * Handle page visibility changes
+ */
+function handleVisibilityChange() {
+    // Add logic for visibility changes if needed
+}
 
 /**
- * Debounce utility
+ * Utility: Debounce function to limit event execution frequency
  */
 function debounce(func, wait = 100) {
     let timeout;
@@ -53,18 +64,16 @@ function debounce(func, wait = 100) {
 }
 
 /**
- * Initialize app when DOM is ready
+ * Initialize the app when the DOM is fully loaded
  */
 document.addEventListener('DOMContentLoaded', () => {
     initApp();
 
-    // Initialize loading bar for first page
-    initLoadingBar();
-
-    // Initialize embers and other effects
+    // Initialize embers and effects when the page is ready
+    const handlePageLoad = () => initEmberSystem();
     if (document.readyState === 'complete') {
-        initEmberSystem();
+        handlePageLoad();
     } else {
-        window.addEventListener('load', initEmberSystem);
+        window.addEventListener('load', handlePageLoad);
     }
 });

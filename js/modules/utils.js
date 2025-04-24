@@ -1,6 +1,12 @@
 ﻿// utils.js
 
-// DOM helper functions
+/* === DOM Helper Functions === */
+
+/**
+ * Debounce a function to limit its execution rate.
+ * @param {Function} func - The function to debounce.
+ * @param {number} wait - Delay in milliseconds.
+ */
 export const debounce = (func, wait = 100) => {
     let timeout;
     return (...args) => {
@@ -9,29 +15,53 @@ export const debounce = (func, wait = 100) => {
     };
 };
 
+/**
+ * Toggle classes on an element.
+ * @param {Element} element - The target DOM element.
+ * @param {Object} classMap - A map of class names and boolean flags.
+ */
 export const toggleClasses = (element, classMap) => {
     if (!element) return;
-    for (const [className, shouldHave] of Object.entries(classMap)) {
+    Object.entries(classMap).forEach(([className, shouldHave]) => {
         element.classList.toggle(className, shouldHave);
-    }
+    });
 };
 
+/**
+ * Set multiple attributes on an element.
+ * @param {Element} element - The target DOM element.
+ * @param {Object} attrMap - A map of attributes and their values.
+ */
 export const setAttributes = (element, attrMap) => {
     if (!element) return;
-    for (const [attr, value] of Object.entries(attrMap)) {
+    Object.entries(attrMap).forEach(([attr, value]) => {
         element.setAttribute(attr, value);
-    }
+    });
 };
 
+/**
+ * Check if an element is in the viewport.
+ * @param {Element} element - The target DOM element.
+ * @param {number} offset - Additional offset to account for visibility.
+ * @returns {boolean} True if the element is visible in the viewport.
+ */
 export const isInViewport = (element, offset = 0) => {
     if (!element) return false;
     const rect = element.getBoundingClientRect();
     return rect.top < window.innerHeight + offset && rect.bottom > -offset;
 };
 
-// Title and page-related utilities
+/* === Title and Page Utilities === */
+
+/**
+ * Get the title element with a specific class.
+ */
 export const getTitleElement = () => document.querySelector('.title-visible');
 
+/**
+ * Update the bounding rectangle of the title element.
+ * @returns {boolean} True if title element exists and rect is updated.
+ */
 export const updateTitleRect = () => {
     const el = getTitleElement();
     if (el) {
@@ -41,109 +71,134 @@ export const updateTitleRect = () => {
     return false;
 };
 
+/**
+ * Get the current page based on the title element.
+ * @returns {string} The current page.
+ */
 export const getCurrentPageFromTitle = () => {
-    const el = getTitleElement();
-    return el?.textContent.trim().toLowerCase().includes('about') ? 'about' : 'home';
+    const title = getTitleElement()?.textContent.trim().toLowerCase();
+    return title?.includes('about') ? 'about' : 'home';
 };
 
+/**
+ * Check if the title is visible on the screen.
+ * @returns {boolean} True if the title is visible.
+ */
 export const isTitleVisible = () => {
-    const titleElement = getTitleElement();
-    if (!titleElement) return false;
-    
-    const rect = titleElement.getBoundingClientRect();
-    return rect.top < window.innerHeight && rect.bottom > 0;
+    const rect = getTitleElement()?.getBoundingClientRect();
+    return rect && rect.top < window.innerHeight && rect.bottom > 0;
 };
 
-// Ember-related utilities
+/* === Ember Utilities === */
+
+/**
+ * Count all active ember elements associated with a specific page.
+ * @param {string} page - The page name.
+ * @returns {number} Count of embers for the specified page.
+ */
 export const countEmbersByPage = page => {
-    if (!window.activeEmbers?.length) return 0;
-    
-    let count = 0;
-    for (const ember of window.activeEmbers) {
-        if (ember.getAttribute('data-page') === page) count++;
-    }
-    return count;
+    return window.activeEmbers?.filter(ember => ember.getAttribute('data-page') === page).length || 0;
 };
 
-// Loading bar utility
+/* === Loading Bar Utility === */
+
+/**
+ * Update the loading bar and text progress dynamically.
+ * @param {number} progress - Progress percentage.
+ */
 export const updateLoadingBar = progress => {
     const loadingBar = document.querySelector('.loading-bar');
     const loadingText = document.querySelector('.loading-text');
     if (!loadingBar || !loadingText) return;
 
-    // Update text and bar width
     loadingText.textContent = `${progress}%`;
     loadingBar.style.width = `${progress}%`;
-    
-    // Update ARIA attribute
     loadingBar.parentElement?.setAttribute('aria-valuenow', progress);
 };
-// Initialize newsletter form
+
+/* === Newsletter Form Initialization === */
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('newsletter-form');
-  
-  if (form) {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const emailInput = form.querySelector('.newsletter-input');
-      const submitButton = form.querySelector('.newsletter-button');
-      const email = emailInput.value.trim();
-      
-      // Basic validation
-      if (!email || !email.includes('@') || !email.includes('.')) {
-        showFormMessage(form, 'Please enter a valid email address', 'error');
-        return;
-      }
-      
-      // Change button state
-      const originalText = submitButton.textContent;
-      submitButton.textContent = 'Sending...';
-      submitButton.disabled = true;
-      
-      try {
-        // Simulate API call (replace with actual implementation)
-        await new Promise(resolve => setTimeout(resolve, 800));
-        
-        // Success
-        emailInput.value = '';
-        showFormMessage(form, 'Thanks for subscribing!', 'success');
-      } catch (error) {
-        console.error('Newsletter error:', error);
-        showFormMessage(form, 'An error occurred. Please try again.', 'error');
-      } finally {
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
-      }
-    });
-  }
+    const newsletterForm = document.getElementById('newsletter-form');
+
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', handleNewsletterSubmit);
+    }
 });
 
-// Display form message
-function showFormMessage(form, message, type) {
-  // Remove any existing message
-  const existingMessage = form.querySelector('.form-message');
-  if (existingMessage) {
-    existingMessage.remove();
-  }
-  
-  // Create message element
-  const messageEl = document.createElement('p');
-  messageEl.className = `form-message ${type}`;
-  messageEl.textContent = message;
-  
-  // Add to form
-  form.appendChild(messageEl);
-  
-  // Auto-remove after delay
-  setTimeout(() => {
-    if (messageEl.isConnected) {
-      messageEl.style.opacity = '0';
-      setTimeout(() => {
-        if (messageEl.isConnected) {
-          messageEl.remove();
-        }
-      }, 300);
+/**
+ * Handle submission of the newsletter form.
+ * @param {Event} e - The submit event.
+ */
+const handleNewsletterSubmit = async e => {
+    e.preventDefault();
+
+    const form = e.target;
+    const emailInput = form.querySelector('.newsletter-input');
+    const submitButton = form.querySelector('.newsletter-button');
+    const email = emailInput.value.trim();
+
+    // Validate email input
+    if (!isValidEmail(email)) {
+        showFormMessage(form, 'Please enter a valid email address', 'error');
+        return;
     }
-  }, 4000);
-}
+
+    // Change button state
+    const originalText = submitButton.textContent;
+    submitButton.textContent = 'Sending...';
+    submitButton.disabled = true;
+
+    try {
+        await simulateApiCall(); // Simulated API call
+        emailInput.value = '';
+        showFormMessage(form, 'Thanks for subscribing!', 'success');
+    } catch (error) {
+        console.error('Newsletter error:', error);
+        showFormMessage(form, 'An error occurred. Please try again.', 'error');
+    } finally {
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+    }
+};
+
+/**
+ * Validate the email format.
+ * @param {string} email - The email address to validate.
+ * @returns {boolean} True if valid, false otherwise.
+ */
+const isValidEmail = email => email.includes('@') && email.includes('.');
+
+/**
+ * Simulate an API call (replace with actual implementation).
+ * @returns {Promise<void>} A resolved promise.
+ */
+const simulateApiCall = () => new Promise(resolve => setTimeout(resolve, 800));
+
+/**
+ * Show a message on the newsletter form.
+ * @param {HTMLFormElement} form - The form element.
+ * @param {string} message - The message to display.
+ * @param {string} type - The type of message ('success', 'error').
+ */
+const showFormMessage = (form, message, type) => {
+    let messageEl = form.querySelector('.form-message');
+
+    // Remove existing message
+    if (messageEl) {
+        messageEl.remove();
+    }
+
+    // Create and insert new message
+    messageEl = document.createElement('p');
+    messageEl.className = `form-message ${type}`;
+    messageEl.textContent = message;
+    form.appendChild(messageEl);
+
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+        if (messageEl.isConnected) {
+            messageEl.style.opacity = '0';
+            setTimeout(() => messageEl.remove(), 300);
+        }
+    }, 4000);
+};

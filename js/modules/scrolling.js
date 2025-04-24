@@ -1,51 +1,54 @@
 ﻿// js/modules/scrolling.js
 
 let backToTopBtn = null;
-let scrollThreshold = 300; // px from top to show the button
+const scrollThreshold = 300; // Pixels from top to show the button
 
 /**
- * Initialize scrolling features
+ * Initialize scrolling-related features, such as the back-to-top button.
  */
 export function init() {
-    // Get the back to top button
     backToTopBtn = document.getElementById('back-to-top');
 
     if (!backToTopBtn) return;
 
-    // Set up event listeners
-    window.addEventListener('scroll', handleScroll);
-    backToTopBtn.addEventListener('click', scrollToTopSmooth);
+    // Add event listeners
+    setupEventListeners();
 
-    // Initial check
-    handleScroll();
+    // Perform an initial check to set the button's visibility
+    toggleBackToTopVisibility();
 }
 
 /**
- * Handle scroll events
+ * Set up event listeners for scrolling and button interaction.
  */
-function handleScroll() {
+function setupEventListeners() {
+    window.addEventListener('scroll', toggleBackToTopVisibility);
+    backToTopBtn.addEventListener('click', scrollToTopSmooth);
+}
+
+/**
+ * Show or hide the back-to-top button based on the scroll position.
+ */
+function toggleBackToTopVisibility() {
     if (!backToTopBtn) return;
 
-    // Show/hide button based on scroll position
-    if (window.scrollY > scrollThreshold) {
-        backToTopBtn.classList.add('visible');
-    } else {
-        backToTopBtn.classList.remove('visible');
-    }
+    // Toggle the button visibility based on scroll position
+    backToTopBtn.classList.toggle('visible', window.scrollY > scrollThreshold);
 }
 
 /**
- * Scroll to top with smooth animation
+ * Smoothly scroll to the top of the page.
  */
 export function scrollToTopSmooth() {
     window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: 'smooth',
     });
 }
 
 /**
- * Scroll to specific element by ID with smooth animation
+ * Smoothly scroll to a specific element by its ID.
+ * @param {string} elementId - The ID of the target element.
  */
 export function scrollToElement(elementId) {
     const element = document.getElementById(elementId);
@@ -53,6 +56,6 @@ export function scrollToElement(elementId) {
 
     element.scrollIntoView({
         behavior: 'smooth',
-        block: 'start'
+        block: 'start',
     });
 }
