@@ -67,8 +67,8 @@
     text-align: center;
     font-style: italic;
     color: var(--gold-light);
-    font-size: 1rem;
+    font-size: 1.5rem;
     margin-top: var(--spacing-lg);
-    max-width: 80%;
+    max-width: 100%;
     line-height: 1.6;
 }
