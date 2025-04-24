@@ -1,94 +1,71 @@
 ﻿/* === ABOUT PAGE === */
 .about-section {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem;
-  animation: fadeInUp 0.8s ease-out forwards;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+    animation: fadeInUp 0.8s ease-out forwards;
 }
 
-/* Typography */
-.about-section p {
-  font-size: 1.1rem;
-  line-height: 1.7;
-  margin-bottom: 1.5rem;
-  color: var(--text-white);
-}
-
-.about-section strong {
-  color: var(--gold);
-  font-weight: 500;
+/* Headings */
+.about-section h2, .about-section h3 {
+    margin: 2.5rem 0 1rem;
 }
 
 .about-section h2 {
-  font-size: 1.8rem;
-  margin: 2.5rem 0 1rem;
-  color: var(--gold);
-  position: relative;
-  display: inline-block;
+    font-size: 1.8rem;
+    color: var(--gold);
+    position: relative;
 }
 
 .about-section h2::after {
-  content: '';
-  position: absolute;
-  bottom: -0.5rem;
-  left: 0;
-  width: 40%;
-  height: 2px;
-  background: linear-gradient(90deg, var(--gold), transparent);
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 40%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
 }
 
 .about-section h3 {
-  font-size: 1.4rem;
-  margin: 1.5rem 0 1rem;
-  color: var(--text-white);
+    font-size: 1.4rem;
+    color: var(--text-white);
 }
 
-.about-section h3 a {
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.3s ease;
+/* Paragraphs and Links */
+.about-section p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    color: var(--text-white);
 }
 
-.about-section h3 a:hover {
-  color: var(--gold);
-}
-
-/* Divider styling */
-.about-section .divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 208, 120, 0.3), transparent);
-  border: none;
-  margin: 3rem auto;
-  width: 80%;
-}
-
-/* Links styling */
 .about-section .text-link {
-  color: var(--gold);
-  text-decoration: none;
-  position: relative;
-  padding-bottom: 2px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.about-section .text-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background-color: var(--gold);
-  transition: width 0.3s ease;
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.3s ease;
 }
 
 .about-section .text-link:hover {
-  color: var(--gold-light);
+    color: var(--gold-light);
+}
+
+.about-section .text-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--gold);
+    transition: width 0.3s ease;
 }
 
 .about-section .text-link:hover::after {
-  width: 100%;
+    width: 100%;
 }
 
 /* Social media section */
@@ -138,4 +115,12 @@
     width: 20px;
     height: 20px;
   }
+}
+
+/* Divider */
+.about-section .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 208, 120, 0.3), transparent);
+    width: 80%;
+    margin: 3rem auto;
 }

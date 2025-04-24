@@ -1,41 +1,37 @@
-﻿/* Card Components */
-.card {
+﻿/* General Card Styles */
+.card,
+.game-card,
+.about-card,
+.featured-card {
     background: rgba(0, 0, 0, 0.2);
-    flex-wrap: wrap;
     border: 1px solid rgba(255, 208, 120, 0.15);
     border-radius: 6px;
     padding: 1.5rem;
     margin: 1rem 0;
-    max-width: 95%;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.card:hover {
-    transform: translateY(-3px);
+.card:hover,
+.game-card:hover,
+.about-card:hover,
+.featured-card:hover {
+    transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Featured Project Card */
+/* Featured Cards - Specific Styles */
 .featured-card {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 208, 120, 0.15);
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-.featured-media {
-    position: relative;
-    overflow: hidden;
-}
-
-.featured-image {
+.featured-card .featured-image {
     width: 100%;
-    height: auto;
-    display: block;
     transition: transform 0.6s ease;
 }
 
@@ -43,60 +39,13 @@
     transform: scale(1.03);
 }
 
-.featured-overlay {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    z-index: 2;
-}
-
-.featured-content {
-    padding: 0 2rem 2rem;
-}
-
-.featured-title {
-    font-size: 2rem;
-    margin: 0 0 1rem;
+.featured-title,
+.featured-description {
     color: var(--gold);
+    margin-bottom: 1rem;
 }
 
 .featured-description {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
     color: var(--text-white);
-}
-
-/* Game Card */
-.game-card {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 208, 120, 0.15);
-    border-radius: 6px;
-    padding: 1.5rem;
-    margin: 2rem 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    max-width: 800px
-
-}
-
-.game-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-}
-
-/* About Card */
-.about-card {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 208, 120, 0.15);
-    border-radius: 6px;
-    padding: 1.5rem;
-    margin: 2rem 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.about-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    line-height: 1.6;
 }

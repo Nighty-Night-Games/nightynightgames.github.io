@@ -3,40 +3,36 @@ html {
     height: 100%;
     font-size: 16px;
     line-height: 1.5;
-    flex: 1;
 }
 
 body {
     min-height: 100vh;
-    max-width: 100%;
-    height: 100%;
+    width: 100%;
     font-family: var(--font-main);
     color: var(--text-light);
     background-color: var(--background-main);
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    background-image: 
+    background-image:
         url('/images/blackhole-bg.webp'),
         url('https://grainy-gradients.vercel.app/noise.svg'),
         url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
-    background-position: center center, center center, center center;
+    background-position: center, center, center;
     background-repeat: no-repeat, no-repeat, repeat;
     background-attachment: fixed, scroll, scroll;
     background-size: cover, cover, auto;
     background-blend-mode: normal, overlay, overlay;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
     overflow-y: auto;
 }
 
 body.menu-open {
     position: fixed;
-    width: 100%;
     overflow: hidden;
 }
 
-/* === MODERN SCROLLBAR === */
+/* Scrollbars */
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -55,18 +51,16 @@ body.menu-open {
     background: var(--gold);
 }
 
-/* Firefox scrollbar */
 * {
     scrollbar-width: thin;
     scrollbar-color: rgba(214, 179, 109, 0.5) rgba(0, 0, 0, 0.1);
 }
 
-/* Reduced motion preferences */
+/* Motion Preferences */
 @media (prefers-reduced-motion: reduce) {
     * {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
     }
 }
