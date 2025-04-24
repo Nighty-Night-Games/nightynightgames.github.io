@@ -76,7 +76,7 @@ const GAME_CARDS = {
       'You\'ll play as <strong>Nui</strong>, a former Nubian prisoner turned reluctant hero, navigating a fractured realm of forgotten gods, collapsing empires, and buried vengeance. With real-time combat, dynamic social systems, and world-altering decisions, every action leaves a mark—the world of Atum remembers.',
     ],
     features: ['Narrative-Driven', 'Strategic Combat', 'Moral Choices', 'Ancient Egypt', 'Action RPG'],
-    showLoadingBar: true, // Enable the progress bar
+    showLoadingBar: true,
   }),
 };
 
@@ -122,6 +122,7 @@ const renderSocialButtons = () =>
 export const pageContent = {
   about: `
     ${PAGE_COMMON.title('About')}
+        ${PAGE_COMMON.divider}
     <section class="about-section">
       <div class="about-card">
         <p><strong>Nighty Night Games</strong> is a one-person indie studio based in Berlin, Germany, devoted to crafting unforgettable worlds—rich in story, emotion, and grit.</p>
@@ -143,11 +144,9 @@ export const pageContent = {
 
   games: `
   ${PAGE_COMMON.title('Games')}
+      ${PAGE_COMMON.divider}
   <section class="games-section">
     <div class="games-intro">
-      <p><strong>Legacy of Atum:</strong> Rough around the edges, but every line, every choice, carries weight.</p>
-    </div>
     ${GAME_CARDS.legacyOfAtum}
-    ${PAGE_COMMON.divider}
   </section>`,
 };
