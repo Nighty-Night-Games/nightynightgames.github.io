@@ -129,12 +129,6 @@ export const pageContent = {
       <p><strong>Legacy of Atum:</strong> Rough around the edges, but every line, every choice, carries weight.</p>
     </div>
 
-    <!-- Loading Bar Section -->
-    <div class="loading-container" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-      <div class="loading-bar"></div>
-      <span class="loading-text" aria-hidden="true">0%</span>
-    </div>
-
     <!-- Game Card Section -->
     ${GAME_CARDS.legacyOfAtum}
     ${PAGE_COMMON.divider}
