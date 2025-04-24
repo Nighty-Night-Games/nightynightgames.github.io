@@ -10,7 +10,7 @@ const PAGE_COMMON = {
     </div>
     <div class="underline"></div>`,
 
-  tagline: `<blockquote class="studio-tagline">Nighty Night Games — From ashes, myths awaken. From dreams, legends rise.</blockquote>`,
+  tagline: `<blockquote class="studio-tagline">Nighty Night Games — Close your eyes. Open a world.</blockquote>`,
 
   divider: `<hr class="divider" />`,
 };
@@ -138,4 +138,6 @@ ${PAGE_COMMON.title('Games')}
   ${PAGE_COMMON.divider}
   ${PAGE_COMMON.tagline}
 </section>`,
+  
+  
 };

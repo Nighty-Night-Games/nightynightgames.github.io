@@ -6,10 +6,10 @@ main {
     justify-content: center;
     align-items: center;
     padding: var(--spacing-lg);
-    padding-top: 5rem;
     width: 100%;
     position: relative;
     z-index: 1;
+
 }
 
 /* Page Content Container */

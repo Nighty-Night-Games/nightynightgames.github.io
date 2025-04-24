@@ -3,9 +3,11 @@ html {
     height: 100%;
     font-size: 16px;
     line-height: 1.5;
+    flex: 1;
 }
 
 body {
+    min-height: 100vh;
     height: 100%;
     font-family: var(--font-main);
     color: var(--text-light);
@@ -24,6 +26,7 @@ body {
     background-attachment: fixed, scroll, scroll;
     background-size: cover, cover, auto;
     background-blend-mode: normal, overlay, overlay;
+    overflow-y: auto;
 }
 
 body.menu-open {

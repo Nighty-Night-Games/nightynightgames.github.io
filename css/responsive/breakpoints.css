@@ -41,6 +41,7 @@
     }
 
     .header-left {
+        visibility: hidden !important;
         justify-self: start;
         justify-content: flex-start;
         gap: var(--spacing-md);

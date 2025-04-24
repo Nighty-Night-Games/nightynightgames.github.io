@@ -3,23 +3,6 @@ html {
   scroll-behavior: smooth; /* Keep this, it's useful */
 }
 
-/* Make snap scrolling optional with a class instead of applying to all main elements */
-.snap-scroll {
-  scroll-snap-type: y proximity; /* Change from mandatory to proximity for gentler snapping */
-  height: 100vh;
-  overflow-y: scroll;
-  scroll-padding-top: 60px;
-}
-
-/* Only apply to sections inside elements with the snap-scroll class */
-.snap-scroll > section {
-  scroll-snap-align: start;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 /* Keep the back-to-top button styling */
 .back-to-top {
   /* Keep existing styles */
