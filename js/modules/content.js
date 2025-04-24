@@ -121,7 +121,7 @@ const renderSocialButtons = () =>
 // Dynamic Page Content
 export const pageContent = {
   about: `
-    ${PAGE_COMMON.title('About NNG')}
+    ${PAGE_COMMON.title('About')}
     <section class="about-section">
       <div class="about-card">
         <p><strong>Nighty Night Games</strong> is a one-person indie studio based in Berlin, Germany, devoted to crafting unforgettable worlds—rich in story, emotion, and grit.</p>
