@@ -17,6 +17,7 @@
     background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
     box-shadow: inset 0 0 4px #fff3c4, 0 0 6px var(--gold);
     transition: width var(--transition-default);
+    background-size: 200% 200%; /* Extend the background for the animation */
 }
 
 .loading-bar.loaded {
@@ -70,4 +71,103 @@
     background: rgba(255, 255, 255, 0.08);
     text-shadow: 0 0 6px var(--text-white);
     transform: scale(1.03);
+}
+
+/* Loading Components for Game Card */
+.game-card .project-progress {
+  width: 100%; /* Adapt to the card's width */
+  max-width: none; /* Remove width restrictions */
+  margin: 0 0 var(--spacing-md) 0; /* Add spacing below */
+  padding: var(--spacing-sm); /* Add padding for visual adjustment */
+  box-shadow: none; /* Remove outer shadow to integrate smoothly */
+}
+
+.game-card .loading-bar-container {
+  margin-top: 0;
+}
+
+/* Loading bar within the game card */
+.game-card-header .loading-bar-container {
+  width: 100%; /* Take full width of the header */
+  height: 6px;
+  margin-top: var(--spacing-xs); /* Spaced below the status */
+  border-radius: 3px; /* Slight rounded corners */
+  background: var(--background-secondary); /* Blend with card's background */
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.1);
+}
+
+.game-card-header .loading-bar {
+  height: 100%;
+  width: 0%; /* Animation will adjust this */
+  border-radius: 3px; /* Smooth edge */
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  animation: pulse-gradient 2s infinite; /* Optional pulse animation */
+  transition: width 0.3s ease; /* Smooth progress transition */
+}
+
+.game-card-header .loading-text {
+  position: absolute;
+  top: -18px; /* Above the bar */
+  right: 0; /* Aligned to the right */
+  font-size: 0.75em;
+  color: var(--gold-light);
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* Gradient pulse animation for progress bar */
+@keyframes pulse-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+/* Loading bar below the image in the game card */
+.game-media img {
+  display: block;
+  margin: 0 auto; /* Center the image */
+}
+
+.game-media .loading-bar-container {
+  margin-top: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.game-media .loading-bar-container {
+  width: 90%; /* Slight margin for better alignment with the image */
+  height: 8px;
+  margin: var(--spacing-sm) auto; /* Center the bar below the image */
+  border: 1px solid var(--gold-glow);
+  background: var(--background-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative; /* To manage inner text alignment */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+}
+
+.game-media .loading-bar {
+  height: 100%;
+  width: 0%; /* The `width` will animate dynamically */
+  border-radius: 4px; /* Rounded corners */
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  transition: width 0.4s ease; /* Smooth loading animation */
+}
+
+.game-media .loading-text {
+  margin-top: var(--spacing-xs);
+  font-size: 0.85em;
+  color: var(--text-light);
+  text-align: center; /* Centered percentage text below the bar */
+}
+.game-card:hover .loading-bar-container {
+  border-color: var(--gold-light);
+  box-shadow: 0 2px 6px rgba(255, 224, 163, 0.4);
+}
+
+.game-card:hover .loading-bar {
+  box-shadow: inset 0 0 6px var(--gold-light), 0 0 8px var(--gold-light);
 }

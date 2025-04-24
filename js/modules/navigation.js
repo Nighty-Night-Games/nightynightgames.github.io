@@ -4,6 +4,7 @@ import { pageContent } from './content.js';
 import { updateLoadingBar, getTitleElement } from './utils.js';
 import { state, update } from './state.js';
 import { get, getAll } from './dom.js';
+import { init as initLoadingBar, removeLoadingBar } from './loadingbar.js';
 
 // Module state
 let currentPageContent = '';
@@ -150,38 +151,40 @@ function navigateTo(page) {
 
 /**
  * Switch to any page
- * @param {string} targetPage - Target page
+ * @param {string} targetPage - Target page name
  */
 function switchToPage(targetPage) {
     const pageContentEl = get('pageContent') || document.getElementById('page-content');
     if (!pageContentEl || currentPageContent === targetPage) return;
-    
+
     // Update application state
     update('currentPage', targetPage);
-    
-    // Fade out animation
+
+    // Fade-out animation before loading new content
     const fadeOut = pageContentEl.animate(
         [{ opacity: 1 }, { opacity: 0 }],
         { duration: ANIMATION.duration, easing: ANIMATION.fadeOutEasing, fill: 'forwards' }
     );
 
     fadeOut.onfinish = () => {
-        // Update content and state
+        // Set new page content
         pageContentEl.innerHTML = pageContent[targetPage];
         currentPageContent = targetPage;
-        
+
+        // Handle loading bar based on the page
+        if (targetPage === 'games') {
+            initLoadingBar(); // Initialize loading bar on Games page
+        } else {
+            removeLoadingBar(); // Ensure it's removed from other pages
+        }
+
         // Additional page transitions
         handlePageTransition(targetPage);
         updateLinks(targetPage);
         scrollToTop();
         focusPageTitle();
-        
-        // Restore loading bar for home page
-        if (state?.hasLoaded && targetPage === 'home') {
-            updateLoadingBar(state.finalProgress);
-        }
 
-        // Fade in animation
+        // Fade-in animation for new content
         pageContentEl.animate(
             [{ opacity: 0 }, { opacity: 1 }],
             { duration: ANIMATION.duration, easing: ANIMATION.fadeInEasing, fill: 'forwards' }

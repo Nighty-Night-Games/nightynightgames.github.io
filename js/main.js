@@ -52,17 +52,19 @@ function debounce(func, wait = 100) {
     };
 }
 
-// Initialize app when DOM is ready
+/**
+ * Initialize app when DOM is ready
+ */
 document.addEventListener('DOMContentLoaded', () => {
     initApp();
-    
-    // Initialize embers after first paint
+
+    // Initialize loading bar for first page
+    initLoadingBar();
+
+    // Initialize embers and other effects
     if (document.readyState === 'complete') {
         initEmberSystem();
     } else {
         window.addEventListener('load', initEmberSystem);
     }
-    
-    // Initialize loading bar after full load
-    window.addEventListener('load', initLoadingBar);
 });

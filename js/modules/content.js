@@ -19,20 +19,33 @@ const PAGE_COMMON = {
     <hr class="divider" />`,
 };
 
+
 // Helper function to sanitize CSS class names
 function sanitizeClassName(str) {
   return str.toLowerCase().replace(/\s+/g, '-');
 }
 
 // === GAME CARD TEMPLATE ===
-const createGameCard = ({ title, status, image, imageAlt, description, features }) => {
+const createGameCard = ({ title, status, image, imageAlt, description, features, showLoadingBar = false }) => {
   const renderDescription = description
     .map((text) =>
       `<p>${text.replace(/<strong>(.*?)<\/strong>/g, (_, boldText) => `<strong>${boldText}</strong>`)}</p>`
     )
     .join('');
 
-  const renderFeatures = features.map((feature) => `<span class="game-feature">${feature}</span>`).join('');
+  const renderFeatures = features
+    .map((feature) => `<span class="game-feature">${feature}</span>`)
+    .join('');
+
+  // Include the loading bar below the image if `showLoadingBar` is true
+  const loadingBar = showLoadingBar
+    ? `
+    <div class="loading-bar-container" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+      <div class="loading-bar"></div>
+      <span class="loading-text">0%</span>
+    </div>
+    `
+    : '';
 
   return `
     <div class="game-card">
@@ -42,6 +55,7 @@ const createGameCard = ({ title, status, image, imageAlt, description, features 
       </div>
       <div class="game-media">
         <img src="${image}" alt="${imageAlt}" />
+        ${loadingBar} <!-- Loading bar placed directly below the image -->
       </div>
       <div class="game-card-content">${renderDescription}</div>
       <div class="game-features">${renderFeatures}</div>
@@ -62,6 +76,7 @@ const GAME_CARDS = {
       'You\'ll play as <strong>Nui</strong>, a former Nubian prisoner turned reluctant hero, navigating a fractured realm of forgotten gods, collapsing empires, and buried vengeance. With real-time combat, dynamic social systems, and world-altering decisions, every action leaves a mark—the world of Atum remembers.',
     ],
     features: ['Narrative-Driven', 'Strategic Combat', 'Moral Choices', 'Ancient Egypt', 'Action RPG'],
+    showLoadingBar: true, // Enable the progress bar
   }),
 };
 
@@ -98,7 +113,7 @@ const renderSocialButtons = () =>
       </a>`
   ).join('');
 
-// === PAGE CONTENT ===
+// Dynamic Page Content
 export const pageContent = {
   about: `
     ${PAGE_COMMON.title('About NNG')}
@@ -124,14 +139,10 @@ export const pageContent = {
   games: `
   ${PAGE_COMMON.title('Games')}
   <section class="games-section">
-    <!-- Intro Section -->
     <div class="games-intro">
       <p><strong>Legacy of Atum:</strong> Rough around the edges, but every line, every choice, carries weight.</p>
     </div>
-
-    <!-- Game Card Section -->
     ${GAME_CARDS.legacyOfAtum}
     ${PAGE_COMMON.divider}
   </section>`,
-
 };
