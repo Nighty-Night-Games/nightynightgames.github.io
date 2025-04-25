@@ -1,5 +1,4 @@
-﻿/* === ROOT VARIABLES === */
-:root {
+﻿:root {
     /* Colors */
     --gold: #ffe0a3;
     --gold-glow: #d6b36d;
@@ -15,7 +14,7 @@
     /* Accent Colors */
     --color-accent: var(--gold-glow);
     --color-accent-hover: var(--gold);
-    --color-accent-dark: #b39249;
+    --color-accent-dark: #b3ae49;
 
     /* Typography */
     --font-main: 'Courier New', Courier, monospace;
@@ -32,4 +31,7 @@
     /* Effects */
     --transition-default: 0.2s ease;
     --blur-amount: 6px;
+}
+:root {
+  --color-bg-dark: #121212; /* Replace with desired dark background color */
 }

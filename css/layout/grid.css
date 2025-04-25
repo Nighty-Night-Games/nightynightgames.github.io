@@ -17,5 +17,4 @@ main {
     padding: var(--spacing-lg) var(--spacing-sm);
     max-width: 2000px;
     margin: 100px auto;
-    text-align: center;
 }

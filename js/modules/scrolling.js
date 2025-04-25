@@ -1,7 +1,7 @@
 ﻿// js/modules/scrolling.js
 
 let backToTopBtn = null;
-const scrollThreshold = 300; // Pixels from top to show the button
+const scrollThreshold = 800; // Pixels from top to show the button
 
 /**
  * Initialize scrolling-related features, such as the back-to-top button.

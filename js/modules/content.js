@@ -12,7 +12,7 @@ const PAGE_COMMON = {
 
   tagline: `
     <blockquote class="studio-tagline">
-      Close your eyes. Open a world.
+      Close your eyes. Create a world.
     </blockquote>`,
 
   divider: `
