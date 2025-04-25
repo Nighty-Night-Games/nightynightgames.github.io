@@ -64,3 +64,13 @@ body.menu-open {
         transition-duration: 0.01ms !important;
     }
 }
+
+.title-wrap {
+    padding-top: 6vh;
+    text-align: center;
+}
+
+.title-wrap.about-title,
+.title-wrap.games-title {
+    padding-top: 8.5vh; /* Matches spacing in home hero-section */
+}
