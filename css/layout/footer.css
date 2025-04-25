@@ -12,9 +12,6 @@ footer {
     backdrop-filter: blur(8px); /* Smooth blur effect */
     overflow: hidden;
     position: relative;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 2s ease-out 2s forwards;
 }
 
 
