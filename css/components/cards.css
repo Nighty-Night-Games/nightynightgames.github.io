@@ -12,6 +12,21 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.game-card {
+    background: rgba(17, 17, 17, 0.75);
+    border: 1px solid rgba(255, 208, 120, 0.05);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 0 40px rgba(255, 208, 120, 0.02);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.game-card:hover {
+    box-shadow: 0 0 80px rgba(255, 208, 120, 0.08);
+}
+
 .card:hover,
 .game-card:hover,
 .about-card:hover,

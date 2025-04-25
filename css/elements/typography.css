@@ -26,7 +26,6 @@ a:hover {
     position: relative;
     display: inline-block;
     width: fit-content;
-    margin-bottom: var(--spacing-md);
 }
 
 h1 {

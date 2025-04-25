@@ -25,8 +25,8 @@
     /* Spacing */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
-    --spacing-md: 1.5rem;
-    --spacing-lg: 2.5rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 3.5rem;
 
     /* Effects */
     --transition-default: 0.2s ease;

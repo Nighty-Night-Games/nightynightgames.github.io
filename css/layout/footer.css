@@ -10,6 +10,19 @@ footer {
     border-top: 1px solid rgba(255, 208, 120, 0.3);
     color: var(--text-light);
     backdrop-filter: blur(8px); /* Smooth blur effect */
+    overflow: hidden;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1.5s ease-out 1s forwards;
+}
+
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Social Media Section */
@@ -75,10 +88,27 @@ footer {
 
 .tagline {
     font-size: 0.85rem;
-    margin: 0.25rem 0 1rem 0;
+    margin: 0.5rem 0 1rem;
     color: var(--gold);
     font-style: italic;
     opacity: 0.9;
+}
+
+.tagline span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(5px);
+    animation: floatIn 10s ease-out forwards;
+}
+.tagline span:nth-child(1) { animation-delay: 0.4s; }
+.tagline span:nth-child(2) { animation-delay: 0.6s; }
+/* ...repeat for each word */
+
+@keyframes floatIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .footer-links {
@@ -87,18 +117,41 @@ footer {
     justify-content: center;
     flex-wrap: wrap;
     margin-top: 0.5rem;
+    color: var(--text-light);
+    font-size: 0.85rem;
+    text-decoration: none;
+    padding: 0 0.25rem;
+    position: relative;
+    transition: color 0.3s ease;
 }
 
 .footer-links a {
     color: var(--text-light);
     font-size: 0.85rem;
     text-decoration: none;
-    transition: color 0.3s ease;
+    opacity: 0.75;
+    transition: opacity 0.3s ease, text-shadow 0.3s ease;
+}
+
+.footer-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0%;
+    height: 1px;
+    background: var(--gold);
+    transition: width 0.3s ease;
 }
 
 .footer-links a:hover {
-    color: var(--gold);
+    opacity: 1;
+    text-shadow: 0 0 5px var(--gold-glow);
     text-decoration: underline;
+}
+
+.footer-links a:hover::after {
+    width: 100%;
 }
 
 /* Newsletter Section */
@@ -108,57 +161,93 @@ footer {
     flex-direction: column;
     align-items: flex-end;
     text-align: right;
-    gap: 1rem;
-    padding-right: 1.5rem;
+    gap: 0.75rem;
+    padding-right: 10rem;
+    max-width: 360px;
+    position: relative;
 }
 
+
 .footer-newsletter h4 {
-    font-size: 1rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--gold);
+    font-size: 1.2rem;
+    text-transform: none;
+    font-family: var(--font-main);
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 0.3px;
+    margin-bottom: 0.5rem;
+}
+
+.newsletter-caption {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    opacity: 0.85;
+    max-width: 480px;
+    margin-top: 0.5rem;
 }
 
 .newsletter-form {
     display: flex;
-    flex-wrap: wrap;
     gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
 }
 
+.newsletter-form::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 250%;
+    height: 250%;
+    background: radial-gradient(circle, rgba(255, 208, 120, 0.08), transparent 70%);
+    border-radius: 50%;
+    filter: blur(40px);
+    z-index: -1;
+}
+
+
 .newsletter-input {
-    padding: 0.5rem;
+    padding: 0.75rem 1rem;
     border: 1px solid rgba(255, 208, 120, 0.3);
-    border-radius: 5px;
-    background: #1f1f1f;
+    border-radius: 6px;
+    background: #121212;
     color: var(--text-light);
+    font-size: 1rem;
     flex: 1;
-    min-width: 200px;
-    transition: border 0.3s ease, background 0.3s ease;
+    min-width: 240px;
+    transition: border 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .newsletter-input:focus {
     border-color: var(--gold);
-    background: #292929;
+    background: #181818;
+    box-shadow: 0 0 8px rgba(255, 208, 120, 0.4);
     outline: none;
 }
 
 .newsletter-button {
-    padding: 0.6rem 1rem;
-    border: 1px solid rgba(255, 208, 120, 0.5);
-    border-radius: 5px;
-    background: rgba(255, 208, 120, 0.1);
+    padding: 0.75rem 1.25rem;
+    border: 1px solid rgba(255, 208, 120, 0.4);
+    border-radius: 6px;
+    background: rgba(255, 208, 120, 0.08);
     color: var(--gold);
     font-weight: bold;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .newsletter-button:hover {
-    background: rgba(255, 208, 120, 0.3);
+    background: rgba(255, 208, 120, 0.15);
     transform: translateY(-2px);
+    box-shadow: 0 0 10px rgba(255, 208, 120, 0.3);
 }
+
 
 /* Responsive Layout */
 @media (max-width: 768px) {
@@ -177,8 +266,10 @@ footer {
 
     .footer-newsletter {
         align-items: center;
-        gap: 1rem;
+        text-align: center;
+        padding: 0;
     }
+}
 
     .newsletter-input {
         width: 100%;
@@ -188,4 +279,3 @@ footer {
     .footer-links {
         justify-content: center;
     }
-}

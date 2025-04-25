@@ -1,6 +1,6 @@
 ﻿/* === GAMES PAGE === */
 .games-section {
-    max-width: 1000px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 1rem;
     animation: fadeInUp 0.8s ease-out forwards;
@@ -8,7 +8,7 @@
 
 /* Intro Section */
 .games-intro {
-    margin: 3rem 0 6rem;
+    margin: 3rem 0 2.5rem;
     text-align: center;
     position: relative;
 }
@@ -40,10 +40,11 @@
     color: var(--gold);
 }
 
-.game-media {
-    margin: 1.5rem 0;
-    border-radius: 8px;
-    overflow: hidden;
+.game-media img {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    object-position: center;
 }
 
 .game-media img {
@@ -69,3 +70,11 @@
     background: rgba(0, 0, 0, 0.15);
     border: 1px dashed rgba(255, 208, 120, 0.2);
 }
+
+.game-card p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    padding: 1.25rem 1.5rem;
+}
+
+
