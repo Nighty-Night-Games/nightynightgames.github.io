@@ -9,20 +9,6 @@
     animation: fadeInUp 0.8s ease-out forwards;
 }
 
-/* Background Glow */
-.about-section::before {
-    content: '';
-    position: absolute;
-    top: -100px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120%;
-    height: 300px;
-    background: radial-gradient(circle, rgba(255, 208, 120, 0.03), transparent);
-    z-index: 0;
-    pointer-events: none;
-}
-
 /* Headings */
 .about-section h2,
 .about-section h3,
@@ -188,8 +174,8 @@
 
 /* Animation Staggering */
 .about-section .about-card:nth-of-type(1) { animation-delay: 0.2s; }
-.about-section h2:nth-of-type(1) { animation-delay: 0.4s; }
-.about-section .about-card:nth-of-type(2) { animation-delay: 0.6s; }
-.about-section h2:nth-of-type(2) { animation-delay: 0.8s; }
-.about-section p:last-of-type { animation-delay: 1s; }
+.about-section h2:nth-of-type(1) { animation-delay: 0.2s; }
+.about-section .about-card:nth-of-type(2) { animation-delay: 0.2s; }
+.about-section h2:nth-of-type(2) { animation-delay: 0.2s; }
+.about-section p:last-of-type { animation-delay: 0.2s; }
 .about-social { animation-delay: 1.2s; }

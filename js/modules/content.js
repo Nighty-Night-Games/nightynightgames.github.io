@@ -16,7 +16,7 @@ const PAGE_COMMON = {
     </blockquote>`,
 
   divider: `
-    <hr class="divider" />`,
+    <hr class="divider-pages" />`,
 };
 
 
@@ -26,40 +26,43 @@ function sanitizeClassName(str) {
 }
 
 // === GAME CARD TEMPLATE ===
-const createGameCard = ({ title, status, image, imageAlt, description, features, showLoadingBar = false }) => {
+const createGameCard = ({ title, status, image, imageAlt, description, features, progress = 0 }) => {
   const renderDescription = description
-    .map((text) =>
-      `<p>${text.replace(/<strong>(.*?)<\/strong>/g, (_, boldText) => `<strong>${boldText}</strong>`)}</p>`
-    )
-    .join('');
+      .map((text) => `<p>${text.replace(/<strong>(.*?)<\/strong>/g, (_, boldText) => `<strong>${boldText}</strong>`)}</p>`)
+      .join('');
 
   const renderFeatures = features
-    .map((feature) => `<span class="game-feature">${feature}</span>`)
-    .join('');
+      .map((feature) => `<span class="game-feature">${feature}</span>`)
+      .join('');
 
-  // Include the loading bar below the image if `showLoadingBar` is true
-  const loadingBar = showLoadingBar
-    ? `
-    <div class="loading-bar-container" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-      <div class="loading-bar"></div>
-      <span class="loading-text">0%</span>
+  const loadingBar = `
+    <div class="game-loading-wrap">
+      <div class="loading-bar-container" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+        <div class="loading-bar" style="width: ${progress}%;"></div>
+      </div>
+      <div class="loading-text">${progress}% Complete</div>
     </div>
-    `
-    : '';
+  `;
 
   return `
     <div class="game-card">
-      <div class="game-card-header">
-        <h2 class="game-title">${title}</h2>
-        <span class="game-status ${sanitizeClassName(status)}">${status}</span>
+      <div class="game-card-content">
+        <div class="game-card-header">
+          <h2 class="game-title">${title}</h2>
+          <span class="game-status ${sanitizeClassName(status)}">${status}</span>
+        </div>
+        <div class="game-description">
+          ${renderDescription}
+        </div>
+        ${loadingBar}
+        <div class="game-features">
+          ${renderFeatures}
+        </div>
+        <a href="#" class="cta-button">Learn More</a>
       </div>
       <div class="game-media">
         <img src="${image}" alt="${imageAlt}" />
-        ${loadingBar} <!-- Loading bar placed directly below the image -->
       </div>
-      <div class="game-card-content">${renderDescription}</div>
-      <div class="game-features">${renderFeatures}</div>
-      <a href="#" class="cta-button">Learn More</a>
     </div>
   `;
 };
@@ -128,14 +131,12 @@ export const pageContent = {
         <p><strong>Nighty Night Games</strong> is a one-person indie studio based in Berlin, Germany, devoted to crafting unforgettable worlds—rich in story, emotion, and grit.</p>
         <p>Founded by solo developer <strong>David Gunther</strong>, NNG is driven by a deep love for games that linger long after the credits roll. The studio's focus lies in immersive storytelling, cinematic atmosphere, and meaningful choices that shape not just the player's journey—but the world itself.</p>
       </div>
-      ${PAGE_COMMON.divider}
       <h2>Currently in Development</h2>
       <div class="about-card">
         <h3><a href="#games">Legacy of Atum: Dead Dynasty</a></h3>
         <p>Our debut title is an atmospheric action RPG set in a myth-infused version of ancient Egypt. It explores moral complexity, strategic survival, and personal legacy.</p>
         <p><a href="#games" class="text-link">Explore Legacy of Atum →</a></p>
       </div>
-      ${PAGE_COMMON.divider}
       <h2>Follow the Journey</h2>
       <p>Dev logs, behind-the-scenes looks, and cinematic updates are shared regularly. Whether you're a player, fellow developer, or just curious, you're warmly invited to follow along.</p>
       <div class="about-social">${renderSocialButtons()}</div>

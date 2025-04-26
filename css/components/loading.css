@@ -1,48 +1,55 @@
-﻿/* Shared Loading Bar Styles */
+﻿/* === SHARED LOADING BAR STYLES === */
 .loading-bar-container {
-    width: 100%; /* Auto adapt width */
-    height: 8px;
-    background-color: transparent;
+    width: auto; /* <-- Center naturally */
+    max-width: 600px;
+    min-width: 200px;
+    height: 6px;
+    margin: 1.5rem auto 1rem; /* <-- CENTER it horizontally */
     border: 1px solid var(--gold-glow);
     border-radius: 4px;
     position: relative;
     overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .loading-bar {
     height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
-    transition: width 0.3s ease;
-    box-shadow: inset 0 0 4px #fff3c4, 0 0 6px var(--gold);
+    width: 0%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 4px;
+    transition: width 0.4s ease;
 }
 
 .loading-text {
-    font-size: 0.9em;
-    color: var(--text-white);
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
     text-align: center;
+    color: var(--text-light);
+    opacity: 0.9;
 }
-/* Project Components */
+
+
+/* === PROJECT PROGRESS COMPONENT === */
 .project-progress {
-    margin-top: var(--spacing-lg);
-    gap: var(--spacing-sm);
-    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 90%;
+    text-align: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
+    width: 90%;
 }
 
 .project-caption {
     font-size: var(--font-size-base);
     color: var(--text-light);
-    margin-bottom: var(--spacing-xs);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 .project-label {
-    font-size: 1.1em;
+    font-size: 1.1rem;
     font-weight: bold;
     text-transform: uppercase;
     color: var(--gold);
@@ -51,114 +58,54 @@
     border-radius: 4px;
     background: rgba(255, 248, 214, 0.05);
     backdrop-filter: blur(2px);
-    transition: all var(--transition-default);
-    text-shadow: 0 0 4px var(--gold-glow);
+    transition: all 0.3s ease;
     text-decoration: none;
 }
 
 .project-label:hover {
-    color: var(--text-white);
-    border-color: var(--text-white);
-    background: rgba(255, 255, 255, 0.08);
-    text-shadow: 0 0 6px var(--text-white);
-    transform: scale(1.03);
+    color: var(--gold);
+    border-color: var(--gold);
+    background: rgba(255, 248, 214, 0.08);
+    transform: scale(1.02);
 }
 
-/* Loading Components for Game Card */
+/* === GAME CARD SPECIFIC === */
 .game-card .project-progress {
-  width: 100%; /* Adapt to the card's width */
-  max-width: none; /* Remove width restrictions */
-  margin: 0 0 var(--spacing-md) 0; /* Add spacing below */
-  padding: var(--spacing-sm); /* Add padding for visual adjustment */
-  box-shadow: none; /* Remove outer shadow to integrate smoothly */
+    width: 100%;
+    margin: 1rem 0 2rem;
+    padding: 0;
 }
 
 .game-card .loading-bar-container {
-  margin-top: 0;
+    margin-top: 1.25rem;
 }
 
-/* Loading bar within the game card */
-.game-card-header .loading-bar-container {
-  width: 100%; /* Take full width of the header */
-  height: 6px;
-  margin-top: var(--spacing-xs); /* Spaced below the status */
-  border-radius: 3px; /* Slight rounded corners */
-  background: var(--background-secondary); /* Blend with card's background */
-  overflow: hidden;
-  position: relative;
-  box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.1);
-}
-
-.game-card-header .loading-bar {
-  height: 100%;
-  width: 0%; /* Animation will adjust this */
-  border-radius: 3px; /* Smooth edge */
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-  animation: pulse-gradient 2s infinite; /* Optional pulse animation */
-  transition: width 0.3s ease; /* Smooth progress transition */
-}
-
-.game-card-header .loading-text {
-  position: absolute;
-  top: -18px; /* Above the bar */
-  right: 0; /* Aligned to the right */
-  font-size: 0.75em;
-  color: var(--gold-light);
-  letter-spacing: 0.5px;
-  font-weight: 600;
-}
-
-/* Gradient pulse animation for progress bar */
-@keyframes pulse-gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
-}
-/* Loading bar below the image in the game card */
-.game-media img {
-  display: block;
-  margin: 0 auto; /* Center the image */
-}
-
-.game-media .loading-bar-container {
-  margin-top: var(--spacing-sm);
-  margin-bottom: var(--spacing-md);
-}
-
-.game-media .loading-bar-container {
-  width: 90%; /* Slight margin for better alignment with the image */
-  height: 8px;
-  margin: var(--spacing-sm) auto; /* Center the bar below the image */
-  border: 1px solid var(--gold-glow);
-  background: var(--background-secondary);
-  border-radius: 4px;
-  overflow: hidden;
-  position: relative; /* To manage inner text alignment */
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
-}
-
-.game-media .loading-bar {
-  height: 100%;
-  width: 0%; /* The `width` will animate dynamically */
-  border-radius: 4px; /* Rounded corners */
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-  transition: width 0.4s ease; /* Smooth loading animation */
-}
-
-.game-media .loading-text {
-  margin-top: var(--spacing-xs);
-  font-size: 0.85em;
-  color: var(--text-light);
-  text-align: center; /* Centered percentage text below the bar */
-}
 .game-card:hover .loading-bar-container {
-  border-color: var(--gold-light);
-  box-shadow: 0 2px 6px rgba(255, 224, 163, 0.4);
+    border-color: var(--gold-glow); /* Stay subtle */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3); /* No big hover boost */
 }
 
 .game-card:hover .loading-bar {
-  box-shadow: inset 0 0 6px var(--gold-light), 0 0 8px var(--gold-light);
+    box-shadow: none; /* Remove extra hover glow */
 }
+
+/* === GAME MEDIA === */
+.game-media img {
+    display: block;
+    margin: 0 auto;
+    transition: transform 0.4s ease;
+}
+
+.game-media .loading-bar-container {
+    width: 90%;
+    margin: var(--spacing-sm) auto var(--spacing-md);
+    height: 8px;
+}
+
+/* Disable old glow animation (optional) */
+/* 
+@keyframes pulse-gradient {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+*/

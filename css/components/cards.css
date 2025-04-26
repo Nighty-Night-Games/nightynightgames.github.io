@@ -1,47 +1,69 @@
-﻿/* General Card Styles */
+﻿/* === GENERAL CARD STYLES === */
 .card,
-.game-card,
 .about-card,
 .featured-card {
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 208, 120, 0.15);
-    border-radius: 6px;
+    border-radius: 8px;
     padding: 1.5rem;
-    margin: 1rem 0;
+    margin: 1.5rem 0;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* === GAME CARD - WIDE STYLE === */
 .game-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
     background: rgba(17, 17, 17, 0.75);
-    border: 1px solid rgba(255, 208, 120, 0.05);
+    border: 1px solid rgba(255, 208, 120, 0.08);
     border-radius: 12px;
     padding: 2rem;
-    position: relative;
+    margin: 2rem auto 1.5rem auto; /* was: 3rem auto */
+    max-width: 1400px;
+    gap: 2rem;
     box-shadow: 0 0 40px rgba(255, 208, 120, 0.02);
     overflow: hidden;
-    transition: box-shadow 0.3s ease;
-    margin-bottom: 2rem;
+    transition: box-shadow 0.4s ease;
 }
 
-.game-card:hover {
-    box-shadow: 0 0 80px rgba(255, 208, 120, 0.08);
+.game-media {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.game-media img {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.4s ease;
+}
+
+/* Image Hover */
+.game-card:hover .game-media img {
+    transform: scale(1.02);
+}
+
+/* Card Hover General */
 .card:hover,
 .game-card:hover,
 .about-card:hover,
 .featured-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 20px rgba(255, 208, 120, 0.1);
 }
 
-/* Featured Cards - Specific Styles */
+/* === FEATURED CARD === */
 .featured-card {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
-    border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
@@ -55,23 +77,10 @@
     transform: scale(1.03);
 }
 
-.featured-title,
-.featured-description {
-    color: var(--gold);
-    margin-bottom: 1rem;
-}
-
-.featured-description {
-    color: var(--text-white);
-    line-height: 1.6;
-}
-
-.game-card-content {
-    padding: 1.5rem;
-}
-
-
+/* === TITLES === */
 .game-title {
+    font-size: 2.2rem;
+    color: var(--gold);
     position: relative;
     transition: color 0.3s ease;
 }
@@ -94,3 +103,60 @@
 .game-title:hover::after {
     width: 100%;
 }
+
+/* === OTHER TYPOGRAPHY === */
+.featured-title,
+.featured-description {
+    color: var(--gold);
+    margin-bottom: 1rem;
+}
+
+.featured-description {
+    color: var(--text-white);
+    line-height: 1.6;
+}
+
+/* === RESPONSIVE BEHAVIOR === */
+@media (max-width: 992px) {
+    .game-card {
+        flex-direction: column;
+        padding: 2rem 1.5rem;
+    }
+
+    .game-media img {
+        max-width: 100%;
+    }
+}
+
+.game-card-body {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.game-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.game-media {
+    max-width: 50%;
+    flex: 1;
+}
+
+.game-title-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.game-description {
+    text-align: left;
+}
+
