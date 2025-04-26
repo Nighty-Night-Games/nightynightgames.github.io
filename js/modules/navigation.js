@@ -183,8 +183,8 @@ function focusOnPageTitle() {
 function updateLinkStates(currentPage) {
     const config = {
         home: { games: { text: null, active: false }, about: { text: 'About', active: false } },
-        games: { games: { text: 'Back', active: true }, about: { text: 'About', active: false } },
-        about: { games: { text: null, active: false }, about: { text: 'Back', active: true } },
+        games: { games: { text: 'Home', active: true }, about: { text: 'About', active: false } },
+        about: { games: { text: null, active: false }, about: { text: 'Home', active: true } },
     };
 
     applyLinkUpdates('a[id^="games-link"]', config[currentPage].games);

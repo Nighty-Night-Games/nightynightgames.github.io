@@ -137,19 +137,26 @@ const handleNewsletterSubmit = async e => {
     const submitButton = form.querySelector('.newsletter-button');
     const email = emailInput.value.trim();
 
-    // Validate email input
     if (!isValidEmail(email)) {
         showFormMessage(form, 'Please enter a valid email address', 'error');
         return;
     }
 
-    // Change button state
     const originalText = submitButton.textContent;
     submitButton.textContent = 'Sending...';
     submitButton.disabled = true;
 
     try {
-        await simulateApiCall(); // Simulated API call
+        const response = await fetch('https://formspree.io/f/xpwdwjgq', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
         emailInput.value = '';
         showFormMessage(form, 'Thanks for subscribing!', 'success');
     } catch (error) {
@@ -160,6 +167,7 @@ const handleNewsletterSubmit = async e => {
         submitButton.disabled = false;
     }
 };
+
 
 /**
  * Validate the email format.

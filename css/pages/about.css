@@ -3,13 +3,14 @@
 /* Layout */
 .about-section {
     position: relative;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 1rem;
+    opacity: 0;
     animation: fadeIn 0.8s ease-out forwards;
 }
 
-/* Headings */
+/* Headings and Elements Fade In */
 .about-section h2,
 .about-section h3,
 .about-section p,
@@ -18,8 +19,11 @@
 .about-social {
     opacity: 0;
     animation: fadeIn 1s ease-out forwards;
+    animation-delay: 0.2s;
+    animation-fill-mode: forwards;
 }
 
+/* Headings */
 .about-section h2,
 .about-section h3 {
     margin: 2.5rem 0 1rem;
@@ -108,12 +112,14 @@
     width: 100%;
 }
 
-/* Divider */
-.about-section .divider {
-    width: 80%;
-    margin: 3rem auto;
+/* Divider below Title */
+.divider {
+    width: 90%;
+    max-width: 900px;
     height: 1px;
+    margin: 2.5rem auto;
     background: linear-gradient(90deg, transparent, rgba(255, 208, 120, 0.3), transparent);
+    border: none;
 }
 
 /* Social Media Buttons */
@@ -153,6 +159,7 @@
     fill: currentColor;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
     .social-button {
         width: 40px;
@@ -166,25 +173,17 @@
 
 /* Animation Keyframes */
 @keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
     to {
         opacity: 1;
-        transform: translateY(0);
     }
 }
 
-/* Animation Staggering */
-.about-section .about-card:nth-of-type(1) { animation-delay: 0.2s; }
-.about-section h2:nth-of-type(1) { animation-delay: 0.2s; }
-.about-section .about-card:nth-of-type(2) { animation-delay: 0.2s; }
-.about-section h2:nth-of-type(2) { animation-delay: 0.2s; }
-.about-section p:last-of-type { animation-delay: 0.2s; }
-.about-social { animation-delay: 1.2s; }
-
+/* Optional Special h3 title */
 .about-section h3.gold-title {
     color: var(--gold);
     font-weight: bold;
     font-size: 1.4rem;
 }
-
-
-

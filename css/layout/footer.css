@@ -14,14 +14,6 @@ footer {
     position: relative;
 }
 
-
-@keyframes fadeInUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 /* Social Media Section */
 .footer-social {
     justify-self: start;
@@ -89,17 +81,27 @@ footer {
     color: var(--gold);
     font-style: italic;
     opacity: 0.9;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem;
 }
 
 .tagline span {
     display: inline-block;
     opacity: 0;
-    transform: translateY(5px);
-    animation: floatIn 10s ease-out forwards;
+    transform: translateY(6px);
+    animation: floatIn 1s ease-out forwards;
 }
-.tagline span:nth-child(1) { animation-delay: 0.4s; }
-.tagline span:nth-child(2) { animation-delay: 0.6s; }
-/* ...repeat for each word */
+
+/* Use a general nth-child stagger */
+.tagline span:nth-child(1) { animation-delay: 0.2s; }
+.tagline span:nth-child(2) { animation-delay: 0.4s; }
+.tagline span:nth-child(3) { animation-delay: 0.6s; }
+.tagline span:nth-child(4) { animation-delay: 0.8s; }
+.tagline span:nth-child(5) { animation-delay: 1s; }
+.tagline span:nth-child(6) { animation-delay: 1.2s; }
+/* (optional) You can add more if you ever have more words */
 
 @keyframes floatIn {
     to {
@@ -107,6 +109,7 @@ footer {
         transform: translateY(0);
     }
 }
+
 
 .footer-links {
     display: flex;
