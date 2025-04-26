@@ -92,3 +92,31 @@
         transform: translateY(0);
     }
 }
+
+.text-link {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.3s ease;
+}
+
+.text-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+}
+
+.text-link:hover {
+    color: var(--gold-light);
+}
+
+.text-link:hover::after {
+    width: 100%;
+}
