@@ -6,7 +6,7 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 1rem;
-    animation: fadeInUp 0.8s ease-out forwards;
+    animation: fadeIn 0.8s ease-out forwards;
 }
 
 /* Headings */
@@ -17,8 +17,7 @@
 .about-section .about-card,
 .about-social {
     opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 1s ease-out forwards;
+    animation: fadeIn 1s ease-out forwards;
 }
 
 .about-section h2,
@@ -166,7 +165,7 @@
 }
 
 /* Animation Keyframes */
-@keyframes fadeInUp {
+@keyframes fadeIn {
     to {
         opacity: 1;
         transform: translateY(0);
@@ -180,3 +179,12 @@
 .about-section h2:nth-of-type(2) { animation-delay: 0.2s; }
 .about-section p:last-of-type { animation-delay: 0.2s; }
 .about-social { animation-delay: 1.2s; }
+
+.about-section h3.gold-title {
+    color: var(--gold);
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+
+

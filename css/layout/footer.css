@@ -144,7 +144,6 @@ footer {
 .footer-links a:hover {
     opacity: 1;
     text-shadow: 0 0 5px var(--gold-glow);
-    text-decoration: underline;
 }
 
 .footer-links a:hover::after {

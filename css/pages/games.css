@@ -6,7 +6,7 @@
     max-width: none;
     padding: 2rem 5rem;
     margin: 0 auto;
-    animation: fadeInUp 0.8s ease-out forwards;
+    animation: fadeIn 1s ease-out forwards;
 }
 
 /* Intro */
@@ -90,9 +90,11 @@
 }
 
 /* Animation Keyframes */
-@keyframes fadeInUp {
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
     to {
         opacity: 1;
-        transform: translateY(0);
     }
 }

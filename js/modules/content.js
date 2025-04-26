@@ -58,7 +58,7 @@ const createGameCard = ({ title, status, image, imageAlt, description, features,
         <div class="game-features">
           ${renderFeatures}
         </div>
-        <a href="#" class="cta-button">Learn More</a>
+        <a href="https://www.legacyofatum.com/" class="cta-button" target="_blank" rel="noopener noreferrer">Learn More</a>
       </div>
       <div class="game-media">
         <img src="${image}" alt="${imageAlt}" />
@@ -133,7 +133,7 @@ export const pageContent = {
       </div>
       <h2>Currently in Development</h2>
       <div class="about-card">
-        <h3><a href="#games">Legacy of Atum: Dead Dynasty</a></h3>
+        <h3 class="gold-title">Legacy of Atum: Dead Dynasty</h3>
         <p>Our debut title is an atmospheric action RPG set in a myth-infused version of ancient Egypt. It explores moral complexity, strategic survival, and personal legacy.</p>
         <p><a href="#games" class="text-link">Explore Legacy of Atum →</a></p>
       </div>
