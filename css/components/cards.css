@@ -21,6 +21,7 @@
     box-shadow: 0 0 40px rgba(255, 208, 120, 0.02);
     overflow: hidden;
     transition: box-shadow 0.3s ease;
+    margin-bottom: 2rem;
 }
 
 .game-card:hover {
@@ -63,4 +64,33 @@
 .featured-description {
     color: var(--text-white);
     line-height: 1.6;
+}
+
+.game-card-content {
+    padding: 1.5rem;
+}
+
+
+.game-title {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.game-title:hover {
+    color: var(--gold-light);
+}
+
+.game-title::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gold);
+    transition: width 0.4s ease;
+}
+
+.game-title:hover::after {
+    width: 100%;
 }

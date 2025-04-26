@@ -1,4 +1,6 @@
-﻿/* === GAMES PAGE === */
+﻿/* === GAMES PAGE STYLES === */
+
+/* Layout */
 .games-section {
     max-width: 900px;
     margin: 0 auto;
@@ -6,14 +8,14 @@
     animation: fadeInUp 0.8s ease-out forwards;
 }
 
-/* Intro Section */
+/* Intro */
 .games-intro {
     margin: 3rem 0 2.5rem;
     text-align: center;
     position: relative;
 }
 
-.games-intro:after {
+.games-intro::after {
     content: '';
     position: absolute;
     bottom: -1rem;
@@ -24,38 +26,7 @@
     background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
 
-/* Game Cards */
-.game-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 208, 120, 0.1);
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.8rem;
-}
-
-.game-title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: var(--gold);
-}
-
-.game-media img {
-    width: 100%;
-    max-height: 450px;
-    object-fit: cover;
-    object-position: center;
-}
-
-.game-media img {
-    width: 100%;
-    transition: transform 0.4s ease;
-}
-
-.game-card:hover .game-media img {
-    transform: scale(1.02);
-}
-
+/* Upcoming Section */
 .upcoming-games {
     display: grid;
     gap: 2rem;
@@ -71,10 +42,57 @@
     border: 1px dashed rgba(255, 208, 120, 0.2);
 }
 
+/* Game Cards */
+.game-card {
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 208, 120, 0.08);
+    border-radius: 8px;
+    transition: box-shadow 0.4s ease;
+}
+
+.game-card:hover {
+    box-shadow: 0 0 12px rgba(255, 208, 120, 0.1);
+}
+
+.game-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 208, 120, 0.1);
+    padding: 1rem 1.5rem 0.8rem;
+}
+
+.game-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--gold);
+}
+
+/* Game Media */
+.game-media img {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+}
+
+.game-card:hover .game-media img {
+    transform: scale(1.02);
+}
+
+/* Game Description */
 .game-card p {
     font-size: 0.9rem;
     line-height: 1.6;
     padding: 1.25rem 1.5rem;
 }
 
-
+/* Animation Keyframes */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
