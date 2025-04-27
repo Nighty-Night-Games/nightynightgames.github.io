@@ -136,7 +136,28 @@
                 </div>
             </div>
         </section>
-        <!-- Other sections, if needed, go here -->
+        <div id="contact-form" class="modal" hidden>
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <h4>Contact Us</h4>
+                <form class="contact-form" id="contactForm" action="https://formspree.io/f/xqaqaylw" method="POST">
+                    <div class="form-row">
+                        <input type="text" name="name" class="form-input" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="email" name="email" class="form-input" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-row">
+                        <textarea name="message" class="form-textarea" placeholder="Your Message" required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <button type="submit" class="contact-submit-button">Send Message</button>
+                    </div>
+                    <p class="form-note">We'll get back to you soon.</p>
+                </form>
+            </div>
+        </div>
+
     </div> <!-- CLOSED this div -->
 
     <!-- Back-to-Top Button -->
@@ -180,7 +201,7 @@
             <div class="footer-links">
                 <a href="#privacy">Privacy</a>
                 <a href="#terms">Terms</a>
-                <a href="#contact">Contact</a>
+                <a href="#" class="footer-link" id="open-contact-form">Contact</a>
             </div>
         </div>
 

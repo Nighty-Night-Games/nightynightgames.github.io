@@ -210,3 +210,90 @@ const showFormMessage = (form, message, type) => {
         }
     }, 4000);
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+    const contactLink = document.getElementById('open-contact-form');
+    const contactModal = document.getElementById('contact-form');
+    const modalContent = contactModal?.querySelector('.modal-content');
+    const overlay = contactModal?.querySelector('.modal-overlay');
+    const contactForm = document.getElementById('contactForm');
+
+    if (contactLink && contactModal) {
+        contactLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleContactModal();
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', () => {
+            closeContactModal();
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeContactModal();
+        }
+    });
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(contactForm);
+
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    contactForm.reset();
+                    showThankYouMessage();
+                } else {
+                    alert('Oops! Something went wrong.');
+                }
+            } catch (error) {
+                alert('Oops! Network error.');
+            }
+        });
+    }
+
+    function toggleContactModal() {
+        if (contactModal.hidden) {
+            contactModal.hidden = false;
+            contactModal.classList.add('show');
+            modalContent.classList.add('show');
+            modalContent.classList.remove('hide');
+        } else {
+            closeContactModal();
+        }
+    }
+
+    function closeContactModal() {
+        if (!contactModal.hidden) {
+            modalContent.classList.remove('show');
+            modalContent.classList.add('hide');
+            setTimeout(() => {
+                contactModal.hidden = true;
+                contactModal.classList.remove('show');
+                modalContent.classList.remove('hide');
+            }, 400); // match your CSS animation time
+        }
+    }
+
+    function showThankYouMessage() {
+        modalContent.innerHTML = `
+            <div class="thank-you-wrapper">
+                <p class="thank-you-message">Thanks for contacting us! We'll be in touch soon.</p>
+            </div>
+        `;
+        setTimeout(closeContactModal, 4000);
+    }
+});
+
+
+
