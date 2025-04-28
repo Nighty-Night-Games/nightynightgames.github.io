@@ -136,7 +136,9 @@
                 </div>
             </div>
         </section>
-        <div id="contact-form" class="modal" hidden>
+    </div> <!-- CLOSED this div -->
+
+        <div class="contact-form-container" id="contact-form" hidden>
             <div class="modal-overlay"></div>
             <div class="modal-content">
                 <h4>Contact Us</h4>
@@ -153,13 +155,15 @@
                     <div class="form-row">
                         <button type="submit" class="contact-submit-button">Send Message</button>
                     </div>
+                    <input type="text" name="_gotcha" style="display:none"> <!-- Honeypot -->
+                    <input type="hidden" name="_subject" value="New Contact Form Submission!">
+                    <input type="hidden" name="_next" value="https://nightynightgames.com/thankyou.html">
                     <p class="form-note">We'll get back to you soon.</p>
                 </form>
             </div>
         </div>
 
-    </div> <!-- CLOSED this div -->
-
+        
     <!-- Back-to-Top Button -->
     <button class="back-to-top" id="back-to-top" aria-label="Back to top">
         <svg viewBox="0 0 24 24">
@@ -213,7 +217,6 @@
                     <input type="email" class="newsletter-input" placeholder="Your email" aria-label="Your email address" required>
                     <button type="submit" class="newsletter-button">Subscribe</button>
                 </div>
-                <p class="newsletter-note">Be the first to receive updates, lore, and reveals.</p>
             </form>
         </div>
     </footer>

@@ -195,69 +195,102 @@ const initializeNewsletterForm = () => {
 
 /* === Contact Form === */
 
-/**
- * Initialize the contact form modal logic.
- */
-const initializeContactForm = () => {
+// utils.js (or your main script)
+
+// === Contact Form Modal Logic ===
+export const initializeContactForm = () => {
     const contactLink = document.getElementById('open-contact-form');
     const contactModal = document.getElementById('contact-form');
     const modalContent = contactModal?.querySelector('.modal-content');
     const overlay = contactModal?.querySelector('.modal-overlay');
     const contactForm = document.getElementById('contactForm');
 
-    if (!contactLink || !contactModal) return;
+    // Ensure required elements exist
+    if (!contactLink || !contactModal || !contactForm || !modalContent) return;
 
-    const toggleModal = () => {
-        contactModal.hidden = !contactModal.hidden;
-        contactModal.classList.toggle('show', !contactModal.hidden);
-    };
-
-    const closeModal = () => {
-        if (!contactModal.hidden) {
-            contactModal.hidden = true;
-            contactModal.classList.remove('show');
+    /**
+     * Show/Hide Modal
+     */
+    const toggleModal = (isOpen) => {
+        if (isOpen) {
+            contactModal.hidden = false;
+            contactModal.classList.add('fade-in');
+            contactModal.classList.remove('fade-out');
+            contactModal.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            contactModal.classList.remove('fade-in');
+            contactModal.classList.add('fade-out');
+            setTimeout(() => {
+                contactModal.hidden = true;
+            }, 300); // Match the fade-out animation duration
         }
     };
 
+    /**
+     * Display Thank You Message in Modal
+     */
     const showThankYouMessage = () => {
         modalContent.innerHTML = `
             <div class="thank-you-wrapper">
                 <p class="thank-you-message">Thanks for contacting us! We'll be in touch soon.</p>
             </div>`;
-        setTimeout(closeModal, 4000);
+        setTimeout(() => toggleModal(false), 4000); // Auto close after 4 seconds
     };
 
-    contactLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        toggleModal();
-    });
-
-    overlay?.addEventListener('click', closeModal);
-    document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
-
-    contactForm?.addEventListener('submit', async (e) => {
+    /**
+     * Handle Form Submission
+     */
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
 
         try {
             const response = await fetch(contactForm.action, {
                 method: 'POST',
                 body: new FormData(contactForm),
+                headers: { 'Accept': 'application/json' }
             });
 
             if (response.ok) {
                 contactForm.reset();
                 showThankYouMessage();
             } else {
-                alert('Submission failed. Please try again.');
+                alert('Oops! Something went wrong. Please try again.');
             }
         } catch {
-            alert('Network error. Please try again.');
+            alert('Oops! Network error. Please try again.');
         }
-    });
+    };
+
+    /**
+     * Add Event Listeners (and avoid duplicates using a flag)
+     */
+    if (!contactLink.dataset.initialized) {
+        contactLink.dataset.initialized = 'true';
+
+        // Open/Close Modal on link click
+        contactLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleModal(contactModal.hidden);
+        });
+
+        // Close Modal when clicking outside
+        overlay?.addEventListener('click', () => toggleModal(false));
+
+        // Close Modal on Escape key press
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !contactModal.hidden) {
+                toggleModal(false);
+            }
+        });
+
+        // Form submission handler
+        contactForm.addEventListener('submit', handleFormSubmit);
+    }
 };
 
-/* === Initialization === */
+/**
+ * Initialize Contact Form (ensure it works on dynamically loaded content as well)
+ */
 document.addEventListener('DOMContentLoaded', () => {
-    initializeNewsletterForm();
     initializeContactForm();
 });

@@ -5,6 +5,7 @@ import { updateLoadingBar, getTitleElement } from './utils.js';
 import { state, update } from './state.js';
 import { get, getAll } from './dom.js';
 import { init as initLoadingBar, removeLoadingBar } from './loadingbar.js';
+import { initializeContactForm } from './utils.js';
 
 // Module state
 let currentPageContent = '';
@@ -131,6 +132,10 @@ function switchToPage(targetPage) {
 
     fadeOut.onfinish = () => {
         loadNewPageContent(pageContentEl, targetPage);
+
+        // Reinitialize contact form after DOM is updated
+        initializeContactForm();
+
         pageContentEl.animate([{ opacity: 0 }, { opacity: 1 }], {
             duration: ANIMATION.duration,
             easing: ANIMATION.fadeInEasing,
