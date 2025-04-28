@@ -139,29 +139,57 @@
     </div> <!-- CLOSED this div -->
 
         <div class="contact-form-container" id="contact-form" hidden>
-            <div class="modal-overlay"></div>
-            <div class="modal-content">
-                <h4>Contact Us</h4>
-                <form class="contact-form" id="contactForm" action="https://formspree.io/f/xqaqaylw" method="POST">
-                    <div class="form-row">
-                        <input type="text" name="name" class="form-input" placeholder="Your Name" required>
-                    </div>
-                    <div class="form-row">
-                        <input type="email" name="email" class="form-input" placeholder="Your Email" required>
-                    </div>
-                    <div class="form-row">
-                        <textarea name="message" class="form-textarea" placeholder="Your Message" required></textarea>
-                    </div>
-                    <div class="form-row">
-                        <button type="submit" class="contact-submit-button">Send Message</button>
-                    </div>
-                    <input type="text" name="_gotcha" style="display:none"> <!-- Honeypot -->
-                    <input type="hidden" name="_subject" value="New Contact Form Submission!">
-                    <input type="hidden" name="_next" value="https://nightynightgames.com/thankyou.html">
-                    <p class="form-note">We'll get back to you soon.</p>
-                </form>
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <form class="contact-form" id="contactForm" action="https://formspree.io/f/xqaqaylw" method="POST">
+            <!-- Name Input -->
+            <div class="form-row">
+                <input 
+                    type="text" 
+                    name="name" 
+                    class="form-input" 
+                    placeholder="Your Name" 
+                    required>
             </div>
-        </div>
+
+            <!-- Email Input -->
+            <div class="form-row">
+                <input 
+                    type="email" 
+                    name="email" 
+                    class="form-input" 
+                    placeholder="Your Email" 
+                    required>
+            </div>
+
+            <!-- Message Textarea -->
+            <div class="form-row">
+<textarea
+        name="message"
+        class="form-textarea"
+        placeholder="Your Message"
+        maxlength="1000"
+        aria-describedby="charCount"
+        required></textarea>
+
+
+            </div>
+
+            <!-- Character Counter -->
+            <p id="charCount">1000 characters remaining</p>
+
+            <!-- Submit Button -->
+            <div class="form-row">
+                <button type="submit" class="contact-submit-button">Send Message</button>
+            </div>
+
+            <!-- Hidden Honeypot and Extra Fields -->
+            <input type="hidden" name="_gotcha" tabindex="-1" autocomplete="off">
+            <input type="hidden" name="_subject" value="New Contact Form Submission!">
+            <input type="hidden" name="_next" value="https://nightynightgames.com/thankyou.html">
+        </form>
+    </div>
+</div>
 
         
     <!-- Back-to-Top Button -->

@@ -288,9 +288,40 @@ export const initializeContactForm = () => {
     }
 };
 
+
 /**
  * Initialize Contact Form (ensure it works on dynamically loaded content as well)
  */
 document.addEventListener('DOMContentLoaded', () => {
     initializeContactForm();
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const messageField = document.querySelector('.form-textarea');
+    if (messageField) {
+        messageField.addEventListener('input', () => updateCharCount(messageField, 'charCount'));
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    function updateCharCount(textarea, counterId) {
+        const maxLength = parseInt(textarea.getAttribute("maxlength"), 10);
+        const currentLength = textarea.value.length;
+        const remaining = maxLength - currentLength;
+
+        const counterElement = document.getElementById(counterId);
+        if (counterElement) {
+            counterElement.textContent = `${remaining} characters remaining`;
+        }
+    }
+
+    // Attach the `oninput` event listener
+    const textarea = document.querySelector('textarea[name="message"]');
+    if (textarea) {
+        textarea.addEventListener("input", function () {
+            updateCharCount(this, "charCount");
+        });
+    }
 });
