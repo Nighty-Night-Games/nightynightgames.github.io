@@ -205,6 +205,8 @@ export const initializeContactForm = () => {
     const overlay = contactModal?.querySelector('.modal-overlay');
     const contactForm = document.getElementById('contactForm');
 
+    let formStartTime = null; // 🕒 Track when form was opened
+
     // Ensure required elements exist
     if (!contactLink || !contactModal || !contactForm || !modalContent) return;
 
@@ -217,6 +219,7 @@ export const initializeContactForm = () => {
             contactModal.classList.add('fade-in');
             contactModal.classList.remove('fade-out');
             contactModal.scrollIntoView({ behavior: 'smooth' });
+            formStartTime = Date.now(); // ⏱️ Save the opening time
         } else {
             contactModal.classList.remove('fade-in');
             contactModal.classList.add('fade-out');
@@ -242,6 +245,12 @@ export const initializeContactForm = () => {
      */
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+
+        const timeSpent = (Date.now() - formStartTime) / 1000; // Calculate time in seconds
+        if (timeSpent < 3) { // 🛡️ Require minimum 3 seconds
+            alert('Please take a little more time before submitting!');
+            return;
+        }
 
         try {
             const response = await fetch(contactForm.action, {
@@ -287,6 +296,7 @@ export const initializeContactForm = () => {
         contactForm.addEventListener('submit', handleFormSubmit);
     }
 };
+
 
 
 /**
