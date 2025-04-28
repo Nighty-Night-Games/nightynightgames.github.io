@@ -6,6 +6,7 @@
  * Debounce a function to limit its execution rate.
  * @param {Function} func - The function to debounce.
  * @param {number} wait - Delay in milliseconds.
+ * @returns {Function} Debounced function.
  */
 export const debounce = (func, wait = 100) => {
     let timeout;
@@ -16,34 +17,34 @@ export const debounce = (func, wait = 100) => {
 };
 
 /**
- * Toggle classes on an element.
+ * Toggle multiple classes on an element.
  * @param {Element} element - The target DOM element.
  * @param {Object} classMap - A map of class names and boolean flags.
  */
 export const toggleClasses = (element, classMap) => {
     if (!element) return;
-    Object.entries(classMap).forEach(([className, shouldHave]) => {
+    for (const [className, shouldHave] of Object.entries(classMap)) {
         element.classList.toggle(className, shouldHave);
-    });
+    }
 };
 
 /**
  * Set multiple attributes on an element.
  * @param {Element} element - The target DOM element.
- * @param {Object} attrMap - A map of attributes and their values.
+ * @param {Object} attributes - A map of attributes and their values.
  */
-export const setAttributes = (element, attrMap) => {
+export const setAttributes = (element, attributes) => {
     if (!element) return;
-    Object.entries(attrMap).forEach(([attr, value]) => {
+    for (const [attr, value] of Object.entries(attributes)) {
         element.setAttribute(attr, value);
-    });
+    }
 };
 
 /**
- * Check if an element is in the viewport.
+ * Check if an element is visible in the viewport.
  * @param {Element} element - The target DOM element.
- * @param {number} offset - Additional offset to account for visibility.
- * @returns {boolean} True if the element is visible in the viewport.
+ * @param {number} offset - Additional offset for visibility buffer.
+ * @returns {boolean} True if the element is visible.
  */
 export const isInViewport = (element, offset = 0) => {
     if (!element) return false;
@@ -54,13 +55,14 @@ export const isInViewport = (element, offset = 0) => {
 /* === Title and Page Utilities === */
 
 /**
- * Get the title element with a specific class.
+ * Get the element containing the page title.
+ * @returns {Element|null} The title element.
  */
 export const getTitleElement = () => document.querySelector('.title-visible');
 
 /**
  * Update the bounding rectangle of the title element.
- * @returns {boolean} True if title element exists and rect is updated.
+ * @returns {boolean} True if the element and rectangle were updated successfully.
  */
 export const updateTitleRect = () => {
     const el = getTitleElement();
@@ -72,8 +74,8 @@ export const updateTitleRect = () => {
 };
 
 /**
- * Get the current page based on the title element.
- * @returns {string} The current page.
+ * Get the current page based on the page title.
+ * @returns {string} The current page ('about' or 'home').
  */
 export const getCurrentPageFromTitle = () => {
     const title = getTitleElement()?.textContent.trim().toLowerCase();
@@ -81,55 +83,73 @@ export const getCurrentPageFromTitle = () => {
 };
 
 /**
- * Check if the title is visible on the screen.
- * @returns {boolean} True if the title is visible.
+ * Check if the title element is visible.
+ * @returns {boolean} True if the title is visible in the viewport.
  */
 export const isTitleVisible = () => {
     const rect = getTitleElement()?.getBoundingClientRect();
     return rect && rect.top < window.innerHeight && rect.bottom > 0;
 };
 
-/* === Ember Utilities === */
+/* === Ember and Progress Utilities === */
 
 /**
- * Count all active ember elements associated with a specific page.
+ * Count active ember elements for a specific page.
  * @param {string} page - The page name.
- * @returns {number} Count of embers for the specified page.
+ * @returns {number} Count of ember elements.
  */
-export const countEmbersByPage = page => {
-    return window.activeEmbers?.filter(ember => ember.getAttribute('data-page') === page).length || 0;
-};
-
-/* === Loading Bar Utility === */
+export const countEmbersByPage = (page) =>
+    window.activeEmbers?.filter((ember) => ember.getAttribute('data-page') === page).length || 0;
 
 /**
- * Update the loading bar and text progress dynamically.
- * @param {number} progress - Progress percentage.
+ * Update the progress bar and corresponding text.
+ * @param {number} progress - Progress percentage to display.
  */
-export const updateLoadingBar = progress => {
+export const updateLoadingBar = (progress) => {
     const loadingBar = document.querySelector('.loading-bar');
     const loadingText = document.querySelector('.loading-text');
     if (!loadingBar || !loadingText) return;
 
-    loadingText.textContent = `${progress}%`;
     loadingBar.style.width = `${progress}%`;
+    loadingText.textContent = `${progress}%`;
     loadingBar.parentElement?.setAttribute('aria-valuenow', progress);
 };
 
-/* === Newsletter Form Initialization === */
-document.addEventListener('DOMContentLoaded', () => {
-    const newsletterForm = document.getElementById('newsletter-form');
-
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', handleNewsletterSubmit);
-    }
-});
+/* === Form Utilities === */
 
 /**
- * Handle submission of the newsletter form.
- * @param {Event} e - The submit event.
+ * Display a message on the form (success/error).
+ * @param {HTMLFormElement} form - The form element.
+ * @param {string} message - The message to display.
+ * @param {string} type - The type of message ('success', 'error').
  */
-const handleNewsletterSubmit = async e => {
+export const showFormMessage = (form, message, type) => {
+    const existingMessage = form.querySelector('.form-message');
+    if (existingMessage) existingMessage.remove();
+
+    const messageEl = document.createElement('p');
+    messageEl.className = `form-message ${type}`;
+    messageEl.textContent = message;
+    form.appendChild(messageEl);
+
+    setTimeout(() => {
+        messageEl.style.opacity = '0';
+        setTimeout(() => messageEl.remove(), 300);
+    }, 4000);
+};
+
+/**
+ * Validate email format.
+ * @param {string} email - The email address to validate.
+ * @returns {boolean} True if the email is valid.
+ */
+export const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+
+/**
+ * Handle newsletter form submission.
+ * @param {Event} e - Form submit event.
+ */
+const handleNewsletterSubmit = async (e) => {
     e.preventDefault();
 
     const form = e.target;
@@ -138,11 +158,10 @@ const handleNewsletterSubmit = async e => {
     const email = emailInput.value.trim();
 
     if (!isValidEmail(email)) {
-        showFormMessage(form, 'Please enter a valid email address', 'error');
+        showFormMessage(form, 'Please enter a valid email address.', 'error');
         return;
     }
 
-    const originalText = submitButton.textContent;
     submitButton.textContent = 'Sending...';
     submitButton.disabled = true;
 
@@ -153,147 +172,92 @@ const handleNewsletterSubmit = async e => {
             body: JSON.stringify({ email }),
         });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
+        if (!response.ok) throw new Error('Failed to send email');
         emailInput.value = '';
         showFormMessage(form, 'Thanks for subscribing!', 'success');
-    } catch (error) {
-        console.error('Newsletter error:', error);
+    } catch {
         showFormMessage(form, 'An error occurred. Please try again.', 'error');
     } finally {
-        submitButton.textContent = originalText;
+        submitButton.textContent = 'Subscribe';
         submitButton.disabled = false;
     }
 };
 
-
 /**
- * Validate the email format.
- * @param {string} email - The email address to validate.
- * @returns {boolean} True if valid, false otherwise.
+ * Initialize the newsletter form.
  */
-const isValidEmail = email => email.includes('@') && email.includes('.');
-
-/**
- * Simulate an API call (replace with actual implementation).
- * @returns {Promise<void>} A resolved promise.
- */
-const simulateApiCall = () => new Promise(resolve => setTimeout(resolve, 800));
-
-/**
- * Show a message on the newsletter form.
- * @param {HTMLFormElement} form - The form element.
- * @param {string} message - The message to display.
- * @param {string} type - The type of message ('success', 'error').
- */
-const showFormMessage = (form, message, type) => {
-    let messageEl = form.querySelector('.form-message');
-
-    // Remove existing message
-    if (messageEl) {
-        messageEl.remove();
+const initializeNewsletterForm = () => {
+    const newsletterForm = document.getElementById('newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', handleNewsletterSubmit);
     }
-
-    // Create and insert new message
-    messageEl = document.createElement('p');
-    messageEl.className = `form-message ${type}`;
-    messageEl.textContent = message;
-    form.appendChild(messageEl);
-
-    // Auto-remove after 4 seconds
-    setTimeout(() => {
-        if (messageEl.isConnected) {
-            messageEl.style.opacity = '0';
-            setTimeout(() => messageEl.remove(), 300);
-        }
-    }, 4000);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+/* === Contact Form === */
+
+/**
+ * Initialize the contact form modal logic.
+ */
+const initializeContactForm = () => {
     const contactLink = document.getElementById('open-contact-form');
     const contactModal = document.getElementById('contact-form');
     const modalContent = contactModal?.querySelector('.modal-content');
     const overlay = contactModal?.querySelector('.modal-overlay');
     const contactForm = document.getElementById('contactForm');
 
-    if (contactLink && contactModal) {
-        contactLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleContactModal();
-        });
-    }
+    if (!contactLink || !contactModal) return;
 
-    if (overlay) {
-        overlay.addEventListener('click', () => {
-            closeContactModal();
-        });
-    }
+    const toggleModal = () => {
+        contactModal.hidden = !contactModal.hidden;
+        contactModal.classList.toggle('show', !contactModal.hidden);
+    };
 
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeContactModal();
-        }
-    });
-
-    if (contactForm) {
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const formData = new FormData(contactForm);
-
-            try {
-                const response = await fetch(contactForm.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
-                });
-
-                if (response.ok) {
-                    contactForm.reset();
-                    showThankYouMessage();
-                } else {
-                    alert('Oops! Something went wrong.');
-                }
-            } catch (error) {
-                alert('Oops! Network error.');
-            }
-        });
-    }
-
-    function toggleContactModal() {
-        if (contactModal.hidden) {
-            contactModal.hidden = false;
-            contactModal.classList.add('show');
-            modalContent.classList.add('show');
-            modalContent.classList.remove('hide');
-        } else {
-            closeContactModal();
-        }
-    }
-
-    function closeContactModal() {
+    const closeModal = () => {
         if (!contactModal.hidden) {
-            modalContent.classList.remove('show');
-            modalContent.classList.add('hide');
-            setTimeout(() => {
-                contactModal.hidden = true;
-                contactModal.classList.remove('show');
-                modalContent.classList.remove('hide');
-            }, 400); // match your CSS animation time
+            contactModal.hidden = true;
+            contactModal.classList.remove('show');
         }
-    }
+    };
 
-    function showThankYouMessage() {
+    const showThankYouMessage = () => {
         modalContent.innerHTML = `
             <div class="thank-you-wrapper">
                 <p class="thank-you-message">Thanks for contacting us! We'll be in touch soon.</p>
-            </div>
-        `;
-        setTimeout(closeContactModal, 4000);
-    }
+            </div>`;
+        setTimeout(closeModal, 4000);
+    };
+
+    contactLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleModal();
+    });
+
+    overlay?.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
+
+    contactForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: new FormData(contactForm),
+            });
+
+            if (response.ok) {
+                contactForm.reset();
+                showThankYouMessage();
+            } else {
+                alert('Submission failed. Please try again.');
+            }
+        } catch {
+            alert('Network error. Please try again.');
+        }
+    });
+};
+
+/* === Initialization === */
+document.addEventListener('DOMContentLoaded', () => {
+    initializeNewsletterForm();
+    initializeContactForm();
 });
-
-
-
