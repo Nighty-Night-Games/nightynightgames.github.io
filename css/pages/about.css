@@ -187,3 +187,88 @@
     font-weight: bold;
     font-size: 1.4rem;
 }
+
+/* === ABOUT PAGE CUSTOM ENHANCEMENTS === */
+
+/* Add subtle shadows to cards for better depth */
+.about-card {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(17, 17, 17, 0.9); /* Slight transparency */
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 208, 120, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Enhanced divider with dynamic gradient */
+.divider {
+    background: linear-gradient(90deg, rgba(255, 208, 120, 0.05), rgba(255, 208, 120, 0.5), rgba(255, 208, 120, 0.05));
+    height: 2px;
+    margin: 2rem auto;
+    border-radius: 1px;
+    animation: glow 3s infinite alternate;
+}
+
+/* Smooth glowing effect on divider */
+@keyframes glow {
+    0% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Add hover effects to links for better interactivity */
+.about-section .text-link {
+    text-shadow: 0 2px 4px rgba(255, 208, 120, 0.3);
+    font-weight: 600;
+    color: var(--gold);
+}
+
+.about-section .text-link:hover {
+    text-shadow: 0 4px 8px rgba(255, 208, 120, 0.6);
+    color: var(--gold-light);
+    transform: scale(1.05);
+}
+
+/* Social Button Glow Effect */
+.social-button:hover,
+.social-button:focus {
+    background: rgba(255, 208, 120, 0.15);
+    transform: translateY(-4px) scale(1.1);
+    box-shadow: 0 4px 10px rgba(255, 208, 120, 0.4);
+}
+
+/* Highlight h2 headers for more emphasis */
+.about-section h2 {
+    background: linear-gradient(90deg, rgba(255, 208, 120, 0.2), transparent 70%);
+    padding: 0.5rem 0;
+    border-radius: 4px;
+    text-shadow: 1px 1px 6px rgba(255, 208, 120, 0.3);
+}
+
+/* Responsive Enhancements */
+@media (max-width: 600px) {
+    .about-card {
+        padding: 1.5rem;
+    }
+
+    .social-button {
+        width: 45px;
+        height: 45px;
+    }
+
+    .about-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .about-section p {
+        font-size: 1rem;
+    }
+}
