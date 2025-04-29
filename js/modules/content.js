@@ -124,24 +124,66 @@ const renderSocialButtons = () =>
 // Dynamic Page Content
 export const pageContent = {
   about: `
-    ${PAGE_COMMON.title('About')}
-        ${PAGE_COMMON.divider}
-    <section class="about-section">
-      <div class="about-card">
-        <p><strong>Nighty Night Games</strong> is a one-person indie studio based in Berlin, Germany, devoted to crafting unforgettable worlds—rich in story, emotion, and grit.</p>
-        <p>Founded by solo developer <strong>David Gunther</strong>, NNG is driven by a deep love for games that linger long after the credits roll. The studio's focus lies in immersive storytelling, cinematic atmosphere, and meaningful choices that shape not just the player's journey—but the world itself.</p>
-      </div>
-      <h2>Currently in Development</h2>
-      <div class="about-card">
-        <h3 class="gold-title">Legacy of Atum: Dead Dynasty</h3>
-        <p>Our debut title is an atmospheric action RPG set in a myth-infused version of ancient Egypt. It explores moral complexity, strategic survival, and personal legacy.</p>
-        <p><a href="#games" class="text-link">Explore Legacy of Atum →</a></p>
-      </div>
-      <h2>Follow the Journey</h2>
-      <p>Dev logs, behind-the-scenes looks, and cinematic updates are shared regularly. Whether you're a player, fellow developer, or just curious, you're warmly invited to follow along.</p>
-      <div class="about-social">${renderSocialButtons()}</div>
-      ${PAGE_COMMON.tagline}
-    </section>`,
+  ${PAGE_COMMON.title('About')}
+  ${PAGE_COMMON.divider}
+  <section class="about-section">
+
+    <div class="about-card">
+      <p><strong><a href="https://x.com/nightynightgg" target="_blank" rel="noopener noreferrer">Nighty Night Games</a></strong> is a one-person indie studio based in Berlin, Germany, focused on creating a rich, cinematic gaming experience that stays with players long after the credits roll.</p>
+      <p>Founded by <strong><a href="https://x.com/0xMemLeakx0" target="_blank" rel="noopener noreferrer">David Gunther</a></strong>, the studio was born out of a lifelong passion for storytelling, music, and immersive worldbuilding. Everything is an effort to blend emotional depth with atmospheric gameplay that invites players to lose themselves in a world of myth and consequence.</p>
+    </div>
+
+<h2>Background</h2>
+<div class="about-card">
+  <p>David Gunther is a lifelong gamer and solo developer behind <strong>Nighty Night Games</strong>. His journey began with a Game Boy and Super Nintendo at age 9, followed by a first self-built PC at 14—fueling a love for immersive, choice-driven games and custom-built rigs.</p>
+
+  <p>With a background in music and film, David spent over a decade composing, which now shapes his approach to soundtracks and mood. He draws inspiration from titles like <em>Final Fantasy VII</em>, <em>Mass Effect</em>, <em>Cyberpunk 2077</em>, <em>Kingdom Come: Deliverance</em>, and <em>Fallout: New Vegas</em>—games where narrative weight and atmosphere matter.</p>
+
+  <p>Though the dream of creating his own game lingered for years, it wasn’t until now that all pieces aligned. <strong>Legacy of Atum: Dead Dynasty</strong> is the result—a passion project built from decades of experience and creative drive.</p>
+</div>
+
+
+
+    <h2>Currently in Development</h2>
+    <div class="about-card">
+      <h3 class="gold-title">Legacy of Atum: Dead Dynasty</h3>
+      <p>An atmospheric action RPG set in a myth-infused ancient Egypt. Explore a world shaped by forgotten gods, unravel dynastic conspiracies, and define your legacy through dynamic choices and real-time combat.</p>
+      <p><a href="#games" class="text-link">Explore Legacy of Atum →</a></p>
+    </div>
+
+    <h2>Who Is This For?</h2>
+    <div class="about-card">
+      <p>If you enjoy the visual storytelling of <a href="https://x.com/SuckerPunchProd" target="_blank"><strong>Ghost of Tsushima</strong></a> or <a href="https://x.com/bethesda" target="_blank"><strong>Skyrim</strong></a>, the refined gameplay of <a href="https://x.com/assassinscreed" target="_blank"><strong>Assassin’s Creed</strong></a> or <a href="https://x.com/Naughty_Dog" target="_blank"><strong>The Last of Us</strong></a>, or the narrative depth and moral complexity of <a href="https://x.com/DiscoElysium" target="_blank"><strong>Disco Elysium</strong></a> and <a href="https://x.com/CyberpunkGame" target="_blank"><strong>Cyberpunk 2077</strong></a>, you’ll feel right at home here. My work is crafted for players who appreciate richly told stories, immersive worlds, and gameplay systems that respect your time and choices.</p>
+    </div>
+
+    <h2>Showcase: Tech & Tool Stack</h2>
+    <div class="about-card">
+      <p><strong>Unreal Engine 5</strong> powers the core gameplay, lighting, and visual fidelity. I use <strong>Blueprints</strong> and <strong>GAS</strong> extensively for system design. AI tools are used responsibly for concepting, prototyping, and rapid iteration. Art is created or refined in <strong>Blender</strong>, <strong>Marvelous Designer</strong>, <strong>CC4</strong>, and <strong>Substance</strong>. Music and ambiance are composed natively in-studio.</p>
+    </div>
+
+    <h2>Roadmap</h2>
+    <div class="about-card">
+      <ul>
+        <li><strong>Now –</strong> Finalizing combat, movement, and weather prototypes</li>
+        <li><strong>Mid 2025 –</strong> Demo & vertical slice</li>
+        <li><strong>Late 2025 –</strong> Steam page, trailer, and Wishlist campaign</li>
+        <li><strong>Beyond –</strong> Chapter-based development with devlogs and feedback integration</li>
+      </ul>
+    </div>
+
+    <h2>Dev Philosophy</h2>
+    <div class="about-card">
+      <p>I believe the best games are built on <strong>empathy, clarity, and curiosity</strong>. Even as a solo developer, I aim to create an ambitious, polished experience by using the right tools and keeping my players at the heart of every decision.</p>
+      <p>Every asset, system, and line of dialogue is crafted or tuned with care. I welcome feedback and community insight throughout the journey.</p>
+    </div>
+
+    <h2>Let’s Connect</h2>
+    <p>Follow for devlogs, behind-the-scenes updates, and cinematic peeks into the world of Atum. Whether you're a fellow developer, content creator, or curious player—you’re warmly invited to join the journey.</p>
+
+    <div class="about-social">${renderSocialButtons()}</div>
+    ${PAGE_COMMON.tagline}
+
+  </section>`,
 
   games: `
   ${PAGE_COMMON.title('Games')}

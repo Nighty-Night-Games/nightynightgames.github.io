@@ -195,7 +195,7 @@ const initializeNewsletterForm = () => {
 
 /* === Contact Form === */
 
-// utils.js (or your main script)
+contactForm.setAttribute('action', 'https://formspree.io/f/xqaqaylw');
 
 // === Contact Form Modal Logic ===
 export const initializeContactForm = () => {
@@ -247,7 +247,7 @@ export const initializeContactForm = () => {
         e.preventDefault();
 
         const timeSpent = (Date.now() - formStartTime) / 1000; // Calculate time in seconds
-        if (timeSpent < 3) { // 🛡️ Require minimum 3 seconds
+        if (timeSpent < 10) { // 🛡️ Require minimum 3 seconds
             alert('Please take a little more time before submitting!');
             return;
         }

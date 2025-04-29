@@ -1,64 +1,72 @@
-﻿/* scroll.css - Modified version */
+﻿/* === SCROLL.CSS === */
+
+/* Smooth scroll behavior globally */
 html {
-  scroll-behavior: smooth; /* Keep this, it's useful */
+  scroll-behavior: smooth;
 }
 
-/* Keep the back-to-top button styling */
+/* === BACK-TO-TOP BUTTON === */
 .back-to-top {
   position: fixed;
   bottom: 15rem;
   right: 2rem;
-  width: 3rem;
-  height: 3rem;
+
+  /* Button styling */
+  display: flex; /* Flex layout to center contents */
+  align-items: center; /* Align the arrow vertically */
+  justify-content: center; /* Align the arrow horizontally */
   background-color: var(--color-accent);
   color: var(--color-bg-dark);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  opacity: 0;
-  transform: translateY(20px);
+  border-radius: 50%; /* Makes it a perfect circle */
+  text-decoration: none; /* Remove text underline */
+  padding: 0.75rem; /* Create consistent size without fixed width/height */
+  opacity: 0; /* Hidden by default */
+  transform: translateY(20px); /* Offset for smooth animation */
   transition: opacity 0.3s, transform 0.3s;
-  z-index: 900;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  
+  z-index: 900; /* Ensure it's above most elements */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for visibility */
   cursor: pointer;
-  overflow: visible;
+  overflow: hidden; /* Prevent anything from visually overflowing out */
 }
 
 .back-to-top::before {
   content: "";
   position: absolute;
-  width: 150%;
-  height: 150%;
   top: -25%;
   left: -25%;
+  width: 150%;
+  height: 150%;
   background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
   border-radius: 50%;
-  animation: pulseRing 2.5s infinite ease-out;
   opacity: 0.4;
-  z-index: -1;
+  animation: pulseRing 2.5s infinite ease-out;
+  z-index: -1; /* Keep behind the button */
 }
 
+/* When the button becomes visible */
 .back-to-top.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0); /* Smooth transition to visible */
 }
 
-.back-to-top:hover, .back-to-top:focus {
+.back-to-top:hover,
+.back-to-top:focus {
   background-color: var(--color-accent-hover);
-  transform: translateY(-5px);
-  transition: transform 0.3s ease, background-color 0.3s ease;
-  box-shadow: 0 0 10px var(--gold-light), 0 0 20px rgba(255, 208, 120, 0.3);
+  transform: translateY(-5px); /* Slight hover lift */
+  box-shadow: 0 4px 20px var(--gold-light); /* Enhanced hover effect */
 }
 
+/* SVG Icon inside the back-to-top button */
 .back-to-top svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  fill: currentColor;
+  width: 1.25rem; /* Size the arrow icon */
+  height: 1.25rem;
+  fill: currentColor; /* Use the text color */
 }
 
+/* === ANIMATIONS === */
 
+/* Pulse animation for glow effect */
 @keyframes pulseRing {
   0% {
     transform: scale(0.85);
