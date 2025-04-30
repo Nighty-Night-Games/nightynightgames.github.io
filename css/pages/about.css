@@ -1,5 +1,20 @@
 ﻿/* === ABOUT PAGE STYLES === */
 
+.about-section h1 {
+    font-size: 1.8rem; /* Balanced between h2 (1.8rem) and h3 (1.4rem) */
+    color: var(--gold);
+    text-align: center;
+    margin: 2.5rem auto 1.5rem;
+    text-shadow: 0 2px 6px rgba(255, 208, 120, 0.3);
+    border-bottom: 2px solid rgba(255, 208, 120, 0.25);
+    display: inline-block;
+    padding-bottom: 0.25rem;
+    animation: fadeIn 1s ease-out forwards;
+    opacity: 0;
+    animation-delay: 0.15s;
+}
+
+
 /* Layout */
 .about-section {
     position: relative;
@@ -247,7 +262,7 @@
 
 /* Highlight h2 headers for more emphasis */
 .about-section h2 {
-    background: linear-gradient(90deg, rgba(255, 208, 120, 0.2), transparent 70%);
+    background: linear-gradient(90deg, rgba(255, 208, 120, 0.1), transparent 50%);
     padding: 0.5rem 0;
     border-radius: 4px;
     text-shadow: 1px 1px 6px rgba(255, 208, 120, 0.3);
