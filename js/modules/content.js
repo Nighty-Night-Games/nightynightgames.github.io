@@ -140,7 +140,7 @@ export const pageContent = {
       <strong><a href="https://x.com/nightynightgg" target="_blank" rel="noopener noreferrer" title="Discover Nighty Night Games, an indie game development studio.">Nighty Night Games</a></strong> is an independent game studio based in Berlin, Germany, specialized in crafting <strong>cinematic, narrative-driven gaming experiences</strong> that leave a lasting emotional impact.
     </p>
     <p>
-      Founded by <strong><a href="https://x.com/0xMemLeakx0" target="_blank" rel="noopener noreferrer" title="Learn about David Gunther, founder of Nighty Night Games.">David Gunther</a></strong>, the studio focuses on blending gripping storytelling, fluid gameplat, and immersive worldbuilding to deliver unforgettable gaming experiences.
+      Founded by <strong><a href="https://x.com/0xMemLeakx0" target="_blank" rel="noopener noreferrer" title="Learn about David Gunther, founder of Nighty Night Games.">David Gunther</a></strong>, the studio focuses on blending gripping storytelling, fluid gameplay, and immersive worldbuilding to deliver unforgettable gaming experiences.
     </p>
   </div>
 
