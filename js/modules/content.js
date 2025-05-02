@@ -76,7 +76,7 @@ const GAME_CARDS = {
     imageAlt: 'Legacy of Atum: Dead Dynasty - Game screenshot showing an ancient Egyptian temple',
     description: [
       '<strong>Legacy of Atum</strong> is a gripping atmospheric action RPG that immerses players in a mythical reimagining of Ancient Egypt. Seamlessly weaving together narrative depth, moral choices, and strategic survival, the game offers a hauntingly reactive world shaped by your decisions and actions.',
-'Step into the sandals of <strong>Nui</strong>, a once-imprisoned Nubian warrior transformed into an unexpected hero. Traverse a land fractured by the enigmatic wills of forgotten gods, the turmoil of collapsing empires, and the shards of buried vengeance. With visceral, real-time combat, complex social dynamics, and decisions that ripple across the world, every choice you make leaves an indelible mark—because in Atum, the world remembers.',
+'Step into the sandals of <strong>Nui</strong>, a once-imprisoned Egyptian boy transformed into an unexpected hero. Traverse a land fractured by the enigmatic wills of forgotten gods, the turmoil of a collapsing society, and the shards of buried vengeance. With visceral, real-time combat, complex social dynamics, and decisions that ripple across the world, every choice you make leaves an indelible mark—because in Legacy of Atum, the world remembers.',
     ],
     features: ['Narrative-Driven', 'Strategic Combat', 'Moral Choices', 'Ancient Egypt', 'Action RPG'],
     showLoadingBar: true,
