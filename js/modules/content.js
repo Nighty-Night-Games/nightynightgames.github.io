@@ -160,7 +160,7 @@ export const pageContent = {
   <div class="about-card">
     <h3 class="gold-title">Legacy of Atum: Dead Dynasty</h3>
     <p>
-      A mythological <strong>action RPG</strong> set in a rich, mythological vision of Ancient Egypt. 
+      A <strong>action RPG</strong> set in a rich, mythological vision of Ancient Egypt. 
       Players assume the role of <strong>Nui</strong>, a former prisoner caught in the chaos of forgotten gods, dynastic conspiracies, and buried vengeance.
     </p>
     <p>
