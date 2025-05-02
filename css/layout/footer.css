@@ -6,10 +6,10 @@ footer {
     gap: 2rem;
     width: 100%;
     padding: 2rem 1rem;
-    background: rgba(17, 17, 17, 0.85); /* Subtle transparency */
+    background: rgba(17, 17, 17, 0.85);
     border-top: 1px solid rgba(255, 208, 120, 0.3);
     color: var(--text-light);
-    backdrop-filter: blur(8px); /* Smooth blur effect */
+    backdrop-filter: blur(8px);
     overflow: hidden;
     position: relative;
 }
@@ -35,7 +35,7 @@ footer {
 .social-links {
     display: flex;
     gap: 1rem;
-    flex-wrap: wrap; /* Ensures wrapping for smaller screens */
+    flex-wrap: wrap;
 }
 
 .social-link {
@@ -63,7 +63,7 @@ footer {
     fill: currentColor;
 }
 
-/* Central Section: Main Text and Links */
+/* Center Text & Links */
 .footer-copyright {
     text-align: center;
     color: var(--text-light);
@@ -93,15 +93,12 @@ footer {
     transform: translateY(6px);
     animation: floatIn 1s ease-out forwards;
 }
-
-/* Use a general nth-child stagger */
 .tagline span:nth-child(1) { animation-delay: 0.2s; }
 .tagline span:nth-child(2) { animation-delay: 0.4s; }
 .tagline span:nth-child(3) { animation-delay: 0.6s; }
 .tagline span:nth-child(4) { animation-delay: 0.8s; }
 .tagline span:nth-child(5) { animation-delay: 1s; }
 .tagline span:nth-child(6) { animation-delay: 1.2s; }
-/* (optional) You can add more if you ever have more words */
 
 @keyframes floatIn {
     to {
@@ -109,7 +106,6 @@ footer {
         transform: translateY(0);
     }
 }
-
 
 .footer-links {
     display: flex;
@@ -166,32 +162,22 @@ footer {
     padding-right: 2rem;
 }
 
-
 .footer-newsletter h4 {
-    font-size: 1.2rem;
-    text-transform: none;
-    font-family: var(--font-main);
+    font-size: 1rem;
     font-weight: 600;
     color: var(--gold-light);
     letter-spacing: 0.3px;
     margin-bottom: 0.5rem;
 }
 
-.newsletter-caption {
-    font-style: italic;
-    font-size: 0.85rem;
-    color: var(--text-light);
-    opacity: 0.85;
-    max-width: 480px;
-    margin-top: 0.5rem;
-}
-
 .newsletter-form {
     display: flex;
     gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
     position: relative;
+    width: 100%;
+    max-width: 320px;
 }
 
 .newsletter-form::before {
@@ -208,17 +194,16 @@ footer {
     z-index: -1;
 }
 
-
 .newsletter-input {
-    padding: 0.75rem 1rem;
+    padding: 0.4rem 0.6rem;
     border: 1px solid rgba(255, 208, 120, 0.3);
-    border-radius: 6px;
+    border-radius: 6px 0 0 6px;
     background: #121212;
     color: var(--text-light);
-    font-size: 1rem;
+    font-size: 0.85rem;
     flex: 1;
-    min-width: 240px;
-    transition: border 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    min-width: 160px;
+    height: 2rem;
 }
 
 .newsletter-input:focus {
@@ -229,15 +214,17 @@ footer {
 }
 
 .newsletter-button {
-    padding: 0.75rem 1.25rem;
+    padding: 0.4rem 0.8rem;
     border: 1px solid rgba(255, 208, 120, 0.4);
-    border-radius: 6px;
+    border-radius: 0 6px 6px 0;
     background: rgba(255, 208, 120, 0.08);
     color: var(--gold);
     font-weight: bold;
+    font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     cursor: pointer;
+    height: 2rem;
     transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
@@ -256,25 +243,27 @@ footer {
         text-align: center;
     }
 
-    .footer-social, .footer-copyright, .footer-newsletter {
+    .footer-social,
+    .footer-copyright,
+    .footer-newsletter {
         justify-self: center;
-        text-align: center;
         align-items: center;
+        text-align: center;
         padding: 0;
     }
 
-    .footer-newsletter {
-        align-items: center;
-        text-align: center;
-        padding: 0;
+    .newsletter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .newsletter-input,
+    .newsletter-button {
+        width: 100%;
+        border-radius: 6px;
+    }
+
+    .newsletter-button {
+        margin-top: 0.5rem;
     }
 }
-
-    .newsletter-input {
-        width: 100%;
-        margin-bottom: 0.5rem;
-    }
-
-    .footer-links {
-        justify-content: center;
-    }
