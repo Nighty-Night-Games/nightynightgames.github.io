@@ -116,17 +116,19 @@ function getOrQuery(selector, id) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.querySelector('.connect-toggle');
-    const menu = document.querySelector('.connect-menu');
+    const dropdown = document.querySelector('.connect-dropdown');
+    const toggle = dropdown.querySelector('.connect-toggle');
+    const menu = dropdown.querySelector('.connect-menu');
 
-    toggle.addEventListener('click', () => {
-        const isOpen = menu.style.display === 'flex';
-        menu.style.display = isOpen ? 'none' : 'flex';
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
     });
 
     document.addEventListener('click', (e) => {
-        if (!e.target.closest('.connect-dropdown')) {
-            menu.style.display = 'none';
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('open');
         }
     });
 });
+
