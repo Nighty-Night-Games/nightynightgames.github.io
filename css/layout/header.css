@@ -112,9 +112,9 @@
 
 .connect-dropdown {
     position: relative;
+    z-index: 1000; /* create strong stacking context */
     margin-right: 1rem;
 }
-
 .connect-toggle {
     font-weight: 600;
     cursor: pointer;
