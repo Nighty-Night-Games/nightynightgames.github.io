@@ -16,8 +16,6 @@
 .header-left,
 .header-right {
     display: none;
-    opacity: 0;
-    visibility: hidden;
     transform: translateY(-20px);
     transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
     left: 0;
@@ -41,6 +39,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
 }
 
 .logo img {
@@ -109,4 +108,58 @@
     text-shadow: 0 0 5px var(--gold-light);
     text-decoration: none; /* Explicitly remove underline */
     border-bottom: none; /* Remove any potential bottom border */
+}
+
+.connect-dropdown {
+    position: relative;
+    margin-right: 1rem;
+}
+
+.connect-toggle {
+    font-weight: 600;
+    cursor: pointer;
+    width: 160px; /* Ensures it matches dropdown width */
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 0.85rem;
+    padding: 0.6rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 215, 128, 0.3); /* subtle border */
+}
+
+.connect-toggle:hover {
+    background-color: var(--gold-light);
+    color: var(--background-main);
+}
+
+.connect-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    border-radius: 6px;
+    padding: 0.5rem 0;
+    display: none;
+    flex-direction: column;
+    width: 160px;
+    z-index: 10;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.connect-dropdown.open .connect-menu {
+    display: flex;
+}
+
+.connect-menu a {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gold);
+    text-decoration: none;
+    padding: 0.6rem 0;
+    text-align: center;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.connect-menu a:hover {
+    background-color: var(--gold);
+    color: var(--background-main);
 }

@@ -109,8 +109,12 @@ const SOCIAL_BUTTONS = [
     label: 'Reddit',
     href: 'https://www.reddit.com/r/LegacyOfAtum/',
     iconPath: 'M22.54 11.12c-.78 0-1.46.33-1.96.83-1.7-.98-3.85-1.6-6.26-1.7l1.26-5.92 4.07.96c0 .9.74 1.64 1.65 1.64.93 0 1.68-.75 1.68-1.68 0-.93-.75-1.68-1.68-1.68-.68 0-1.27.41-1.53.99l-4.42-1.05c-.18-.05-.37 0-.52.08-.15.1-.26.24-.3.42l-1.45 6.83c-2.4.06-4.63.7-6.31 1.7a2.74 2.74 0 0 0-1.95-.83C1.49 11.12 0 12.61 0 14.47c0 1.1.6 2.07 1.5 2.59-.08.26-.13.53-.13.8 0 3.15 4.27 5.72 9.52 5.72s9.52-2.57 9.52-5.72c0-.27-.05-.54-.13-.8.9-.52 1.5-1.49 1.5-2.59 0-1.86-1.49-3.35-3.35-3.35zM6.15 16.97c-.93 0-1.68-.75-1.68-1.68 0-.93.75-1.68 1.68-1.68s1.68.75 1.68 1.68-.75 1.68-1.68 1.68zm10.28 1.36c-1.19 1.19-3.4 1.25-4.41 1.25s-3.22-.06-4.42-1.25c-.14-.14-.2-.36-.11-.55.08-.2.28-.31.48-.28 1 .2 2.23.31 3.42.31 1.18 0 2.41-.1 3.4-.31.21-.03.39.08.48.28.11.18.04.41-.08.55zm-.47-1.36c-.93 0-1.68-.75-1.68-1.68 0-.93.75-1.68 1.68-1.68s1.68.75 1.68 1.68-.75 1.68-1.68 1.68z',
+  },
+  {
+    label: 'TikTok',
+    href: 'https://www.tiktok.com/@legacyofatum',
+    iconPath: 'M9 3v12.5a4.5 4.5 0 1 1-3.5-4.4V8.9a6.5 6.5 0 1 0 6.5 6.6V5.4c1.2.8 2.7 1.3 4.3 1.3V4.2c-1.6 0-3.1-.5-4.3-1.4V3H9z'
   }
-
 ];
 
 const renderSocialButtons = () =>
@@ -134,25 +138,23 @@ export const pageContent = {
   ${PAGE_COMMON.divider}
 <section class="about-section">
 
-    <h2>Creating Worlds</h2>
+  <h2>Nighty Night Games</h2>
   <div class="about-card">
     <p>
-      <strong><a href="https://x.com/nightynightgg" target="_blank" rel="noopener noreferrer" title="Discover Nighty Night Games, an indie game development studio.">Nighty Night Games</a></strong> is an independent game studio based in Berlin, Germany, specialized in crafting <strong>cinematic, narrative-driven gaming experiences</strong> that leave a lasting emotional impact.
+      <strong><a href="https://x.com/nightynightgg" target="_blank" rel="noopener noreferrer" title="Discover Nighty Night Games, an indie game development studio.">Nighty Night Games</a></strong> is an independent game studio based in Berlin, Germany, focused on crafting <strong>cinematic, narrative-driven experiences</strong> that leave a lasting emotional impact.
     </p>
     <p>
-      Founded by <strong><a href="https://x.com/0xMemLeakx0" target="_blank" rel="noopener noreferrer" title="Learn about David Gunther, founder of Nighty Night Games.">David Gunther</a></strong>, the studio focuses on blending gripping storytelling, fluid gameplay, and immersive worldbuilding to deliver unforgettable gaming experiences.
+      Founded by <strong><a href="https://x.com/0xMemLeakx0" target="_blank" rel="noopener noreferrer" title="Learn about David Gunther, founder of Nighty Night Games.">David Gunther</a></strong>, the studio blends gripping storytelling, fluid gameplay, and immersive worldbuilding to deliver unforgettable adventures.
     </p>
   </div>
 
   <h2>Founder & Developer</h2>
   <div class="about-card">
     <p>
-      <a href="https://x.com/0xMemLeakx0" target="_blank" rel="noopener noreferrer" title="David Gunther developer profile">David Gunther</a> is the creative force behind Nighty Night Games. 
-      He began his gaming journey at the age of 9, playing on consoles like the Game Boy and Sega Mega Drive. By 14, he transitioned to PC gaming, accumulating over <strong>3,000 hours in Battlefield 2</strong> and immersing himself in RPGs and online titles like <strong>Lord of the Rings Online</strong>.
+      I'm <a href="https://x.com/0xMemLeakx0" target="_blank" rel="noopener noreferrer" title="David Gunther developer profile">David Gunther</a>, the solo developer behind Nighty Night Games. My journey began at age 9 on a Game Boy and Sega Mega Drive. By 14, I was deep into PC gaming—logging over <strong>3,000 hours in Battlefield 2</strong> and getting lost in RPGs like <strong>Lord of the Rings Online</strong>.
     </p>
     <p>
-      David draws inspiration from games that emphasize <strong>narrative depth, emotional storytelling, and atmospheric environments</strong>, including <strong>Final Fantasy VII</strong>, <strong>Cyberpunk 2077</strong>, <strong>Kingdom Come: Deliverance</strong>, and <strong>Fallout: New Vegas</strong>. 
-      With over a decade of music composition experience, David ensures that every soundtrack enhances the emotional impact of his games.
+      I've always been drawn to <strong>narrative depth, great storytelling, and atmospheric worlds</strong>. Games like <strong>Star Wars: KOTOR</strong>, <strong>Cyberpunk 2077</strong>, <strong>Kingdom Come: Deliverance</strong>, and <strong>Bethesda RPGs</strong> have left a deep mark on me. With over 20 years of music composition experience, I craft soundtracks that don’t just accompany the game—they resonate with it.
     </p>
   </div>
 
@@ -160,58 +162,32 @@ export const pageContent = {
   <div class="about-card">
     <h3 class="gold-title">Legacy of Atum: Dead Dynasty</h3>
     <p>
-      A <strong>action RPG</strong> set in a rich, mythological vision of Ancient Egypt. 
-      Players assume the role of <strong>Nui</strong>, a former prisoner caught in the chaos of forgotten gods, dynastic conspiracies, and buried vengeance.
+      An atmospheric, narrative- and combat-driven action RPG set in ancient Egypt’s crumbling Old Kingdom—where gods fall silent, and chaos reigns.
     </p>
     <p>
-      With <strong>real-time combat, reactive environments, and choice-driven storytelling</strong>, your actions shape the world and define your legacy. 
-      Learn more about the game on our <a href="#games" class="text-link" title="Explore the Legacy of Atum: Dead Dynasty game page">Games page →</a>
-    </p>
-
-
-  <h2>Is it for You?</h2>
-  <div class="about-card">
-    <p>
-      If you enjoy <strong>immersive storytelling, dynamic worlds, and meaningful choices</strong>, Legacy of Atum is crafted with you in mind. 
-      Fans of visually breathtaking adventures like <strong>Ghost of Tsushima</strong> and <strong>Skyrim</strong>, action-packed gameplay like <strong>Assassin’s Creed</strong> and <strong>The Last of Us</strong>, and morally complex narratives like <strong>Disco Elysium</strong> and <strong>Cyberpunk 2077</strong> will feel right at home.
+      Learn more on the <a href="#games" class="text-link" title="Explore the Legacy of Atum: Dead Dynasty game page">Games page →</a>
     </p>
   </div>
-
-  <h2>Technology and Tools</h2>
-  <div class="about-card">
-    <p>
-      Nighty Night Games uses <strong><a href="https://www.unrealengine.com/" target="_blank" rel="noopener noreferrer" title="Unreal Engine 5 official website">Unreal Engine 5</a></strong> for cutting-edge visuals and gameplay. 
-    </p>
-    <p>
-      Art and assets are crafted and refined using tools like <strong><a href="https://www.blender.org/" target="_blank" rel="noopener noreferrer" title="Blender 3D modeling software">Blender</a></strong>, <strong><a href="https://www.marvelousdesigner.com/" target="_blank" rel="noopener noreferrer" title="Marvelous Designer for 3D modeling">Marvelous Designer</a></strong>, and <strong><a href="https://www.reallusion.com/character-creator/" target="_blank" rel="noopener noreferrer" title="Character Creator 4 for character design">Character Creator 4 (CC4)</a></strong>. 
-      Music and ambiance are produced in-house to maintain full creative control.
-    </p>
-  </div>
-    </div>
 
   <h2>Philosophy</h2>
   <div class="about-card">
     <p>
-      At Nighty Night Games, I prioritize <strong>empathy, storytelling, and craftsmanship</strong>. 
-      Every detail, from combat systems to dialogues, is carefully designed to create a deeply immersive experience.
+      I prioritize <strong>art, storytelling, and gameplay quality</strong>. Every detail—combat, dialogue, environment—is hand-crafted to create a deeply immersive experience.
     </p>
     <p>
-      As a solo developer, I prioritize player engagement and community feedback to deliver polished, memorable games that challenge and inspire creativity.
+      As a solo dev, I rely on community feedback and thoughtful iteration to build a game that not only play well, but stays with you long after.
     </p>
   </div>
 
   <h2>Join the Community</h2>
   <div class="about-card">
     <p>
-      Follow Nighty Night Games for updates on <strong>Legacy of Atum: Dead Dynasty</strong> and future projects. Stay tuned through <strong>developer logs</strong>, <strong>behind-the-scenes previews</strong>, and more. 
-      Whether you’re a developer, gamer, or content creator, you’re invited to join the growing <strong>Nighty Night Games</strong> community.
+      Follow for updates on <strong>Legacy of Atum: Dead Dynasty</strong> and future projects. Expect <strong>devlogs</strong>, <strong>behind-the-scenes previews</strong>, and more.
     </p>
+      <div class="about-social">${renderSocialButtons()}</div>
   </div>
 
-  <div class="about-social">${renderSocialButtons()}</div>
-  
 </section>
-
 
 `,
 

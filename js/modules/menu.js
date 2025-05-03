@@ -114,3 +114,19 @@ function updateMenuState(isOpen, menuToggle, mobileMenu) {
 function getOrQuery(selector, id) {
     return get(id) || document.querySelector(selector);
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.querySelector('.connect-toggle');
+    const menu = document.querySelector('.connect-menu');
+
+    toggle.addEventListener('click', () => {
+        const isOpen = menu.style.display === 'flex';
+        menu.style.display = isOpen ? 'none' : 'flex';
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.connect-dropdown')) {
+            menu.style.display = 'none';
+        }
+    });
+});
