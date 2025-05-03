@@ -60,3 +60,10 @@
 .animate-floatPulse {
     animation: floatPulse 3s ease-in-out infinite;
 }
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none;
+        transition: none;
+    }
+}

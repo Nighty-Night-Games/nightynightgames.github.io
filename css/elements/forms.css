@@ -219,6 +219,6 @@ button:hover {
     }
 
     textarea {
-        min-width: auto; /* Allow flexible resizing for smaller devices */
+       min-width: 90%;
     }
 }

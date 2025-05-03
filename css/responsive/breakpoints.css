@@ -134,6 +134,13 @@
     }
 }
 
+  @media (max-width: 768px) {
+      button {
+          padding: 0.5rem 1rem;
+          font-size: 0.85rem;
+      }
+  }
+
 /* Extra Small Screens (max-width: 480px) */
 @media screen and (max-width: 480px) {
     .site-header {
