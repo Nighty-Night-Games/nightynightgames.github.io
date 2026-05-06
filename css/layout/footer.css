@@ -235,13 +235,3 @@ footer {
 }
 
 
-/* Responsive Layout */
-@media (max-width: 768px) {
-    footer {
-        grid-template-columns: 1fr;
-    }
-    .footer-social,
-    .footer-newsletter {
-        align-items: center;
-    }
-}
